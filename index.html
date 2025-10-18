@@ -8,15 +8,14 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <style>
-    /* Background video - sized to show full width */
+    /* Background video - edge to edge */
     .bg-video {
       position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 85vw;
-      height: auto;
-      object-fit: contain;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
       object-position: center center;
       z-index: 2147483647 !important;
       pointer-events: none;
@@ -26,26 +25,17 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      max-width: 85vw;
-      max-height: 85vh;
     }
     
-    /* Mobile video - sized to show full width */
+    /* Mobile video - edge to edge */
     @media (max-width: 768px) {
       .bg-video {
-        width: 90vw;
-        height: auto;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        object-fit: contain;
+        width: 100vw;
+        height: 100vh;
+        top: 0;
+        left: 0;
+        object-fit: cover;
         object-position: center center;
-        border: none;
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        max-width: 90vw;
-        max-height: 85vh;
       }
     }
     
