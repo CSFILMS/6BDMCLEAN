@@ -64,10 +64,20 @@
       white-space: pre-wrap;
       text-shadow: 0 0 3px var(--fg), 0 0 10px var(--fg), 0 0 20px var(--fg);
       background-color: rgba(0, 0, 0, 0.7);
+    }
+    
+    /* Scanlines overlay on top of text */
+    #video-text-scanlines {
+      position: fixed;
+      top: 2rem;
+      left: 2rem;
+      z-index: 2147483649 !important;
+      padding: 1rem 1.5rem;
+      pointer-events: none;
       background-image: repeating-linear-gradient(
         0deg,
-        rgba(0, 0, 0, 0.4) 0px,
-        rgba(0, 0, 0, 0.4) 2px,
+        rgba(0, 0, 0, 0.5) 0px,
+        rgba(0, 0, 0, 0.5) 2px,
         transparent 2px,
         transparent 4px
       );
@@ -76,6 +86,11 @@
     @media (max-width: 768px) {
       #video-text-overlay {
         font-size: 1.2rem;
+        top: 1.5rem;
+        left: 1.5rem;
+        padding: 0.75rem 1rem;
+      }
+      #video-text-scanlines {
         top: 1.5rem;
         left: 1.5rem;
         padding: 0.75rem 1rem;
@@ -909,6 +924,11 @@ z-index: 2 !important;
     A FILM BY EUGENE JARECKI
   </div>
   
+  <!-- Scanlines overlay on top of text -->
+  <div id="video-text-scanlines" style="display: none;">
+    A FILM BY EUGENE JARECKI
+  </div>
+  
   <script>
     // Detect device type and load appropriate video size
     (function() {
@@ -1131,6 +1151,7 @@ FOR THIS, WE NEED YOUR HELP.
       console.log('🎬 Showing video...');
       const video = document.getElementById('bg-video3');
       const textOverlay = document.getElementById('video-text-overlay');
+      const scanlines = document.getElementById('video-text-scanlines');
       
       if (video) {
         console.log('✅ Video element found, showing...');
@@ -1151,6 +1172,16 @@ FOR THIS, WE NEED YOUR HELP.
           console.log('📝 Text overlay z-index:', window.getComputedStyle(textOverlay).zIndex);
         } else {
           console.error('❌ Video text overlay element not found!');
+        }
+        
+        // Show scanlines overlay
+        if (scanlines) {
+          scanlines.style.setProperty('display', 'block', 'important');
+          scanlines.style.setProperty('visibility', 'visible', 'important');
+          scanlines.style.setProperty('opacity', '1', 'important');
+          console.log('✅ Video scanlines overlay shown');
+        } else {
+          console.error('❌ Video scanlines overlay element not found!');
         }
         
         // Ensure video is completely muted
@@ -1195,6 +1226,7 @@ FOR THIS, WE NEED YOUR HELP.
       console.log('🛑 Hiding video...');
       const video = document.getElementById('bg-video3');
       const textOverlay = document.getElementById('video-text-overlay');
+      const scanlines = document.getElementById('video-text-scanlines');
       
       if (video) {
         video.pause();
@@ -1205,6 +1237,12 @@ FOR THIS, WE NEED YOUR HELP.
       if (textOverlay) {
         textOverlay.style.setProperty('display', 'none', 'important');
         console.log('✅ Video text overlay hidden');
+      }
+      
+      // Hide scanlines overlay
+      if (scanlines) {
+        scanlines.style.setProperty('display', 'none', 'important');
+        console.log('✅ Video scanlines overlay hidden');
       }
     }
     
