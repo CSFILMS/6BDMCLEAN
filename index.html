@@ -8,16 +8,16 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <style>
-    /* Background video - locked to screen edges */
+    /* Background video - with side padding */
     .bg-video {
       position: fixed;
       top: 0;
-      left: 0;
-      right: 0;
+      left: 2rem;
+      right: 2rem;
       bottom: 0;
-      width: 100vw;
+      width: calc(100vw - 4rem);
       height: 100vh;
-      object-fit: cover;
+      object-fit: contain;
       object-position: center center;
       z-index: 2147483647 !important;
       pointer-events: none;
@@ -29,16 +29,16 @@
       box-sizing: border-box;
     }
     
-    /* Mobile video - same as desktop, locked to edges */
+    /* Mobile video - with side padding */
     @media (max-width: 768px) {
       .bg-video {
         top: 0;
-        left: 0;
-        right: 0;
+        left: 1rem;
+        right: 1rem;
         bottom: 0;
-        width: 100vw;
+        width: calc(100vw - 2rem);
         height: 100vh;
-        object-fit: cover;
+        object-fit: contain;
         object-position: center center;
       }
     }
