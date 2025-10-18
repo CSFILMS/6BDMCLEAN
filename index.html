@@ -15,9 +15,9 @@
       left: 0;
       right: 0;
       bottom: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
       object-position: center center;
       z-index: 2147483647 !important;
       pointer-events: none;
@@ -27,8 +27,6 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      max-width: 100%;
-      max-height: 100%;
     }
     
     /* Mobile video - same as desktop, locked to edges */
@@ -38,12 +36,10 @@
         left: 0;
         right: 0;
         bottom: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover;
         object-position: center center;
-        max-width: 100%;
-        max-height: 100%;
       }
     }
     
@@ -1983,9 +1979,9 @@ FOR THIS, WE NEED YOUR HELP.
             slideCounterEl.style.visibility = 'hidden';
           }
           
-          // Check if this text contains "A FILM BY" and add delayed subtitle
-          if (text.includes('A FILM BY EUGENE JARECKI')) {
-            console.log('A FILM BY detected - showing video and adding delay...');
+          // Check if this text contains "6BDM" and show video
+          if (text.includes('6BDM: JULIAN ASSANGE AND THE PRICE OF TRUTH')) {
+            console.log('6BDM detected - showing video and adding delay...');
             
             // Show JA_OBIWAN video
             showVideo3Background();
@@ -1996,13 +1992,11 @@ FOR THIS, WE NEED YOUR HELP.
             // Split the text to separate FILM BY line from 6BDM line
             const lines = text.split('\n');
             console.log('All lines:', lines);
-            const filmByLine = lines.find(line => line.includes('A FILM BY EUGENE JARECKI'));
             const sixBdmLine = lines.find(line => line.includes('6BDM: JULIAN ASSANGE AND THE PRICE OF TRUTH'));
-            console.log('Film by line:', filmByLine);
             console.log('6BDM line:', sixBdmLine);
             
-            // Show only the FILM BY line immediately
-            element.textContent = filmByLine;
+            // Hide the main text element (video overlay will show "A FILM BY")
+            element.textContent = '';
             
             // Create a separate element positioned in the middle of the screen for 6BDM
             const bdmElement = document.createElement('div');
