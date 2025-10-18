@@ -11,13 +11,13 @@
     /* Background video - sized to show full width */
     .bg-video {
       position: fixed;
-      top: 47%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 90vw;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      width: 97vw;
       height: auto;
       object-fit: contain;
-      object-position: center center;
+      object-position: left center;
       z-index: 2147483647 !important;
       pointer-events: none;
       display: none;
@@ -26,25 +26,59 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      max-width: 90vw;
-      max-height: 80vh;
+      max-width: 97vw;
+      max-height: 95vh;
     }
     
     /* Mobile video - sized to show full width */
     @media (max-width: 768px) {
       .bg-video {
-        width: 95vw;
+        width: 100vw;
         height: auto;
-        top: 47%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
         object-fit: contain;
+        object-position: center center;
         border: none;
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        max-width: 95vw;
-        max-height: 75vh;
+        max-width: 100vw;
+        max-height: 100vh;
+      }
+    }
+    
+    /* Video text overlay */
+    #video-text-overlay {
+      position: fixed;
+      top: 2rem;
+      left: 2rem;
+      z-index: 2147483648 !important;
+      color: var(--fg);
+      font-family: var(--font-family);
+      font-size: 1.5rem;
+      text-align: left;
+      padding: 1rem 1.5rem;
+      pointer-events: none;
+      white-space: pre-wrap;
+      text-shadow: 0 0 3px var(--fg), 0 0 10px var(--fg), 0 0 20px var(--fg);
+      background-color: rgba(0, 0, 0, 0.7);
+      background-image: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.4) 0px,
+        rgba(0, 0, 0, 0.4) 2px,
+        transparent 2px,
+        transparent 4px
+      );
+    }
+    
+    @media (max-width: 768px) {
+      #video-text-overlay {
+        font-size: 1.2rem;
+        top: 1.5rem;
+        left: 1.5rem;
+        padding: 0.75rem 1rem;
       }
     }
     
@@ -858,7 +892,6 @@ z-index: 2 !important;
     autoplay
     muted
     playsinline
-    loop
     preload="metadata"
     aria-hidden="true"
     tabindex="-1"
@@ -871,6 +904,11 @@ z-index: 2 !important;
      <source id="video-source" src="" type="video/mp4" />
   </video>
   
+  <!-- Text overlay on top of video -->
+  <div id="video-text-overlay" style="display: none;">
+    A FILM BY EUGENE JARECKI
+  </div>
+  
   <script>
     // Detect device type and load appropriate video size
     (function() {
@@ -881,10 +919,10 @@ z-index: 2 !important;
       // Use mobile video for mobile devices (smaller file size, optimized for mobile)
       // Use desktop video for larger screens
       if (isMobile) {
-        videoSource.src = 'VIDEOS/HAVETOENDSOMEHOW_mobile.mp4?v=3';
+        videoSource.src = 'VIDEOS/HOLOGRAM_mobile.mp4?v=4';
         console.log('📱 Loading mobile-optimized video');
       } else {
-        videoSource.src = 'VIDEOS/HAVETOENDSOMEHOW.mp4?v=3';
+        videoSource.src = 'VIDEOS/HOLOGRAM.mp4?v=4';
         console.log('🖥️ Loading desktop video');
       }
       
@@ -1092,6 +1130,7 @@ FOR THIS, WE NEED YOUR HELP.
     function showVideo3Background() {
       console.log('🎬 Showing video...');
       const video = document.getElementById('bg-video3');
+      const textOverlay = document.getElementById('video-text-overlay');
       
       if (video) {
         console.log('✅ Video element found, showing...');
@@ -1101,6 +1140,18 @@ FOR THIS, WE NEED YOUR HELP.
         video.style.setProperty('opacity', '1', 'important');
         console.log('🎬 Video display set to block with !important');
         console.log('🎬 Video computed style:', window.getComputedStyle(video).display);
+        
+        // Show text overlay
+        if (textOverlay) {
+          textOverlay.style.setProperty('display', 'block', 'important');
+          textOverlay.style.setProperty('visibility', 'visible', 'important');
+          textOverlay.style.setProperty('opacity', '1', 'important');
+          console.log('✅ Video text overlay shown');
+          console.log('📝 Text overlay computed style:', window.getComputedStyle(textOverlay).display);
+          console.log('📝 Text overlay z-index:', window.getComputedStyle(textOverlay).zIndex);
+        } else {
+          console.error('❌ Video text overlay element not found!');
+        }
         
         // Ensure video is completely muted
         video.muted = true;
@@ -1143,10 +1194,17 @@ FOR THIS, WE NEED YOUR HELP.
     function hideVideo3Background() {
       console.log('🛑 Hiding video...');
       const video = document.getElementById('bg-video3');
+      const textOverlay = document.getElementById('video-text-overlay');
       
       if (video) {
         video.pause();
         video.style.setProperty('display', 'none', 'important');
+      }
+      
+      // Hide text overlay
+      if (textOverlay) {
+        textOverlay.style.setProperty('display', 'none', 'important');
+        console.log('✅ Video text overlay hidden');
       }
     }
     
@@ -1707,14 +1765,31 @@ FOR THIS, WE NEED YOUR HELP.
         
         // Show characters up to current index
         const currentText = subtitleText.substring(0, charIndex + 1);
-        element.textContent = baseText + currentText;
+        
+        // Check if this is the 6BDM text and format it with different sizes
+        if (subtitleText.includes('6BDM:') && subtitleText.includes('JULIAN ASSANGE')) {
+          const parts = currentText.split('\n');
+          if (parts.length > 1) {
+            element.innerHTML = parts[0] + '<br><span style="font-size: 0.75em;">' + parts[1] + '</span>';
+          } else {
+            element.textContent = currentText;
+          }
+        } else {
+          element.textContent = baseText + currentText;
+        }
         
         
         charIndex++;
         if (charIndex >= len) {
           clearInterval(currentTypingInterval);
           currentTypingInterval = null;
-          element.textContent = baseText + subtitleText; // Final clean text
+          // Final clean text with formatting
+          if (subtitleText.includes('6BDM:') && subtitleText.includes('JULIAN ASSANGE')) {
+            const parts = subtitleText.split('\n');
+            element.innerHTML = parts[0] + '<br><span style="font-size: 0.75em;">' + parts[1] + '</span>';
+          } else {
+            element.textContent = baseText + subtitleText;
+          }
           console.log('Subtitle typewriter complete');
           if (shouldContinueTyping) { // Only call onComplete if we weren't cancelled
           onComplete && onComplete();
@@ -1896,8 +1971,8 @@ FOR THIS, WE NEED YOUR HELP.
             bdmElement.id = 'bdm-subtitle';
             bdmElement.style.cssText = `
               position: fixed;
-              top: 48%;
-              left: 0.5rem;
+              top: 70%;
+              left: 2.5rem;
               transform: translateY(-50%);
               width: 80vw;
               z-index: 2147483647;
@@ -1919,11 +1994,12 @@ FOR THIS, WE NEED YOUR HELP.
               bdmElement.style.fontSize = '1.26rem';
               bdmElement.style.width = '90vw';
               bdmElement.style.paddingLeft = '0.5rem';
-              bdmElement.style.left = '0.5rem';
+              bdmElement.style.left = '1.5rem';
+              bdmElement.style.top = '68%';
             }
             document.body.appendChild(bdmElement);
             
-            // After 22 seconds, type 6BDM in the center of the screen
+            // After 3 seconds, type 6BDM in the center of the screen
             const filmByTimeout = setTimeout(() => {
               if (sixBdmLine) {
                 // Format the text with proper indentation and line breaks
@@ -1936,7 +2012,7 @@ FOR THIS, WE NEED YOUR HELP.
                 console.log('6BDM line not found, skipping subtitle animation');
                 onComplete && onComplete();
               }
-            }, 22000); // 22 second delay
+            }, 3000); // 3 second delay
             filmByTimeouts.push(filmByTimeout);
           } else {
             onComplete && onComplete();
