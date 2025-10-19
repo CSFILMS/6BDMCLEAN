@@ -10,33 +10,36 @@
   <style>
     /* Background video - edge to edge, larger */
     .bg-video {
-      position: fixed;
-      top: -10%;
-      left: -10%;
-      width: 120vw;
-      height: 120vh;
-      object-fit: cover;
-      object-position: center center;
+      position: fixed !important;
+      top: -10% !important;
+      left: -10% !important;
+      right: -10% !important;
+      bottom: -10% !important;
+      width: 120vw !important;
+      height: 120vh !important;
+      object-fit: cover !important;
+      object-position: center center !important;
       z-index: 2147483647 !important;
-      pointer-events: none;
+      pointer-events: none !important;
       display: none;
       animation: none;
-      border: none;
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+      border: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      box-sizing: border-box !important;
     }
     
     /* Mobile video - sides touch edges, larger */
     @media (max-width: 768px) {
       .bg-video {
-        width: 120vw;
-        height: auto;
-        top: 50%;
-        left: -10%;
-        transform: translateY(-50%);
-        object-fit: cover;
-        object-position: center center;
+        width: 120vw !important;
+        height: auto !important;
+        top: 50% !important;
+        left: -10% !important;
+        right: -10% !important;
+        transform: translateY(-50%) !important;
+        object-fit: cover !important;
+        object-position: center center !important;
       }
     }
     
