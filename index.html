@@ -8,7 +8,7 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <style>
-    /* Background video - edge to edge */
+    /* Background video - edge to edge, scaled up 15% */
     .bg-video {
       position: fixed;
       top: 0;
@@ -25,16 +25,17 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      transform: scale(1.15);
     }
     
-    /* Mobile video - sides touch edges */
+    /* Mobile video - sides touch edges, scaled up 15% */
     @media (max-width: 768px) {
       .bg-video {
         width: 100vw;
         height: auto;
         top: 50%;
         left: 0;
-        transform: translateY(-50%);
+        transform: translateY(-50%) scale(1.15);
         object-fit: contain;
         object-position: center center;
       }
