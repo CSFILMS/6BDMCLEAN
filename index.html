@@ -928,6 +928,11 @@ z-index: 2 !important;
     <source src="TEXTAUDIO.mp4" type="audio/mp4">
   </audio>
   
+  <!-- Video audio track -->
+  <audio id="video-audio" preload="auto">
+    <source src="VIDEOS/HOLOGRAMFINALAUDIOGLITCH_audio.m4a" type="audio/mp4">
+  </audio>
+  
   <script>
     // Detect device type and load appropriate video size
     (function() {
@@ -1147,6 +1152,7 @@ FOR THIS, WE NEED YOUR HELP.
     function showVideo3Background() {
       console.log('🎬 Showing video...');
       const video = document.getElementById('bg-video3');
+      const videoAudio = document.getElementById('video-audio');
       const textOverlay = document.getElementById('video-text-overlay');
       const scanlines = document.getElementById('video-text-scanlines');
       
@@ -1189,6 +1195,19 @@ FOR THIS, WE NEED YOUR HELP.
         // Skip first 2 seconds
         video.currentTime = 2;
         
+        // Play video audio synced with video
+        if (videoAudio) {
+          videoAudio.currentTime = 2; // Start at same time as video
+          videoAudio.volume = 0.7; // Set volume
+          videoAudio.play().then(() => {
+            console.log('🔊 Video audio playing synced with video');
+          }).catch(err => {
+            console.log('❌ Video audio play failed:', err.message);
+          });
+        } else {
+          console.error('❌ Video audio element not found!');
+        }
+        
         // Set up video event listeners
         const onCanPlay = () => {
           console.log('✅ Video ready to play');
@@ -1222,12 +1241,20 @@ FOR THIS, WE NEED YOUR HELP.
     function hideVideo3Background() {
       console.log('🛑 Hiding video...');
       const video = document.getElementById('bg-video3');
+      const videoAudio = document.getElementById('video-audio');
       const textOverlay = document.getElementById('video-text-overlay');
       const scanlines = document.getElementById('video-text-scanlines');
       
       if (video) {
         video.pause();
         video.style.setProperty('display', 'none', 'important');
+      }
+      
+      // Stop video audio
+      if (videoAudio) {
+        videoAudio.pause();
+        videoAudio.currentTime = 0;
+        console.log('🔇 Video audio stopped');
       }
       
       // Hide text overlay
