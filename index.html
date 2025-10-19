@@ -1933,10 +1933,18 @@ FOR THIS, WE NEED YOUR HELP.
 
       // Play text unscramble audio
       const textAudio = document.getElementById('text-audio');
+      console.log('🔊 Attempting to play text audio:', textAudio);
       if (textAudio) {
         textAudio.currentTime = 0;
         textAudio.volume = 0.5;
-        textAudio.play().catch(err => console.log('Text audio play failed:', err));
+        console.log('🔊 Playing text audio...');
+        textAudio.play().then(() => {
+          console.log('✅ Text audio playing successfully');
+        }).catch(err => {
+          console.log('❌ Text audio play failed:', err);
+        });
+      } else {
+        console.log('❌ Text audio element not found!');
       }
 
       // Use requestAnimationFrame for better performance
@@ -1957,6 +1965,7 @@ FOR THIS, WE NEED YOUR HELP.
           
           // Stop text unscramble audio
           if (textAudio) {
+            console.log('🛑 Stopping text audio');
             textAudio.pause();
             textAudio.currentTime = 0;
           }
@@ -2101,10 +2110,18 @@ FOR THIS, WE NEED YOUR HELP.
 
       // Play text unscramble audio
       const textAudio = document.getElementById('text-audio');
+      console.log('🔊 Attempting to play text audio:', textAudio);
       if (textAudio) {
         textAudio.currentTime = 0;
         textAudio.volume = 0.5;
-        textAudio.play().catch(err => console.log('Text audio play failed:', err));
+        console.log('🔊 Playing text audio...');
+        textAudio.play().then(() => {
+          console.log('✅ Text audio playing successfully');
+        }).catch(err => {
+          console.log('❌ Text audio play failed:', err);
+        });
+      } else {
+        console.log('❌ Text audio element not found!');
       }
 
       // Use requestAnimationFrame for better performance with ultra-fast timing
@@ -2125,6 +2142,7 @@ FOR THIS, WE NEED YOUR HELP.
           
           // Stop text unscramble audio
           if (textAudio) {
+            console.log('🛑 Stopping text audio');
             textAudio.pause();
             textAudio.currentTime = 0;
           }
