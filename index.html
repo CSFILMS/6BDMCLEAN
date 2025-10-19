@@ -305,9 +305,14 @@ transparent 4px
       }
       
       /* Additional mobile constraints to prevent overflow */
-      * {
+      *:not(.bg-video):not(#bg-video3) {
         max-width: 100% !important;
         box-sizing: border-box !important;
+      }
+      
+      /* Allow video to scale beyond viewport */
+      .bg-video, #bg-video3 {
+        max-width: none !important;
       }
       
       /* Ensure no element can cause horizontal overflow */
