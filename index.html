@@ -917,6 +917,11 @@ z-index: 2 !important;
   <!-- Scanlines overlay on top of text -->
   <div id="video-text-scanlines" style="display: none;"></div>
   
+  <!-- Text unscramble audio -->
+  <audio id="text-audio" preload="auto">
+    <source src="TEXTAUDIO.mp4" type="audio/mp4">
+  </audio>
+  
   <script>
     // Detect device type and load appropriate video size
     (function() {
@@ -1925,6 +1930,14 @@ FOR THIS, WE NEED YOUR HELP.
       for (let i=0;i<len;i++) scrambled[i] = /\s/.test(text[i]) ? text[i] : chars[Math.floor(Math.random()*chars.length)];
       isAnimating = true; promptElem.style.visibility='hidden'; navMsg.style.visibility='hidden';
 
+      // Play text unscramble audio
+      const textAudio = document.getElementById('text-audio');
+      if (textAudio) {
+        textAudio.currentTime = 0;
+        textAudio.volume = 0.5;
+        textAudio.play().catch(err => console.log('Text audio play failed:', err));
+      }
+
       // Use requestAnimationFrame for better performance
       const stopAnimation = createRAFAnimation(() => {
         const display = scrambled.slice();
@@ -1940,6 +1953,12 @@ FOR THIS, WE NEED YOUR HELP.
           stopAnimation();
           truncateTextToFit(element, text);
           isAnimating=false;
+          
+          // Stop text unscramble audio
+          if (textAudio) {
+            textAudio.pause();
+            textAudio.currentTime = 0;
+          }
           
           // Wrap years in spans for styling
           wrapYearsInSpans(element);
@@ -2079,6 +2098,14 @@ FOR THIS, WE NEED YOUR HELP.
       for (let i=0;i<len;i++) scrambled[i] = /\s/.test(text[i]) ? text[i] : chars[Math.floor(Math.random()*chars.length)];
       isAnimating = true; promptElem.style.visibility='hidden'; navMsg.style.visibility='hidden';
 
+      // Play text unscramble audio
+      const textAudio = document.getElementById('text-audio');
+      if (textAudio) {
+        textAudio.currentTime = 0;
+        textAudio.volume = 0.5;
+        textAudio.play().catch(err => console.log('Text audio play failed:', err));
+      }
+
       // Use requestAnimationFrame for better performance with ultra-fast timing
       const stopAnimation = createRAFAnimation(() => {
         const display = scrambled.slice();
@@ -2094,6 +2121,12 @@ FOR THIS, WE NEED YOUR HELP.
           stopAnimation();
           truncateTextToFit(element, text);
           isAnimating=false;
+          
+          // Stop text unscramble audio
+          if (textAudio) {
+            textAudio.pause();
+            textAudio.currentTime = 0;
+          }
           
           // Wrap years in spans for styling
           wrapYearsInSpans(element);
@@ -2113,7 +2146,7 @@ FOR THIS, WE NEED YOUR HELP.
             // Slide 2 - hide everything (invisible)
             navMsg.style.visibility = 'hidden';
             slideCounterEl.style.visibility = 'hidden';
-          } else if (currentPage >= 2) {
+          } else if (currentPage === 2) {
             // On slide 3 and all subsequent slides, show slide counter in nav-msg location
             navMsg.innerHTML=`SLIDE ${currentPage + 1} / ${pages.length}`;
             navMsg.style.fontSize = '1rem';
