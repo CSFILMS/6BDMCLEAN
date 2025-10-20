@@ -1089,6 +1089,7 @@ FOR THIS, WE NEED YOUR HELP.
     let debugMode = true;
     let currentAudio = null; // Track currently playing audio
     let audioVolume = 0.67; // Default volume level
+    let typingAudio = null; // Track typing audio for video end subtitle
     
     // Function to stop any currently playing audio
     function stopCurrentAudio() {
@@ -1301,28 +1302,26 @@ FOR THIS, WE NEED YOUR HELP.
       
       // Type the message character by character
       const message = '6BDM:\nJULIAN ASSANGE AND THE PRICE OF TRUTH';
-      const textAudio = document.getElementById('text-audio');
+      
+      // Stop any existing typing audio
+      if (typingAudio) {
+        typingAudio.pause();
+        typingAudio = null;
+      }
+      
+      // Create a new audio instance for typing sound
+      typingAudio = new Audio('TEXTAUDIO.mp4');
+      typingAudio.volume = 1.0; // Full volume
+      typingAudio.loop = true; // Loop during typing
+      typingAudio.muted = false; // Ensure not muted
       
       // Play typing audio
-      console.log('🔊 Attempting to play TEXTAUDIO for video end subtitle:', textAudio);
-      if (textAudio) {
-        // Stop and reset audio first
-        textAudio.pause();
-        textAudio.currentTime = 0;
-        textAudio.volume = 0.7;
-        
-        // Load the audio to ensure it's ready
-        textAudio.load();
-        
-        console.log('🔊 TEXTAUDIO element found, attempting play...');
-        textAudio.play().then(() => {
-          console.log('✅ TEXTAUDIO playing successfully for video end subtitle');
-        }).catch(err => {
-          console.error('❌ TEXTAUDIO play failed:', err.message, err);
-        });
-      } else {
-        console.error('❌ TEXTAUDIO element not found!');
-      }
+      console.log('🔊 Playing TEXTAUDIO for video end subtitle... Volume:', typingAudio.volume, 'Muted:', typingAudio.muted);
+      typingAudio.play().then(() => {
+        console.log('✅ TEXTAUDIO playing successfully - Volume:', typingAudio.volume, 'Paused:', typingAudio.paused);
+      }).catch(err => {
+        console.error('❌ TEXTAUDIO play failed:', err.message);
+      });
       
       let charIndex = 0;
       const typingInterval = setInterval(() => {
@@ -1338,12 +1337,10 @@ FOR THIS, WE NEED YOUR HELP.
           charIndex++;
         } else {
           clearInterval(typingInterval);
-          // Stop text audio when typing is complete
-          if (textAudio) {
-            textAudio.pause();
-            textAudio.currentTime = 0;
-            console.log('🛑 Text audio stopped - typing complete');
-          }
+          // Stop typing audio when typing is complete
+          typingAudio.pause();
+          typingAudio.currentTime = 0;
+          console.log('🛑 Typing audio stopped - typing complete');
         }
       }, 50); // 50ms per character
     }
@@ -1379,6 +1376,14 @@ FOR THIS, WE NEED YOUR HELP.
         textAudio.pause();
         textAudio.currentTime = 0;
         console.log('🔇 Text audio stopped');
+      }
+      
+      // Stop typing audio
+      if (typingAudio) {
+        typingAudio.pause();
+        typingAudio.currentTime = 0;
+        typingAudio = null;
+        console.log('🔇 Typing audio stopped');
       }
       
       // Hide text overlay
