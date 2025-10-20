@@ -1254,6 +1254,12 @@ FOR THIS, WE NEED YOUR HELP.
         video.addEventListener('canplay', onCanPlay);
         video.addEventListener('error', onError);
         
+        // Add event listener for when video ends
+        video.addEventListener('ended', () => {
+          console.log('🎬 Video ended - starting subtitle typing');
+          startVideoEndSubtitle();
+        });
+        
         video.play().then(() => {
           console.log('✅ Video playing from start (muted)');
           console.log('🎬 Video dimensions:', video.videoWidth, 'x', video.videoHeight);
@@ -1266,14 +1272,80 @@ FOR THIS, WE NEED YOUR HELP.
         console.error('❌ Video element not found!');
       }
     }
+    
+    // Function to start typing subtitle when video ends
+    function startVideoEndSubtitle() {
+      // Create or get the subtitle element
+      let subtitleEl = document.getElementById('video-end-subtitle');
+      if (!subtitleEl) {
+        subtitleEl = document.createElement('div');
+        subtitleEl.id = 'video-end-subtitle';
+        const isMobile = window.innerWidth <= 768;
+        subtitleEl.style.cssText = `
+          position: fixed;
+          bottom: ${isMobile ? '8vh' : '10vh'};
+          left: 50%;
+          transform: translateX(-50%);
+          color: var(--fg);
+          font-family: var(--font-family);
+          font-size: ${isMobile ? '1.2rem' : '1.5rem'};
+          text-align: center;
+          z-index: 2147483648;
+          pointer-events: none;
+          white-space: pre-wrap;
+          text-shadow: 0 0 3px var(--fg), 0 0 10px var(--fg), 0 0 20px var(--fg);
+        `;
+        document.body.appendChild(subtitleEl);
+      }
+      
+      // Type the message character by character
+      const message = '6BDM:\nJULIAN ASSANGE AND THE PRICE OF TRUTH';
+      const textAudio = document.getElementById('text-audio');
+      
+      // Play typing audio
+      if (textAudio) {
+        textAudio.currentTime = 0;
+        textAudio.volume = 0.5;
+        textAudio.play().then(() => {
+          console.log('🔊 Text audio playing for video end subtitle');
+        }).catch(err => {
+          console.log('❌ Text audio play failed:', err);
+        });
+      }
+      
+      let charIndex = 0;
+      const typingInterval = setInterval(() => {
+        if (charIndex < message.length) {
+          const currentText = message.substring(0, charIndex + 1);
+          // Format with smaller second line
+          const lines = currentText.split('\n');
+          if (lines.length > 1) {
+            subtitleEl.innerHTML = lines[0] + '<br><span style="font-size: 0.75em;">' + lines[1] + '</span>';
+          } else {
+            subtitleEl.textContent = currentText;
+          }
+          charIndex++;
+        } else {
+          clearInterval(typingInterval);
+          // Stop text audio when typing is complete
+          if (textAudio) {
+            textAudio.pause();
+            textAudio.currentTime = 0;
+            console.log('🛑 Text audio stopped - typing complete');
+          }
+        }
+      }, 50); // 50ms per character
+    }
 
     function hideVideo3Background() {
       console.log('🛑 Hiding video...');
       const videoContainer = document.getElementById('video-container');
       const video = document.getElementById('bg-video3');
       const videoAudio = document.getElementById('video-audio');
+      const textAudio = document.getElementById('text-audio');
       const textOverlay = document.getElementById('video-text-overlay');
       const scanlines = document.getElementById('video-text-scanlines');
+      const videoEndSubtitle = document.getElementById('video-end-subtitle');
       
       if (videoContainer) {
         videoContainer.style.setProperty('display', 'none', 'important');
@@ -1291,6 +1363,13 @@ FOR THIS, WE NEED YOUR HELP.
         console.log('🔇 Video audio stopped');
       }
       
+      // Stop text audio
+      if (textAudio) {
+        textAudio.pause();
+        textAudio.currentTime = 0;
+        console.log('🔇 Text audio stopped');
+      }
+      
       // Hide text overlay
       if (textOverlay) {
         textOverlay.style.setProperty('display', 'none', 'important');
@@ -1301,6 +1380,12 @@ FOR THIS, WE NEED YOUR HELP.
       if (scanlines) {
         scanlines.style.setProperty('display', 'none', 'important');
         console.log('✅ Video scanlines overlay hidden');
+      }
+      
+      // Remove video end subtitle
+      if (videoEndSubtitle) {
+        videoEndSubtitle.remove();
+        console.log('✅ Video end subtitle removed');
       }
     }
     
