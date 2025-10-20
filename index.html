@@ -11,12 +11,10 @@
     /* Background video - edge to edge, larger */
     .bg-video {
       position: fixed !important;
-      top: -10% !important;
-      left: -10% !important;
-      right: -10% !important;
-      bottom: -10% !important;
-      width: 120vw !important;
-      height: 120vh !important;
+      top: -15vh !important;
+      left: -15vw !important;
+      width: 130vw !important;
+      height: 130vh !important;
       object-fit: cover !important;
       object-position: center center !important;
       z-index: 2147483647 !important;
@@ -32,14 +30,16 @@
     /* Mobile video - sides touch edges, larger */
     @media (max-width: 768px) {
       .bg-video {
-        width: 120vw !important;
+        width: 130vw !important;
         height: auto !important;
+        min-height: 100vh !important;
         top: 50% !important;
-        left: -10% !important;
-        right: -10% !important;
+        left: -15vw !important;
         transform: translateY(-50%) !important;
         object-fit: cover !important;
         object-position: center center !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
       }
     }
     
