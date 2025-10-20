@@ -1284,8 +1284,8 @@ FOR THIS, WE NEED YOUR HELP.
         subtitleEl.style.cssText = `
           position: fixed;
           top: 67%;
-          left: ${isMobile ? '0.5vw' : '1rem'};
-          padding-left: ${isMobile ? '0.5vw' : '0.5rem'};
+          left: ${isMobile ? '2rem' : '3rem'};
+          padding-left: 0.5rem;
           transform: translateY(-50%);
           color: var(--fg);
           font-family: var(--font-family);
@@ -1304,14 +1304,18 @@ FOR THIS, WE NEED YOUR HELP.
       const textAudio = document.getElementById('text-audio');
       
       // Play typing audio
+      console.log('🔊 Attempting to play TEXTAUDIO for video end subtitle:', textAudio);
       if (textAudio) {
         textAudio.currentTime = 0;
-        textAudio.volume = 0.5;
+        textAudio.volume = 0.7;
+        console.log('🔊 TEXTAUDIO element found, attempting play...');
         textAudio.play().then(() => {
-          console.log('🔊 Text audio playing for video end subtitle');
+          console.log('✅ TEXTAUDIO playing successfully for video end subtitle');
         }).catch(err => {
-          console.log('❌ Text audio play failed:', err);
+          console.error('❌ TEXTAUDIO play failed:', err.message, err);
         });
+      } else {
+        console.error('❌ TEXTAUDIO element not found!');
       }
       
       let charIndex = 0;
