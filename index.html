@@ -8,13 +8,13 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <style>
-    /* Background video - edge to edge, larger */
+    /* Background video - edge to edge */
     .bg-video {
       position: fixed !important;
-      top: -7.5vh !important;
-      left: -7.5vw !important;
-      width: 115vw !important;
-      height: 115vh !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
       object-fit: cover !important;
       object-position: center center !important;
       z-index: 2147483647 !important;
@@ -27,19 +27,16 @@
       box-sizing: border-box !important;
     }
     
-    /* Mobile video - sides touch edges, larger */
+    /* Mobile video - fullscreen with cover */
     @media (max-width: 768px) {
       .bg-video {
-        width: 115vw !important;
-        height: auto !important;
-        min-height: 100vh !important;
-        top: 50% !important;
-        left: -7.5vw !important;
-        transform: translateY(-50%) !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        top: 0 !important;
+        left: 0 !important;
+        transform: none !important;
         object-fit: cover !important;
         object-position: center center !important;
-        margin-left: 0 !important;
-        margin-right: 0 !important;
       }
     }
     
