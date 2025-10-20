@@ -1311,7 +1311,7 @@ FOR THIS, WE NEED YOUR HELP.
       
       // Create a new audio instance for typing sound
       typingAudio = new Audio('TEXTAUDIO.mp4');
-      typingAudio.volume = 1.0; // Full volume
+      typingAudio.volume = 0.3; // Lower volume
       typingAudio.loop = true; // Loop during typing
       typingAudio.muted = false; // Ensure not muted
       
@@ -2096,21 +2096,24 @@ FOR THIS, WE NEED YOUR HELP.
       for (let i=0;i<len;i++) scrambled[i] = /\s/.test(text[i]) ? text[i] : chars[Math.floor(Math.random()*chars.length)];
       isAnimating = true; promptElem.style.visibility='hidden'; navMsg.style.visibility='hidden';
 
-      // Play text unscramble audio
-      const textAudio = document.getElementById('text-audio');
-      console.log('🔊 Attempting to play text audio:', textAudio);
-      if (textAudio) {
-        textAudio.currentTime = 0;
-        textAudio.volume = 0.5;
-        console.log('🔊 Playing text audio...');
-        textAudio.play().then(() => {
-          console.log('✅ Text audio playing successfully');
-        }).catch(err => {
-          console.log('❌ Text audio play failed:', err);
-        });
-      } else {
-        console.log('❌ Text audio element not found!');
+      // Stop any existing typing audio
+      if (typingAudio) {
+        typingAudio.pause();
+        typingAudio = null;
       }
+      
+      // Create new audio instance for unscrambling
+      typingAudio = new Audio('TEXTAUDIO.mp4');
+      typingAudio.volume = 0.3;
+      typingAudio.loop = true;
+      typingAudio.muted = false;
+      
+      console.log('🔊 Playing unscramble audio...');
+      typingAudio.play().then(() => {
+        console.log('✅ Unscramble audio playing');
+      }).catch(err => {
+        console.log('❌ Unscramble audio play failed:', err);
+      });
 
       // Use requestAnimationFrame for better performance
       const stopAnimation = createRAFAnimation(() => {
@@ -2128,11 +2131,12 @@ FOR THIS, WE NEED YOUR HELP.
           truncateTextToFit(element, text);
           isAnimating=false;
           
-          // Stop text unscramble audio
-          if (textAudio) {
-            console.log('🛑 Stopping text audio');
-            textAudio.pause();
-            textAudio.currentTime = 0;
+          // Stop typing audio
+          if (typingAudio) {
+            console.log('🛑 Stopping typing audio');
+            typingAudio.pause();
+            typingAudio.currentTime = 0;
+            typingAudio = null;
           }
           
           // Wrap years in spans for styling
@@ -2247,11 +2251,12 @@ FOR THIS, WE NEED YOUR HELP.
           truncateTextToFit(element, text);
           isAnimating=false;
           
-          // Stop text unscramble audio
-          if (textAudio) {
-            console.log('🛑 Stopping text audio');
-            textAudio.pause();
-            textAudio.currentTime = 0;
+          // Stop typing audio
+          if (typingAudio) {
+            console.log('🛑 Stopping typing audio');
+            typingAudio.pause();
+            typingAudio.currentTime = 0;
+            typingAudio = null;
           }
           
           // Wrap years in spans for styling
