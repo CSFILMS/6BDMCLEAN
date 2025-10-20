@@ -1306,8 +1306,14 @@ FOR THIS, WE NEED YOUR HELP.
       // Play typing audio
       console.log('🔊 Attempting to play TEXTAUDIO for video end subtitle:', textAudio);
       if (textAudio) {
+        // Stop and reset audio first
+        textAudio.pause();
         textAudio.currentTime = 0;
         textAudio.volume = 0.7;
+        
+        // Load the audio to ensure it's ready
+        textAudio.load();
+        
         console.log('🔊 TEXTAUDIO element found, attempting play...');
         textAudio.play().then(() => {
           console.log('✅ TEXTAUDIO playing successfully for video end subtitle');
@@ -2154,75 +2160,17 @@ FOR THIS, WE NEED YOUR HELP.
             slideCounterEl.style.visibility = 'hidden';
           }
           
-          // Check if this text contains "A FILM BY" and add delayed subtitle
+          // Check if this text contains "A FILM BY" and show video
           if (text.includes('A FILM BY EUGENE JARECKI')) {
-            console.log('A FILM BY detected - showing video and adding delay...');
+            console.log('A FILM BY detected - showing video...');
             
-            // Show JA_OBIWAN video
+            // Show video
             showVideo3Background();
             
-            // Enable typing for this specific animation
-            shouldContinueTyping = true;
+            // Hide the text element since video will show everything
+            element.textContent = '';
             
-            // Split the text to separate FILM BY line from 6BDM line
-            const lines = text.split('\n');
-            console.log('All lines:', lines);
-            const filmByLine = lines.find(line => line.includes('A FILM BY EUGENE JARECKI'));
-            const sixBdmLine = lines.find(line => line.includes('6BDM: JULIAN ASSANGE AND THE PRICE OF TRUTH'));
-            console.log('Film by line:', filmByLine);
-            console.log('6BDM line:', sixBdmLine);
-            
-            // Show only the FILM BY line immediately
-            element.textContent = filmByLine;
-            
-            // Create a separate element positioned in the middle of the screen for 6BDM
-            const bdmElement = document.createElement('div');
-            bdmElement.id = 'bdm-subtitle';
-            bdmElement.style.cssText = `
-              position: fixed;
-              top: 85%;
-              left: 2.5rem;
-              transform: translateY(-50%);
-              width: 80vw;
-              z-index: 2147483647;
-              color: var(--fg);
-              font-family: var(--font-family);
-              font-size: 1.62rem;
-              text-align: left;
-              padding-left: 0.5rem;
-              padding-right: 2rem;
-              opacity: 1;
-              pointer-events: none;
-              display: block;
-              white-space: pre-wrap;
-              text-shadow: 0 0 2px var(--fg), 0 0 8px var(--fg), 0 0 16px var(--fg);
-            `;
-            
-            // Add mobile responsiveness
-            if (window.innerWidth <= 768) {
-              bdmElement.style.fontSize = '1.26rem';
-              bdmElement.style.width = '90vw';
-              bdmElement.style.paddingLeft = '0.5rem';
-              bdmElement.style.left = '1.5rem';
-              bdmElement.style.top = '83%';
-            }
-            document.body.appendChild(bdmElement);
-            
-            // After 3 seconds, type 6BDM in the center of the screen
-            const filmByTimeout = setTimeout(() => {
-              if (sixBdmLine) {
-                // Format the text with proper indentation and line breaks
-                const formattedText = '6BDM:\nJULIAN ASSANGE AND THE PRICE OF TRUTH';
-                // Type the formatted 6BDM text in the center element
-                decodeSubtitle(bdmElement, '', formattedText, () => {
-                  onComplete && onComplete();
-                });
-              } else {
-                console.log('6BDM line not found, skipping subtitle animation');
-                onComplete && onComplete();
-              }
-            }, 3000); // 3 second delay
-            filmByTimeouts.push(filmByTimeout);
+            onComplete && onComplete();
           } else {
             onComplete && onComplete();
           }
