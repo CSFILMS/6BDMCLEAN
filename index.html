@@ -116,6 +116,15 @@
       animation: slideInRight 0.35s cubic-bezier(0.0, 0.0, 0.2, 1) forwards;
     }
     
+    /* Make images slide with page */
+    .slide-with-page.slide-out {
+      animation: slideOutLeft 0.35s cubic-bezier(0.4, 0.0, 1, 1) forwards;
+    }
+    
+    .slide-with-page.slide-in {
+      animation: slideInRight 0.35s cubic-bezier(0.0, 0.0, 0.2, 1) forwards;
+    }
+    
     /* Video overlay (disabled for small centered video) */
     .bg-overlay {
       display: none;
@@ -1612,7 +1621,7 @@ FOR THIS, WE NEED YOUR HELP.
       const imageContainer = document.createElement('div');
       imageContainer.id = 'cannes-photo-container';
       imageContainer.style.cssText = `
-        position: absolute !important;
+        position: fixed !important;
         bottom: 18vh !important;
         left: 50% !important;
         transform: translateX(-50%) !important;
@@ -1624,6 +1633,7 @@ FOR THIS, WE NEED YOUR HELP.
         pointer-events: none !important;
         overflow: hidden !important;
       `;
+      imageContainer.classList.add('slide-with-page');
       document.getElementById('page').appendChild(imageContainer);
       
       // Add Cannes photo
@@ -2316,9 +2326,16 @@ FOR THIS, WE NEED YOUR HELP.
         
         // Only animate if not first load
         if (currentPage !== null && currentPage !== pageIndex) {
-          // Trigger slide-out animation
+          // Trigger slide-out animation on page and images
           pageEl.classList.remove('slide-in');
           pageEl.classList.add('slide-out');
+          
+          // Animate images too
+          const slideImages = document.querySelectorAll('.slide-with-page');
+          slideImages.forEach(img => {
+            img.classList.remove('slide-in');
+            img.classList.add('slide-out');
+          });
           
           // Wait for slide-out to complete, then update content and slide in
           setTimeout(() => {
@@ -2331,13 +2348,23 @@ FOR THIS, WE NEED YOUR HELP.
             // Update content (rest of function)
             continuePageSetup(pageIndex, pageEl, el, promptElem);
             
-            // Trigger slide-in animation
+            // Trigger slide-in animation on page
             pageEl.classList.remove('slide-out');
             pageEl.classList.add('slide-in');
             
-            // Remove animation class after completion
+            // Animate new images in
+            const newSlideImages = document.querySelectorAll('.slide-with-page');
+            newSlideImages.forEach(img => {
+              img.classList.remove('slide-out');
+              img.classList.add('slide-in');
+            });
+            
+            // Remove animation classes after completion
             setTimeout(() => {
               pageEl.classList.remove('slide-in');
+              newSlideImages.forEach(img => {
+                img.classList.remove('slide-in');
+              });
             }, 350);
           }, 350);
           
