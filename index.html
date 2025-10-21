@@ -154,15 +154,13 @@
     
     /* FORCE NO SCROLLING */
     html {
-      overflow-x: visible;
-      overflow-y: hidden;
+      overflow: hidden;
       height: 100%;
       width: 100%;
     }
     
     body {
-      overflow-x: visible;
-      overflow-y: hidden;
+      overflow: hidden;
       position: fixed;
       top: 0;
       left: 0;
@@ -193,8 +191,7 @@
         width: 100% !important;
         left: 0 !important;
         right: 0 !important;
-        overflow-x: visible !important;
-        overflow-y: hidden !important;
+        overflow: hidden !important;
         -webkit-text-size-adjust: 100%; /* Prevent iOS text scaling */
         text-size-adjust: 100%; /* Standard property for Chrome/Edge */
         -webkit-tap-highlight-color: transparent; /* Remove tap highlights */
@@ -303,10 +300,9 @@
         max-width: none !important;
       }
       
-      /* Ensure no element can cause horizontal overflow - except video */
+      /* Ensure no element can cause horizontal overflow */
       html {
-        overflow-x: visible !important;
-        overflow-y: hidden !important;
+        overflow: hidden !important;
       }
       
       #page, #text-wrap, #unscramble {
