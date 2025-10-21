@@ -109,11 +109,11 @@
     }
     
     #page.slide-out {
-      animation: slideOutLeft 0.5s cubic-bezier(0.4, 0.0, 1, 1) forwards;
+      animation: slideOutLeft 0.35s cubic-bezier(0.4, 0.0, 1, 1) forwards;
     }
     
     #page.slide-in {
-      animation: slideInRight 0.5s cubic-bezier(0.0, 0.0, 0.2, 1) forwards;
+      animation: slideInRight 0.35s cubic-bezier(0.0, 0.0, 0.2, 1) forwards;
     }
     
     /* Video overlay (disabled for small centered video) */
@@ -2334,8 +2334,8 @@ FOR THIS, WE NEED YOUR HELP.
             // Remove animation class after completion
             setTimeout(() => {
               pageEl.classList.remove('slide-in');
-            }, 500);
-          }, 500);
+            }, 350);
+          }, 350);
           
           return; // Exit early, will continue after animation
         }
