@@ -70,31 +70,11 @@
       background-color: rgba(0, 0, 0, 0.7);
     }
     
-    /* Scanlines overlay on top of text */
-    #video-text-scanlines {
-      position: fixed;
-      top: 2rem;
-      left: 2rem;
-      z-index: 2147483649 !important;
-      padding: 0.7rem 1.05rem;
-      pointer-events: none;
-      background-image: repeating-linear-gradient(
-        0deg,
-        rgba(0, 0, 0, 0.5) 0px,
-        rgba(0, 0, 0, 0.5) 2px,
-        transparent 2px,
-        transparent 4px
-      );
-    }
+    /* Video text scanlines removed */
     
     @media (max-width: 768px) {
       #video-text-overlay {
         font-size: 0.84rem;
-        top: 1.5rem;
-        left: 1.5rem;
-        padding: 0.52rem 0.7rem;
-      }
-      #video-text-scanlines {
         top: 1.5rem;
         left: 1.5rem;
         padding: 0.52rem 0.7rem;
@@ -172,43 +152,7 @@
       box-sizing: border-box;
     }
     
-    /* CRT scanline effect */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: repeating-linear-gradient(
-0deg,
-transparent 0px,
-transparent 2px,
-rgba(0, 255, 0, 0.03) 2px,
-rgba(0, 255, 0, 0.03) 4px
-      );
-      pointer-events: none;
-      z-index: 99998;
-    }
-    
-    /* Black scanlines on top */
-    body::after {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: repeating-linear-gradient(
-0deg,
-rgba(0, 0, 0, 0.26) 0px,
-rgba(0, 0, 0, 0.26) 2px,
-transparent 2px,
-transparent 4px
-      );
-      pointer-events: none;
-      z-index: 99999;
-    }
+    /* Scanlines removed */
     
     @media (max-width: 768px) {
       body {
@@ -946,9 +890,6 @@ z-index: 2 !important;
     A FILM BY EUGENE JARECKI
   </div>
   
-  <!-- Scanlines overlay on top of text -->
-  <div id="video-text-scanlines" style="display: none;"></div>
-  
   <!-- Text unscramble audio -->
   <audio id="text-audio" preload="auto">
     <source src="TEXTAUDIO.mp4" type="audio/mp4">
@@ -1182,7 +1123,6 @@ FOR THIS, WE NEED YOUR HELP.
       const video = document.getElementById('bg-video3');
       const videoAudio = document.getElementById('video-audio');
       const textOverlay = document.getElementById('video-text-overlay');
-      const scanlines = document.getElementById('video-text-scanlines');
       
       if (videoContainer) {
         videoContainer.style.setProperty('display', 'block', 'important');
@@ -1210,15 +1150,6 @@ FOR THIS, WE NEED YOUR HELP.
           console.error('❌ Video text overlay element not found!');
         }
         
-        // Show scanlines overlay
-        if (scanlines) {
-          scanlines.style.setProperty('display', 'block', 'important');
-          scanlines.style.setProperty('visibility', 'visible', 'important');
-          scanlines.style.setProperty('opacity', '1', 'important');
-          console.log('✅ Video scanlines overlay shown');
-        } else {
-          console.error('❌ Video scanlines overlay element not found!');
-        }
         
         // Ensure video is completely muted
         video.muted = true;
@@ -1355,7 +1286,6 @@ FOR THIS, WE NEED YOUR HELP.
       const videoAudio = document.getElementById('video-audio');
       const textAudio = document.getElementById('text-audio');
       const textOverlay = document.getElementById('video-text-overlay');
-      const scanlines = document.getElementById('video-text-scanlines');
       const videoEndSubtitle = document.getElementById('video-end-subtitle');
       
       if (videoContainer) {
@@ -1393,12 +1323,6 @@ FOR THIS, WE NEED YOUR HELP.
       if (textOverlay) {
         textOverlay.style.setProperty('display', 'none', 'important');
         console.log('✅ Video text overlay hidden');
-      }
-      
-      // Hide scanlines overlay
-      if (scanlines) {
-        scanlines.style.setProperty('display', 'none', 'important');
-        console.log('✅ Video scanlines overlay hidden');
       }
       
       // Remove video end subtitle
