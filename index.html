@@ -2545,7 +2545,7 @@ FOR THIS, WE NEED YOUR HELP.
        const slideCounter = document.getElementById('slide-counter');
        
        if (pageIndex <= 1) {
-         // Slides 1-2: Show PRESS SPACEBAR in nav-msg
+         // Slides 1-2: Show PRESS SPACEBAR in nav-msg, show slide counter below
          if (navMsg) {
            navMsg.innerHTML = 'PRESS&nbsp;SPACEBAR<br>TO&nbsp;CONTINUE';
            navMsg.style.fontSize = '0.7rem';
@@ -2556,8 +2556,12 @@ FOR THIS, WE NEED YOUR HELP.
            navMsg.style.lineHeight = '1.3';
            navMsg.style.whiteSpace = 'normal';
          }
+         if (slideCounter) {
+           slideCounter.textContent = `SLIDE ${pageIndex + 1} / ${pages.length}`;
+           slideCounter.style.visibility = 'visible';
+         }
        } else {
-         // Slide 3 onwards: Show slide counter in nav-msg area
+         // Slide 3 onwards: Show slide counter in nav-msg area, hide bottom counter
          if (navMsg) {
            navMsg.textContent = `SLIDE ${pageIndex + 1} / ${pages.length}`;
            navMsg.style.fontSize = '0.7rem';
@@ -2567,12 +2571,9 @@ FOR THIS, WE NEED YOUR HELP.
            navMsg.style.maxWidth = '140px';
            navMsg.style.whiteSpace = 'nowrap';
          }
-       }
-       
-       // Update slide counter below to always show current slide
-       if (slideCounter) {
-         slideCounter.textContent = `SLIDE ${pageIndex + 1} / ${pages.length}`;
-         slideCounter.style.visibility = 'visible';
+         if (slideCounter) {
+           slideCounter.style.visibility = 'hidden';
+         }
        }
        console.log(`📊 Navigation updated for page ${pageIndex + 1}`);
        
