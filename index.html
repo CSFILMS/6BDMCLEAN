@@ -1666,10 +1666,10 @@ FOR THIS, WE NEED YOUR HELP.
       const imageContainer = document.createElement('div');
       imageContainer.id = 'cannes-photo-container';
       imageContainer.style.cssText = `
-        position: absolute !important;
-        top: 80% !important;
+        position: fixed !important;
+        bottom: 22vh !important;
         left: 50% !important;
-        transform: translate(-50%, 0%) !important;
+        transform: translateX(-50%) !important;
         max-width: 75vw !important;
         max-height: 40vh !important;
         width: 75vw !important;
@@ -1677,8 +1677,9 @@ FOR THIS, WE NEED YOUR HELP.
         z-index: 1 !important;
         pointer-events: none !important;
         overflow: visible !important;
+        transition: opacity 0.15s ease-in-out !important;
       `;
-      document.getElementById('page').appendChild(imageContainer);
+      document.body.appendChild(imageContainer);
       
       // Add Cannes photo
       const img = document.createElement('img');
@@ -1697,8 +1698,10 @@ FOR THIS, WE NEED YOUR HELP.
       `;
       imageContainer.appendChild(img);
       
-      // CRT-style fade-in effect with brightness flash
+      // Quick fade-in effect
+      imageContainer.style.opacity = '0';
       setTimeout(() => {
+        imageContainer.style.opacity = '1';
         img.style.opacity = '1';
         // Add brightness flash effect with intense glow
         img.style.filter = 'brightness(1.2) sepia(1) hue-rotate(60deg) saturate(4.0)';
@@ -1829,8 +1832,10 @@ FOR THIS, WE NEED YOUR HELP.
       `;
       imageContainer.appendChild(img);
       
-      // CRT-style fade-in effect with brightness flash
+      // Quick fade-in effect
+      imageContainer.style.opacity = '0';
       setTimeout(() => {
+        imageContainer.style.opacity = '1';
         img.style.opacity = '1';
         // Add brightness flash effect with intense glow
         img.style.filter = 'brightness(0.7) sepia(1) hue-rotate(60deg) saturate(4.0)';
@@ -1895,29 +1900,20 @@ FOR THIS, WE NEED YOUR HELP.
     
     
     function removeAllImages() {
-      // Remove Cannes photo
-      const cannesContainer = document.getElementById('cannes-photo-container');
-      if (cannesContainer) {
-        cannesContainer.remove();
-      }
+      // Quick fade out all image containers
+      const containers = [
+        document.getElementById('cannes-photo-container'),
+        document.getElementById('arrest-photo-container'),
+        document.getElementById('correa-photo-container'),
+        document.getElementById('collateral-photo-container')
+      ];
       
-      // Remove Arrest photo
-      const arrestContainer = document.getElementById('arrest-photo-container');
-      if (arrestContainer) {
-        arrestContainer.remove();
-      }
-      
-      // Remove Correa photo
-      const correaContainer = document.getElementById('correa-photo-container');
-      if (correaContainer) {
-        correaContainer.remove();
-      }
-      
-      // Remove Collateral photo
-      const collateralContainer = document.getElementById('collateral-photo-container');
-      if (collateralContainer) {
-        collateralContainer.remove();
-      }
+      containers.forEach(container => {
+        if (container) {
+          container.style.opacity = '0';
+          setTimeout(() => container.remove(), 150);
+        }
+      });
       
       // Remove 6BDM subtitle element
       const bdmSubtitle = document.getElementById('bdm-subtitle');
