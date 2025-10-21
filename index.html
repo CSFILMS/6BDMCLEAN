@@ -1645,16 +1645,16 @@ FOR THIS, WE NEED YOUR HELP.
       imageContainer.id = 'cannes-photo-container';
       imageContainer.style.cssText = `
         position: fixed !important;
-        top: 55% !important;
+        bottom: 20vh !important;
         left: 50% !important;
-        transform: translate(-50%, -50%) !important;
+        transform: translateX(-50%) !important;
         max-width: 75vw !important;
-        max-height: 60vh !important;
+        max-height: 50vh !important;
         width: 75vw !important;
-        height: 60vh !important;
+        height: auto !important;
         z-index: 1 !important;
         pointer-events: none !important;
-        overflow: hidden !important;
+        overflow: visible !important;
       `;
       imageContainer.classList.add('slide-with-page');
       document.getElementById('page').appendChild(imageContainer);
