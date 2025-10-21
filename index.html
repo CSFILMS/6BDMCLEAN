@@ -998,7 +998,7 @@ z-index: 2 !important;
     <span id="nav-next">&gt;</span>
   </div>
 
-  <div id="slide-counter">PRESS SPACEBAR<br>TO CONTINUE</div>
+  <div id="slide-counter">SLIDE 1 / 1</div>
 
   
   <!-- Custom cursor -->
@@ -2556,18 +2556,34 @@ FOR THIS, WE NEED YOUR HELP.
          videoStartTime = null; // Reset video timing when leaving video slide
        }
        
-       // Update slide counter message
+       // Update nav message and slide counter
+       const navMsg = document.getElementById('nav-msg');
        const slideCounter = document.getElementById('slide-counter');
-       if (slideCounter) {
-         if (pageIndex < 2) {
-           // Slides 1-2: Show PRESS SPACEBAR message
-           slideCounter.innerHTML = 'PRESS SPACEBAR<br>TO CONTINUE';
-         } else {
-           // Slide 3 onwards: Show slide counter
-           slideCounter.textContent = `SLIDE ${pageIndex + 1} / ${pages.length}`;
+       
+       if (pageIndex < 2) {
+         // Slides 1-2: Show PRESS SPACEBAR in nav-msg, hide slide counter
+         if (navMsg) {
+           navMsg.innerHTML = 'PRESS SPACEBAR<br>TO CONTINUE';
+           navMsg.style.fontSize = '0.7rem';
+           navMsg.style.textAlign = 'center';
+           navMsg.style.visibility = 'visible';
+           navMsg.style.maxWidth = '300px';
+           navMsg.style.lineHeight = '1.3';
          }
-         console.log(`📊 Slide counter updated for page ${pageIndex + 1}`);
+         if (slideCounter) {
+           slideCounter.style.visibility = 'hidden';
+         }
+       } else {
+         // Slide 3 onwards: Hide nav-msg, show slide counter
+         if (navMsg) {
+           navMsg.style.visibility = 'hidden';
+         }
+         if (slideCounter) {
+           slideCounter.textContent = `SLIDE ${pageIndex + 1} / ${pages.length}`;
+           slideCounter.style.visibility = 'visible';
+         }
        }
+       console.log(`📊 Navigation updated for page ${pageIndex + 1}`);
        
        // video2 handling removed - defunct
      }
