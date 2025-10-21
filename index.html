@@ -2565,12 +2565,14 @@ FOR THIS, WE NEED YOUR HELP.
        if (pageIndex < 2) {
          // Slides 1-2: Show PRESS SPACEBAR in nav-msg, hide slide counter
          if (navMsg) {
-           navMsg.innerHTML = 'PRESS SPACEBAR<br>TO CONTINUE';
+           navMsg.innerHTML = 'PRESS&nbsp;SPACEBAR<br>TO&nbsp;CONTINUE';
            navMsg.style.fontSize = '0.7rem';
            navMsg.style.textAlign = 'center';
            navMsg.style.visibility = 'visible';
+           navMsg.style.minWidth = '200px';
            navMsg.style.maxWidth = '300px';
            navMsg.style.lineHeight = '1.3';
+           navMsg.style.whiteSpace = 'normal';
          }
          if (slideCounter) {
            slideCounter.style.visibility = 'hidden';
