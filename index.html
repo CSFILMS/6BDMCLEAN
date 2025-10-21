@@ -2556,7 +2556,18 @@ FOR THIS, WE NEED YOUR HELP.
          videoStartTime = null; // Reset video timing when leaving video slide
        }
        
-       // Slide counter now shows static "PRESS SPACEBAR TO CONTINUE" message
+       // Update slide counter message
+       const slideCounter = document.getElementById('slide-counter');
+       if (slideCounter) {
+         if (pageIndex < 2) {
+           // Slides 1-2: Show PRESS SPACEBAR message
+           slideCounter.innerHTML = 'PRESS SPACEBAR<br>TO CONTINUE';
+         } else {
+           // Slide 3 onwards: Show slide counter
+           slideCounter.textContent = `SLIDE ${pageIndex + 1} / ${pages.length}`;
+         }
+         console.log(`📊 Slide counter updated for page ${pageIndex + 1}`);
+       }
        
        // video2 handling removed - defunct
      }
