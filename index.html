@@ -188,7 +188,26 @@
       box-sizing: border-box;
     }
     
-    /* Scanlines removed */
+    /* Black fuzzy scanline overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.15) 0px,
+        rgba(0, 0, 0, 0.15) 2px,
+        transparent 2px,
+        transparent 4px
+      );
+      pointer-events: none;
+      z-index: 2999999999;
+      opacity: 0.8;
+      filter: blur(0.3px);
+    }
     
     @media (max-width: 768px) {
       body {
