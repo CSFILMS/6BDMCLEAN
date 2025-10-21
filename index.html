@@ -2277,7 +2277,7 @@ FOR THIS, WE NEED YOUR HELP.
             // Slide 2 - hide everything (invisible)
             navMsg.style.visibility = 'hidden';
             slideCounterEl.style.visibility = 'hidden';
-          } else if (currentPage === 2) {
+          } else if (currentPage >= 2) {
             // On slide 3 and all subsequent slides, show slide counter in nav-msg location
             navMsg.innerHTML=`SLIDE ${currentPage + 1} / ${pages.length}`;
             navMsg.style.fontSize = '1rem';
