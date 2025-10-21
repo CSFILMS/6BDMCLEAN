@@ -1723,19 +1723,20 @@ FOR THIS, WE NEED YOUR HELP.
       const imageContainer = document.createElement('div');
       imageContainer.id = 'arrest-photo-container';
       imageContainer.style.cssText = `
-        position: absolute !important;
-        top: 70% !important;
+        position: fixed !important;
+        bottom: 5rem !important;
         left: 50% !important;
-        transform: translate(-50%, -50%) !important;
+        transform: translateX(-50%) !important;
         max-width: 75vw !important;
-        max-height: 75vh !important;
+        max-height: 35vh !important;
         width: 75vw !important;
-        height: 75vh !important;
-        z-index: 0 !important;
+        height: auto !important;
+        z-index: 1 !important;
         pointer-events: none !important;
-        overflow: hidden !important;
+        overflow: visible !important;
+        transition: opacity 0.15s ease-in-out !important;
       `;
-      document.getElementById('page').appendChild(imageContainer);
+      document.body.appendChild(imageContainer);
       
       // Add Arrest photo
       const img = document.createElement('img');
@@ -1754,8 +1755,10 @@ FOR THIS, WE NEED YOUR HELP.
       `;
       imageContainer.appendChild(img);
       
-      // CRT-style fade-in effect
+      // Quick fade-in effect
+      imageContainer.style.opacity = '0';
       setTimeout(() => {
+        imageContainer.style.opacity = '1';
         img.style.opacity = '0.4';
       }, 50);
       
@@ -1770,17 +1773,18 @@ FOR THIS, WE NEED YOUR HELP.
       const imageContainer = document.createElement('div');
       imageContainer.id = 'collateral-photo-container';
       imageContainer.style.cssText = `
-        position: absolute !important;
-        top: 70% !important;
+        position: fixed !important;
+        bottom: 5rem !important;
         left: 50% !important;
-        transform: translate(-50%, -50%) !important;
+        transform: translateX(-50%) !important;
         max-width: 75vw !important;
-        max-height: 75vh !important;
+        max-height: 35vh !important;
         width: 75vw !important;
-        height: 75vh !important;
-        z-index: 0 !important;
+        height: auto !important;
+        z-index: 1 !important;
         pointer-events: none !important;
-        overflow: hidden !important;
+        overflow: visible !important;
+        transition: opacity 0.15s ease-in-out !important;
       `;
       
       // Add desktop-only styling with higher specificity
@@ -1859,19 +1863,20 @@ FOR THIS, WE NEED YOUR HELP.
       const imageContainer = document.createElement('div');
       imageContainer.id = 'correa-photo-container';
       imageContainer.style.cssText = `
-        position: absolute !important;
-        top: 70% !important;
+        position: fixed !important;
+        bottom: 5rem !important;
         left: 50% !important;
-        transform: translate(-50%, -50%) !important;
+        transform: translateX(-50%) !important;
         max-width: 75vw !important;
-        max-height: 75vh !important;
+        max-height: 35vh !important;
         width: 75vw !important;
-        height: 75vh !important;
-        z-index: 0 !important;
+        height: auto !important;
+        z-index: 1 !important;
         pointer-events: none !important;
-        overflow: hidden !important;
+        overflow: visible !important;
+        transition: opacity 0.15s ease-in-out !important;
       `;
-      document.getElementById('page').appendChild(imageContainer);
+      document.body.appendChild(imageContainer);
       
       // Add Correa photo
       const img = document.createElement('img');
@@ -1890,8 +1895,10 @@ FOR THIS, WE NEED YOUR HELP.
       `;
       imageContainer.appendChild(img);
       
-      // CRT-style fade-in effect
+      // Quick fade-in effect
+      imageContainer.style.opacity = '0';
       setTimeout(() => {
+        imageContainer.style.opacity = '1';
         img.style.opacity = '0.6';
       }, 50);
       
