@@ -2145,27 +2145,7 @@ FOR THIS, WE NEED YOUR HELP.
           // Wrap years in spans for styling
           wrapYearsInSpans(element);
           
-          // Show appropriate message based on page
-          if (currentPage === 0) {
-            // Slide 1 - show PRESS SPACEBAR message
-            navMsg.innerHTML='PRESS SPACEBAR<br>TO ENTER';
-            navMsg.style.fontSize = '0.75rem';
-            navMsg.style.textAlign = 'center';
-            navMsg.style.visibility='visible';
-            navMsg.style.textTransform = 'uppercase';
-            navMsg.style.letterSpacing = '0.1em';
-          } else if (currentPage === 1) {
-            // Slide 2 - hide everything (invisible)
-            navMsg.style.visibility = 'hidden';
-          } else if (currentPage >= 2) {
-            // On slide 3 and all subsequent slides, show slide counter in nav-msg location
-            navMsg.innerHTML=`SLIDE ${currentPage + 1} / ${pages.length}`;
-            navMsg.style.fontSize = '1rem';
-            navMsg.style.textAlign = 'center';
-            navMsg.style.visibility='visible';
-            navMsg.style.textTransform = 'uppercase';
-            navMsg.style.letterSpacing = '0.1em';
-          }
+          // Navigation messages are now handled in startPage function
           
           // Check if this text contains "A FILM BY" and show video
           if (text.includes('A FILM BY EUGENE JARECKI')) {
@@ -2260,27 +2240,7 @@ FOR THIS, WE NEED YOUR HELP.
           // Wrap years in spans for styling
           wrapYearsInSpans(element);
           
-          // Show appropriate message based on page
-          if (currentPage === 0) {
-            // Slide 1 - show PRESS SPACEBAR message
-            navMsg.innerHTML='PRESS SPACEBAR<br>TO ENTER';
-            navMsg.style.fontSize = '0.75rem';
-            navMsg.style.textAlign = 'center';
-            navMsg.style.visibility='visible';
-            navMsg.style.textTransform = 'uppercase';
-            navMsg.style.letterSpacing = '0.1em';
-          } else if (currentPage === 1) {
-            // Slide 2 - hide everything (invisible)
-            navMsg.style.visibility = 'hidden';
-          } else if (currentPage >= 2) {
-            // On slide 3 and all subsequent slides, show slide counter in nav-msg location
-            navMsg.innerHTML=`SLIDE ${currentPage + 1} / ${pages.length}`;
-            navMsg.style.fontSize = '1rem';
-            navMsg.style.textAlign = 'center';
-            navMsg.style.visibility='visible';
-            navMsg.style.textTransform = 'uppercase';
-            navMsg.style.letterSpacing = '0.1em';
-          }
+          // Navigation messages are now handled in startPage function
           
           onComplete && onComplete();
           return false; // Stop animation
