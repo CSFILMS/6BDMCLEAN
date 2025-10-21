@@ -85,7 +85,36 @@
     
     /* Video effects removed - clean video display */
     
+    /* Slide transition animations */
+    @keyframes slideOutLeft {
+      0% {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      100% {
+        transform: translateX(-100%);
+        opacity: 0;
+      }
+    }
     
+    @keyframes slideInRight {
+      0% {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      100% {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    
+    #page.slide-out {
+      animation: slideOutLeft 0.5s cubic-bezier(0.4, 0.0, 1, 1) forwards;
+    }
+    
+    #page.slide-in {
+      animation: slideInRight 0.5s cubic-bezier(0.0, 0.0, 0.2, 1) forwards;
+    }
     
     /* Video overlay (disabled for small centered video) */
     .bg-overlay {
@@ -2276,12 +2305,52 @@ FOR THIS, WE NEED YOUR HELP.
   function startPage(pageIndex){
         if (pageIndex >= pages.length) pageIndex = 0;
         if (pageIndex < 0) pageIndex = pages.length - 1;
+        
+        const pageEl = document.getElementById('page');
+        const el = document.getElementById('unscramble');
+        const promptElem = document.getElementById('prompt');
+        
+        // Only animate if not first load
+        if (currentPage !== null && currentPage !== pageIndex) {
+          // Trigger slide-out animation
+          pageEl.classList.remove('slide-in');
+          pageEl.classList.add('slide-out');
+          
+          // Wait for slide-out to complete, then update content and slide in
+          setTimeout(() => {
+            currentPage = pageIndex;
+            
+            console.log(`🔍 Starting page ${pageIndex + 1}, content:`, pages[pageIndex] ? pages[pageIndex].substring(0, 100) : 'UNDEFINED');
+            console.log(`🔍 DEBUG: Page ${pageIndex + 1} full content length:`, pages[pageIndex] ? pages[pageIndex].length : 0);
+            console.log(`🔍 DEBUG: Total pages available:`, pages.length);
+            
+            // Update content (rest of function)
+            continuePageSetup(pageIndex, pageEl, el, promptElem);
+            
+            // Trigger slide-in animation
+            pageEl.classList.remove('slide-out');
+            pageEl.classList.add('slide-in');
+            
+            // Remove animation class after completion
+            setTimeout(() => {
+              pageEl.classList.remove('slide-in');
+            }, 500);
+          }, 500);
+          
+          return; // Exit early, will continue after animation
+        }
+        
+        // First load - no animation
         currentPage = pageIndex;
         
         console.log(`🔍 Starting page ${pageIndex + 1}, content:`, pages[pageIndex] ? pages[pageIndex].substring(0, 100) : 'UNDEFINED');
         console.log(`🔍 DEBUG: Page ${pageIndex + 1} full content length:`, pages[pageIndex] ? pages[pageIndex].length : 0);
         console.log(`🔍 DEBUG: Total pages available:`, pages.length);
         
+        continuePageSetup(pageIndex, pageEl, el, promptElem);
+  }
+  
+  function continuePageSetup(pageIndex, pageEl, el, promptElem) {
         // Clear all timeouts and intervals
         clearAllTimeouts();
         
