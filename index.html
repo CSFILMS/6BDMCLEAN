@@ -998,7 +998,7 @@ z-index: 2 !important;
     <span id="nav-next">&gt;</span>
   </div>
 
-  <div id="slide-counter">SLIDE 1 / 1</div>
+  <div id="slide-counter">PRESS SPACEBAR<br>TO CONTINUE</div>
 
   
   <!-- Custom cursor -->
@@ -2556,12 +2556,7 @@ FOR THIS, WE NEED YOUR HELP.
          videoStartTime = null; // Reset video timing when leaving video slide
        }
        
-       // Update slide counter
-       const slideCounter = document.getElementById('slide-counter');
-       if (slideCounter) {
-         slideCounter.textContent = `SLIDE ${pageIndex + 1} / ${pages.length}`;
-         console.log(`📊 Slide counter updated: ${pageIndex + 1} / ${pages.length}`);
-       }
+       // Slide counter now shows static "PRESS SPACEBAR TO CONTINUE" message
        
        // video2 handling removed - defunct
      }
