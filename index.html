@@ -541,6 +541,7 @@ z-index: 1;
     /* All pages - ensure no scroll */
     #page {
       overflow: hidden !important;
+      position: relative;
     }
     
     /* Slides 4, 5, 6, 7 - ensure page container has no scroll */
@@ -1611,8 +1612,8 @@ FOR THIS, WE NEED YOUR HELP.
       const imageContainer = document.createElement('div');
       imageContainer.id = 'cannes-photo-container';
       imageContainer.style.cssText = `
-        position: fixed !important;
-        top: 50% !important;
+        position: absolute !important;
+        top: 60% !important;
         left: 50% !important;
         transform: translate(-50%, -50%) !important;
         max-width: 75vw !important;
@@ -1623,7 +1624,7 @@ FOR THIS, WE NEED YOUR HELP.
         pointer-events: none !important;
         overflow: hidden !important;
       `;
-      document.body.appendChild(imageContainer);
+      document.getElementById('page').appendChild(imageContainer);
       
       // Add Cannes photo
       const img = document.createElement('img');
@@ -1665,7 +1666,7 @@ FOR THIS, WE NEED YOUR HELP.
       const imageContainer = document.createElement('div');
       imageContainer.id = 'arrest-photo-container';
       imageContainer.style.cssText = `
-        position: fixed !important;
+        position: absolute !important;
         top: 60% !important;
         left: 50% !important;
         transform: translate(-50%, -50%) !important;
@@ -1677,7 +1678,7 @@ FOR THIS, WE NEED YOUR HELP.
         pointer-events: none !important;
         overflow: hidden !important;
       `;
-      document.body.appendChild(imageContainer);
+      document.getElementById('page').appendChild(imageContainer);
       
       // Add Arrest photo
       const img = document.createElement('img');
@@ -1712,8 +1713,8 @@ FOR THIS, WE NEED YOUR HELP.
       const imageContainer = document.createElement('div');
       imageContainer.id = 'collateral-photo-container';
       imageContainer.style.cssText = `
-        position: fixed !important;
-        top: 50% !important;
+        position: absolute !important;
+        top: 60% !important;
         left: 50% !important;
         transform: translate(-50%, -50%) !important;
         max-width: 75vw !important;
@@ -1755,7 +1756,7 @@ FOR THIS, WE NEED YOUR HELP.
         }
       `;
       document.head.appendChild(style);
-      document.body.appendChild(imageContainer);
+      document.getElementById('page').appendChild(imageContainer);
       
       // Add Collateral photo
       const img = document.createElement('img');
@@ -1799,7 +1800,7 @@ FOR THIS, WE NEED YOUR HELP.
       const imageContainer = document.createElement('div');
       imageContainer.id = 'correa-photo-container';
       imageContainer.style.cssText = `
-        position: fixed !important;
+        position: absolute !important;
         top: 60% !important;
         left: 50% !important;
         transform: translate(-50%, -50%) !important;
@@ -1811,7 +1812,7 @@ FOR THIS, WE NEED YOUR HELP.
         pointer-events: none !important;
         overflow: hidden !important;
       `;
-      document.body.appendChild(imageContainer);
+      document.getElementById('page').appendChild(imageContainer);
       
       // Add Correa photo
       const img = document.createElement('img');
