@@ -108,12 +108,42 @@
       }
     }
     
-    #page.slide-out {
+    @keyframes slideOutRight {
+      0% {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      100% {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+    }
+    
+    @keyframes slideInLeft {
+      0% {
+        transform: translateX(-100%);
+        opacity: 0;
+      }
+      100% {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    
+    #page.slide-out-left {
       animation: slideOutLeft 0.35s cubic-bezier(0.4, 0.0, 1, 1) forwards;
     }
     
-    #page.slide-in {
+    #page.slide-in-right {
       animation: slideInRight 0.35s cubic-bezier(0.0, 0.0, 0.2, 1) forwards;
+    }
+    
+    #page.slide-out-right {
+      animation: slideOutRight 0.35s cubic-bezier(0.4, 0.0, 1, 1) forwards;
+    }
+    
+    #page.slide-in-left {
+      animation: slideInLeft 0.35s cubic-bezier(0.0, 0.0, 0.2, 1) forwards;
     }
     
     
@@ -2340,9 +2370,18 @@ FOR THIS, WE NEED YOUR HELP.
         
         // Only animate if not first load
         if (currentPage !== null && currentPage !== pageIndex) {
-          // Trigger slide-out animation
-          pageEl.classList.remove('slide-in');
-          pageEl.classList.add('slide-out');
+          // Determine direction (forward or backward)
+          const goingForward = pageIndex > currentPage;
+          
+          // Remove all animation classes
+          pageEl.classList.remove('slide-in-right', 'slide-in-left', 'slide-out-left', 'slide-out-right');
+          
+          // Trigger slide-out animation based on direction
+          if (goingForward) {
+            pageEl.classList.add('slide-out-left');
+          } else {
+            pageEl.classList.add('slide-out-right');
+          }
           
           // Wait for slide-out to complete, then update content and slide in
           setTimeout(() => {
@@ -2355,13 +2394,17 @@ FOR THIS, WE NEED YOUR HELP.
             // Update content (rest of function)
             continuePageSetup(pageIndex, pageEl, el, promptElem);
             
-            // Trigger slide-in animation
-            pageEl.classList.remove('slide-out');
-            pageEl.classList.add('slide-in');
+            // Trigger slide-in animation based on direction
+            pageEl.classList.remove('slide-out-left', 'slide-out-right');
+            if (goingForward) {
+              pageEl.classList.add('slide-in-right');
+            } else {
+              pageEl.classList.add('slide-in-left');
+            }
             
             // Remove animation class after completion
             setTimeout(() => {
-              pageEl.classList.remove('slide-in');
+              pageEl.classList.remove('slide-in-right', 'slide-in-left');
             }, 350);
           }, 350);
           
