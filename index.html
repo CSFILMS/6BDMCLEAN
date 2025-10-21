@@ -188,25 +188,23 @@
       box-sizing: border-box;
     }
     
-    /* Black fuzzy scanline overlay */
-    body::after {
-      content: '';
+    /* Scanline overlay */
+    #scanline-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: repeating-linear-gradient(
+      background-image: repeating-linear-gradient(
         0deg,
-        rgba(0, 0, 0, 0.15) 0px,
-        rgba(0, 0, 0, 0.15) 2px,
-        transparent 2px,
-        transparent 4px
+        rgba(0, 0, 0, 0.2) 0px,
+        rgba(0, 0, 0, 0.2) 1px,
+        transparent 1px,
+        transparent 3px
       );
       pointer-events: none;
-      z-index: 2999999999;
-      opacity: 0.8;
-      filter: blur(0.3px);
+      z-index: 999999999;
+      mix-blend-mode: multiply;
     }
     
     @media (max-width: 768px) {
@@ -960,6 +958,9 @@ z-index: 2 !important;
   <audio id="video-audio" preload="auto">
     <source src="VIDEOS/HOLO4JOSE_AUDIOFIX_audio.m4a" type="audio/mp4">
   </audio>
+  
+  <!-- Scanline overlay on top of everything -->
+  <div id="scanline-overlay"></div>
   
   <script>
     // Detect device type and load appropriate video size
