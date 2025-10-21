@@ -725,7 +725,7 @@ z-index: 1;
       width: auto;
       z-index: 99997;
       padding: 0.75rem 1.5rem;
-      gap: 3rem;
+      gap: 1.5rem;
     }
     
     /* Desktop - reduced padding for closer arrows */
@@ -741,7 +741,7 @@ z-index: 1;
       font-size:0.7rem;
       min-height: 2.5rem;
       visibility: hidden;
-      max-width: 500px;
+      max-width: 140px;
       line-height: 1.3;
       white-space: normal;
       display: inline-block;
@@ -2444,24 +2444,6 @@ FOR THIS, WE NEED YOUR HELP.
         isInLineRevealMode = false;
         
         
-        slideCounterEl.textContent = `SLIDE ${pageIndex + 1} / ${pages.length}`;
-        
-        // Handle slide counter visibility based on page
-        if (pageIndex === 0) {
-          // Slide 1 - hide regular counter, nav-msg will show slide counter after animation
-          slideCounterEl.style.visibility = 'hidden';
-        } else if (pageIndex === 1) {
-          // Slide 2 - hide everything (invisible)
-          slideCounterEl.style.visibility = 'hidden';
-          navMsg.style.visibility = 'hidden';
-          // Reset nav-msg styling
-          navMsg.style.textTransform = '';
-          navMsg.style.letterSpacing = '';
-        } else if (pageIndex >= 2) {
-          // On slide 3 and all subsequent slides, hide regular counter (will be shown in nav-msg after animation)
-          slideCounterEl.style.visibility = 'hidden';
-        }
-        
         // Set data-page attribute for CSS targeting
         pageEl.setAttribute('data-page', pageIndex + 1);
         
@@ -2569,8 +2551,8 @@ FOR THIS, WE NEED YOUR HELP.
            navMsg.style.fontSize = '0.7rem';
            navMsg.style.textAlign = 'center';
            navMsg.style.visibility = 'visible';
-           navMsg.style.minWidth = '200px';
-           navMsg.style.maxWidth = '300px';
+           navMsg.style.minWidth = '120px';
+           navMsg.style.maxWidth = '140px';
            navMsg.style.lineHeight = '1.3';
            navMsg.style.whiteSpace = 'normal';
          }
@@ -2578,13 +2560,18 @@ FOR THIS, WE NEED YOUR HELP.
            slideCounter.style.visibility = 'hidden';
          }
        } else {
-         // Slide 3 onwards: Hide nav-msg, show slide counter
+         // Slide 3 onwards: Show slide counter in nav-msg area
          if (navMsg) {
-           navMsg.style.visibility = 'hidden';
+           navMsg.textContent = `SLIDE ${pageIndex + 1} / ${pages.length}`;
+           navMsg.style.fontSize = '0.7rem';
+           navMsg.style.textAlign = 'center';
+           navMsg.style.visibility = 'visible';
+           navMsg.style.minWidth = '100px';
+           navMsg.style.maxWidth = '140px';
+           navMsg.style.whiteSpace = 'nowrap';
          }
          if (slideCounter) {
-           slideCounter.textContent = `SLIDE ${pageIndex + 1} / ${pages.length}`;
-           slideCounter.style.visibility = 'visible';
+           slideCounter.style.visibility = 'hidden';
          }
        }
        console.log(`📊 Navigation updated for page ${pageIndex + 1}`);
