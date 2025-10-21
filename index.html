@@ -2557,9 +2557,9 @@ FOR THIS, WE NEED YOUR HELP.
        }
        
        // Update slide counter
-       const slideCounterEl = document.getElementById('slide-counter');
-       if (slideCounterEl) {
-         slideCounterEl.textContent = `SLIDE ${pageIndex + 1} / ${pages.length}`;
+       const slideCounter = document.getElementById('slide-counter');
+       if (slideCounter) {
+         slideCounter.textContent = `SLIDE ${pageIndex + 1} / ${pages.length}`;
          console.log(`📊 Slide counter updated: ${pageIndex + 1} / ${pages.length}`);
        }
        
