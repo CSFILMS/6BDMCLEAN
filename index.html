@@ -2713,7 +2713,15 @@ FOR THIS, WE NEED YOUR HELP.
     document.getElementById('nav-prev').addEventListener('click', goBack);
     document.getElementById('nav-next').addEventListener('click', safeAdvance);
  document.addEventListener('pointerdown', (e)=>{ 
-      if (e.target.id==='nav-prev'||e.target.id==='nav-next') return; 
+      if (e.target.id==='nav-prev'||e.target.id==='nav-next') return;
+      
+      // Ignore clicks on play button and its children
+      if (e.target.id === 'video-play-button' || 
+          e.target.id === 'video-play-triangle' || 
+          e.target.id === 'video-play-text' ||
+          e.target.closest('#video-play-button')) {
+        return;
+      }
       
       // Unlock audio context on pointer interaction
       unlockAudioContext();
@@ -2735,7 +2743,15 @@ FOR THIS, WE NEED YOUR HELP.
     }, {passive:true});
      
      document.addEventListener('touchstart', (e)=>{ 
-       if (e.target.id==='nav-prev'||e.target.id==='nav-next') return; 
+       if (e.target.id==='nav-prev'||e.target.id==='nav-next') return;
+       
+       // Ignore clicks on play button and its children
+       if (e.target.id === 'video-play-button' || 
+           e.target.id === 'video-play-triangle' || 
+           e.target.id === 'video-play-text' ||
+           e.target.closest('#video-play-button')) {
+         return;
+       }
        
        const now = Date.now();
        // Debounce touch events to prevent double-firing
@@ -2764,7 +2780,15 @@ FOR THIS, WE NEED YOUR HELP.
      
      // Add touchend event handler for better mobile responsiveness  
      document.addEventListener('touchend', (e)=>{ 
-       if (e.target.id==='nav-prev'||e.target.id==='nav-next') return; 
+       if (e.target.id==='nav-prev'||e.target.id==='nav-next') return;
+       
+       // Ignore clicks on play button and its children
+       if (e.target.id === 'video-play-button' || 
+           e.target.id === 'video-play-triangle' || 
+           e.target.id === 'video-play-text' ||
+           e.target.closest('#video-play-button')) {
+         return;
+       }
        
        const now = Date.now();
        // Debounce touch events to prevent double-firing
@@ -2784,7 +2808,15 @@ FOR THIS, WE NEED YOUR HELP.
        }
      }, {passive:false});
 document.addEventListener('click', (e)=>{ 
-      if (e.target.id==='nav-prev'||e.target.id==='nav-next') return; 
+      if (e.target.id==='nav-prev'||e.target.id==='nav-next') return;
+      
+      // Ignore clicks on play button and its children
+      if (e.target.id === 'video-play-button' || 
+          e.target.id === 'video-play-triangle' || 
+          e.target.id === 'video-play-text' ||
+          e.target.closest('#video-play-button')) {
+        return;
+      }
       
       const now = Date.now();
       // Prevent click events that follow touch events too closely
