@@ -131,19 +131,19 @@
     }
     
     #page.slide-out-left {
-      animation: slideOutLeft 0.35s cubic-bezier(0.4, 0.0, 1, 1) forwards;
+      animation: slideOutLeft 0.25s cubic-bezier(0.4, 0.0, 1, 1) forwards;
     }
     
     #page.slide-in-right {
-      animation: slideInRight 0.35s cubic-bezier(0.0, 0.0, 0.2, 1) forwards;
+      animation: slideInRight 0.25s cubic-bezier(0.0, 0.0, 0.2, 1) forwards;
     }
     
     #page.slide-out-right {
-      animation: slideOutRight 0.35s cubic-bezier(0.4, 0.0, 1, 1) forwards;
+      animation: slideOutRight 0.25s cubic-bezier(0.4, 0.0, 1, 1) forwards;
     }
     
     #page.slide-in-left {
-      animation: slideInLeft 0.35s cubic-bezier(0.0, 0.0, 0.2, 1) forwards;
+      animation: slideInLeft 0.25s cubic-bezier(0.0, 0.0, 0.2, 1) forwards;
     }
     
     
@@ -2464,8 +2464,8 @@ FOR THIS, WE NEED YOUR HELP.
             // Remove animation class after completion
             setTimeout(() => {
               pageEl.classList.remove('slide-in-right', 'slide-in-left');
-            }, 350);
-          }, 350);
+            }, 250);
+          }, 250);
           
           return; // Exit early, will continue after animation
         }
@@ -2672,7 +2672,7 @@ FOR THIS, WE NEED YOUR HELP.
     /* ================== NAV ================== */
     let lastAdvance = 0;
     let isNavigating = false;
-    function throttle(){ const now=Date.now(); if (now-lastAdvance<800) return false; lastAdvance=now; return true; }
+    function throttle(){ const now=Date.now(); if (now-lastAdvance<600) return false; lastAdvance=now; return true; }
     function safeAdvance(){ 
       if (!throttle() || isNavigating) return; 
       
@@ -2695,14 +2695,14 @@ FOR THIS, WE NEED YOUR HELP.
       unlockAudioContext();
       isNavigating = true;
       startPage(currentPage+1);
-      setTimeout(() => { isNavigating = false; }, 800);
+      setTimeout(() => { isNavigating = false; }, 600);
     }
     function goBack(){ 
       if (!throttle() || isNavigating) return; 
       unlockAudioContext(); 
       isNavigating = true;
       startPage(currentPage-1);
-      setTimeout(() => { isNavigating = false; }, 800);
+      setTimeout(() => { isNavigating = false; }, 600);
     }
 
     // Use only click events to avoid double-firing
