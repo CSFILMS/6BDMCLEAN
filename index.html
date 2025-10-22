@@ -70,6 +70,44 @@
       background-color: rgba(0, 0, 0, 0.7);
     }
     
+    /* Scanline patch over video text */
+    #video-text-scanlines {
+      position: fixed;
+      top: 2rem;
+      left: 2rem;
+      width: 25rem;
+      height: 4rem;
+      z-index: 2147483649 !important;
+      pointer-events: none;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.3) 0px,
+        rgba(0, 0, 0, 0.3) 3px,
+        transparent 3px,
+        transparent 6px
+      );
+      display: none;
+    }
+    
+    /* Scanline patch over navbar */
+    #nav-scanlines {
+      position: fixed;
+      bottom: 15vh;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30rem;
+      height: 7vh;
+      z-index: 99999;
+      pointer-events: none;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.3) 0px,
+        rgba(0, 0, 0, 0.3) 3px,
+        transparent 3px,
+        transparent 6px
+      );
+    }
+    
     /* Video text scanlines removed */
     
     @media (max-width: 768px) {
@@ -1006,6 +1044,12 @@ z-index: 2 !important;
     A FILM BY EUGENE JARECKI
   </div>
   
+  <!-- Scanline patch over video text -->
+  <div id="video-text-scanlines"></div>
+  
+  <!-- Scanline patch over navbar -->
+  <div id="nav-scanlines"></div>
+  
   <!-- Text unscramble audio -->
   <audio id="text-audio" preload="auto">
     <source src="TEXTAUDIO.mp4" type="audio/mp4">
@@ -1241,6 +1285,7 @@ FOR THIS, WE NEED YOUR HELP.
       const videoContainer = document.getElementById('video-container');
       const playButton = document.getElementById('video-play-button');
       const textOverlay = document.getElementById('video-text-overlay');
+      const textScanlines = document.getElementById('video-text-scanlines');
       
       // Reset video start time when entering slide
       videoStartTime = null;
@@ -1262,6 +1307,12 @@ FOR THIS, WE NEED YOUR HELP.
         textOverlay.style.setProperty('visibility', 'visible', 'important');
         textOverlay.style.setProperty('opacity', '1', 'important');
         console.log('✅ Video text overlay shown');
+      }
+      
+      // Show text scanlines
+      if (textScanlines) {
+        textScanlines.style.display = 'block';
+        console.log('✅ Video text scanlines shown');
       }
     }
     
@@ -1402,6 +1453,7 @@ FOR THIS, WE NEED YOUR HELP.
       const videoAudio = document.getElementById('video-audio');
       const textAudio = document.getElementById('text-audio');
       const textOverlay = document.getElementById('video-text-overlay');
+      const textScanlines = document.getElementById('video-text-scanlines');
       const playButton = document.getElementById('video-play-button');
       const videoEndSubtitle = document.getElementById('video-end-subtitle');
       
@@ -1445,6 +1497,12 @@ FOR THIS, WE NEED YOUR HELP.
       if (textOverlay) {
         textOverlay.style.setProperty('display', 'none', 'important');
         console.log('✅ Video text overlay hidden');
+      }
+      
+      // Hide text scanlines
+      if (textScanlines) {
+        textScanlines.style.display = 'none';
+        console.log('✅ Video text scanlines hidden');
       }
       
       // Remove video end subtitle
