@@ -1447,7 +1447,11 @@ FOR THIS, WE NEED YOUR HELP.
     document.addEventListener('DOMContentLoaded', () => {
       const playButton = document.getElementById('video-play-button');
       if (playButton) {
-        playButton.addEventListener('click', playVideoAndAudio);
+        playButton.addEventListener('click', (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          playVideoAndAudio();
+        });
         console.log('✅ Play button click listener added');
       }
     });
