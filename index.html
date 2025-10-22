@@ -2160,18 +2160,23 @@ FOR THIS, WE NEED YOUR HELP.
         typingAudio = null;
       }
       
-      // Create new audio instance for unscrambling
-      typingAudio = new Audio('TEXTAUDIO.mp4');
-      typingAudio.volume = 0.15;
-      typingAudio.loop = true;
-      typingAudio.muted = false;
-      
-      console.log('🔊 Playing unscramble audio...');
-      typingAudio.play().then(() => {
-        console.log('✅ Unscramble audio playing');
-      }).catch(err => {
-        console.log('❌ Unscramble audio play failed:', err);
-      });
+      // Don't play typing audio on video slide (slide 3, pageIndex 2)
+      if (currentPage !== 2) {
+        // Create new audio instance for unscrambling
+        typingAudio = new Audio('TEXTAUDIO.mp4');
+        typingAudio.volume = 0.15;
+        typingAudio.loop = true;
+        typingAudio.muted = false;
+        
+        console.log('🔊 Playing unscramble audio...');
+        typingAudio.play().then(() => {
+          console.log('✅ Unscramble audio playing');
+        }).catch(err => {
+          console.log('❌ Unscramble audio play failed:', err);
+        });
+      } else {
+        console.log('🔇 Skipping unscramble audio on video slide');
+      }
 
       // Use requestAnimationFrame for better performance
       const stopAnimation = createRAFAnimation(() => {
@@ -2252,20 +2257,28 @@ FOR THIS, WE NEED YOUR HELP.
       for (let i=0;i<len;i++) scrambled[i] = /\s/.test(text[i]) ? text[i] : chars[Math.floor(Math.random()*chars.length)];
       isAnimating = true; promptElem.style.visibility='hidden'; navMsg.style.visibility='hidden';
 
-      // Play text unscramble audio
-      const textAudio = document.getElementById('text-audio');
-      console.log('🔊 Attempting to play text audio:', textAudio);
-      if (textAudio) {
-        textAudio.currentTime = 0;
-        textAudio.volume = 0.5;
-        console.log('🔊 Playing text audio...');
-        textAudio.play().then(() => {
-          console.log('✅ Text audio playing successfully');
+      // Stop any existing typing audio
+      if (typingAudio) {
+        typingAudio.pause();
+        typingAudio = null;
+      }
+      
+      // Don't play typing audio on video slide (slide 3, pageIndex 2)
+      if (currentPage !== 2) {
+        // Create new audio instance for unscrambling
+        typingAudio = new Audio('TEXTAUDIO.mp4');
+        typingAudio.volume = 0.15;
+        typingAudio.loop = true;
+        typingAudio.muted = false;
+        
+        console.log('🔊 Playing unscramble audio (ultra-fast)...');
+        typingAudio.play().then(() => {
+          console.log('✅ Unscramble audio playing');
         }).catch(err => {
-          console.log('❌ Text audio play failed:', err);
+          console.log('❌ Unscramble audio play failed:', err);
         });
       } else {
-        console.log('❌ Text audio element not found!');
+        console.log('🔇 Skipping unscramble audio on video slide');
       }
 
       // Use requestAnimationFrame for better performance with ultra-fast timing
