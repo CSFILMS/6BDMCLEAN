@@ -232,6 +232,37 @@
       visibility: visible !important;
     }
     
+    /* Video play button */
+    #video-play-button {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2147483648;
+      text-align: center;
+      cursor: pointer;
+      display: none;
+    }
+    
+    #video-play-triangle {
+      width: 0;
+      height: 0;
+      border-left: 40px solid var(--fg);
+      border-top: 25px solid transparent;
+      border-bottom: 25px solid transparent;
+      margin: 0 auto 1rem auto;
+      filter: drop-shadow(0 0 5px var(--fg)) drop-shadow(0 0 15px var(--fg));
+    }
+    
+    #video-play-text {
+      color: var(--fg);
+      font-family: var(--font-family);
+      font-size: 1rem;
+      text-shadow: 0 0 3px var(--fg), 0 0 10px var(--fg);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    
     @media (max-width: 768px) {
       body {
         padding: 0 !important;
@@ -950,23 +981,28 @@ z-index: 2 !important;
   <!-- video2 removed - defunct -->
 
   <div class="video-container" id="video-container">
-    <video
-      id="bg-video3"
-      class="bg-video bg-video3"
-      autoplay
-      muted
-      playsinline
-      preload="metadata"
-      aria-hidden="true"
-      tabindex="-1"
-      disablepictureinpicture
-      controlslist="nodownload noplaybackrate noptimizequality nodatachannel"
-      volume="0"
-      defaultMuted
-    >
-       <!-- Mobile devices will use the smaller video, desktop uses the full quality -->
-       <source id="video-source" src="" type="video/mp4" />
-    </video>
+  <video
+    id="bg-video3"
+    class="bg-video bg-video3"
+    muted
+    playsinline
+    preload="metadata"
+    aria-hidden="true"
+    tabindex="-1"
+    disablepictureinpicture
+    controlslist="nodownload noplaybackrate noptimizequality nodatachannel"
+    volume="0"
+    defaultMuted
+  >
+     <!-- Mobile devices will use the smaller video, desktop uses the full quality -->
+     <source id="video-source" src="" type="video/mp4" />
+  </video>
+  </div>
+  
+  <!-- Video play button -->
+  <div id="video-play-button">
+    <div id="video-play-triangle"></div>
+    <div id="video-play-text">A MESSAGE FROM THE PAST</div>
   </div>
   
   <!-- Text overlay on top of video -->
@@ -1205,10 +1241,9 @@ FOR THIS, WE NEED YOUR HELP.
 
     // Video3 functions - with audio that stops when slide changes
     function showVideo3Background() {
-      console.log('🎬 Showing video...');
+      console.log('🎬 Showing video slide...');
       const videoContainer = document.getElementById('video-container');
-      const video = document.getElementById('bg-video3');
-      const videoAudio = document.getElementById('video-audio');
+      const playButton = document.getElementById('video-play-button');
       const textOverlay = document.getElementById('video-text-overlay');
       
       if (videoContainer) {
@@ -1216,28 +1251,33 @@ FOR THIS, WE NEED YOUR HELP.
         console.log('✅ Video container shown');
       }
       
+      // Show play button
+      if (playButton) {
+        playButton.style.display = 'block';
+        console.log('✅ Play button shown');
+      }
+      
+      // Show text overlay
+      if (textOverlay) {
+        textOverlay.style.setProperty('display', 'block', 'important');
+        textOverlay.style.setProperty('visibility', 'visible', 'important');
+        textOverlay.style.setProperty('opacity', '1', 'important');
+        console.log('✅ Video text overlay shown');
+      }
+    }
+    
+    // Play video and audio when play button is clicked
+    function playVideoAndAudio() {
+      const video = document.getElementById('bg-video3');
+      const videoAudio = document.getElementById('video-audio');
+      const playButton = document.getElementById('video-play-button');
+      
+      // Hide play button
+      if (playButton) {
+        playButton.style.display = 'none';
+      }
+      
       if (video) {
-        console.log('✅ Video element found, showing...');
-        
-        video.style.setProperty('display', 'block', 'important');
-        video.style.setProperty('visibility', 'visible', 'important');
-        video.style.setProperty('opacity', '1', 'important');
-        console.log('🎬 Video display set to block with !important');
-        console.log('🎬 Video computed style:', window.getComputedStyle(video).display);
-        
-        // Show text overlay
-        if (textOverlay) {
-          textOverlay.style.setProperty('display', 'block', 'important');
-          textOverlay.style.setProperty('visibility', 'visible', 'important');
-          textOverlay.style.setProperty('opacity', '1', 'important');
-          console.log('✅ Video text overlay shown');
-          console.log('📝 Text overlay computed style:', window.getComputedStyle(textOverlay).display);
-          console.log('📝 Text overlay z-index:', window.getComputedStyle(textOverlay).zIndex);
-        } else {
-          console.error('❌ Video text overlay element not found!');
-        }
-        
-        
         // Ensure video is completely muted
         video.muted = true;
         video.volume = 0;
@@ -1255,43 +1295,21 @@ FOR THIS, WE NEED YOUR HELP.
           }).catch(err => {
             console.log('❌ Video audio play failed:', err.message);
           });
-        } else {
-          console.error('❌ Video audio element not found!');
         }
-        
-        // Set up video event listeners
-        const onCanPlay = () => {
-          console.log('✅ Video ready to play');
-          video.currentTime = 2; // Ensure we skip first 2 seconds
-          video.removeEventListener('canplay', onCanPlay);
-          video.removeEventListener('error', onError);
-        };
-        
-        const onError = (e) => {
-          console.log('❌ Video failed to load:', e);
-          video.removeEventListener('canplay', onCanPlay);
-          video.removeEventListener('error', onError);
-        };
-        
-        video.addEventListener('canplay', onCanPlay);
-        video.addEventListener('error', onError);
         
         // Add event listener for when video ends
         video.addEventListener('ended', () => {
           console.log('🎬 Video ended - starting subtitle typing');
           startVideoEndSubtitle();
-        });
+        }, { once: true });
         
+        // Play video
         video.play().then(() => {
           console.log('✅ Video playing from start (muted)');
-          console.log('🎬 Video dimensions:', video.videoWidth, 'x', video.videoHeight);
-          console.log('🎬 Video position:', video.getBoundingClientRect());
           videoStartTime = Date.now();
         }).catch(err => {
           console.log('❌ Video play failed:', err.message);
         });
-      } else {
-        console.error('❌ Video element not found!');
       }
     }
     
@@ -1373,6 +1391,7 @@ FOR THIS, WE NEED YOUR HELP.
       const videoAudio = document.getElementById('video-audio');
       const textAudio = document.getElementById('text-audio');
       const textOverlay = document.getElementById('video-text-overlay');
+      const playButton = document.getElementById('video-play-button');
       const videoEndSubtitle = document.getElementById('video-end-subtitle');
       
       if (videoContainer) {
@@ -1382,6 +1401,11 @@ FOR THIS, WE NEED YOUR HELP.
       
       if (video) {
         video.pause();
+      }
+      
+      // Hide play button
+      if (playButton) {
+        playButton.style.display = 'none';
       }
       
       // Stop video audio
@@ -1418,6 +1442,15 @@ FOR THIS, WE NEED YOUR HELP.
         console.log('✅ Video end subtitle removed');
       }
     }
+    
+    // Add click event listener to play button
+    document.addEventListener('DOMContentLoaded', () => {
+      const playButton = document.getElementById('video-play-button');
+      if (playButton) {
+        playButton.addEventListener('click', playVideoAndAudio);
+        console.log('✅ Play button click listener added');
+      }
+    });
     
     // Enhanced audio context initialization with debugging
     function initAudioContext() {
@@ -1667,7 +1700,7 @@ FOR THIS, WE NEED YOUR HELP.
       imageContainer.id = 'cannes-photo-container';
       imageContainer.style.cssText = `
         position: fixed !important;
-        bottom: 12rem !important;
+        bottom: 16rem !important;
         left: 50% !important;
         transform: translateX(-50%) !important;
         max-width: 75vw !important;
@@ -1724,7 +1757,7 @@ FOR THIS, WE NEED YOUR HELP.
       imageContainer.id = 'arrest-photo-container';
       imageContainer.style.cssText = `
         position: fixed !important;
-        bottom: 12rem !important;
+        bottom: 16rem !important;
         left: 50% !important;
         transform: translateX(-50%) !important;
         max-width: 75vw !important;
@@ -1864,7 +1897,7 @@ FOR THIS, WE NEED YOUR HELP.
       imageContainer.id = 'correa-photo-container';
       imageContainer.style.cssText = `
         position: fixed !important;
-        bottom: 12rem !important;
+        bottom: 16rem !important;
         left: 50% !important;
         transform: translateX(-50%) !important;
         max-width: 75vw !important;
