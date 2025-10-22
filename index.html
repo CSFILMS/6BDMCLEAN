@@ -2558,6 +2558,10 @@ FOR THIS, WE NEED YOUR HELP.
             // Wrap years in spans for styling
             wrapYearsInSpans(el);
              // Collateral Murder slide animation removed
+         } else if (pageIndex === 2) {
+           // Slide 3 (video slide) - no scrambling, just clear text
+           console.log(`🎬 Video slide ${pageIndex + 1}: Skipping scramble, showing play button`);
+           el.textContent = '';
          } else {
            console.log(`🎯 SCRAMBLE: Displaying content for slide ${pageIndex + 1}:`, pages[pageIndex].substring(0, 100));
            scrambleFastChunks(el, pages[pageIndex], () => {
