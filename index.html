@@ -238,10 +238,11 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      z-index: 2147483648;
+      z-index: 2147483649;
       text-align: center;
       cursor: pointer;
       display: none;
+      pointer-events: auto;
     }
     
     #video-play-triangle {
@@ -1245,6 +1246,9 @@ FOR THIS, WE NEED YOUR HELP.
       const videoContainer = document.getElementById('video-container');
       const playButton = document.getElementById('video-play-button');
       const textOverlay = document.getElementById('video-text-overlay');
+      
+      // Reset video start time when entering slide
+      videoStartTime = null;
       
       if (videoContainer) {
         videoContainer.style.setProperty('display', 'block', 'important');
@@ -2652,8 +2656,13 @@ FOR THIS, WE NEED YOUR HELP.
     function safeAdvance(){ 
       if (!throttle()) return; 
       
-      // Check if we're on the video slide (slide 3, index 2) and video hasn't played for 2 seconds yet
-      if (currentPage === 2 && videoStartTime !== null) {
+      // Check if we're on the video slide (slide 3, index 2)
+      if (currentPage === 2) {
+        if (videoStartTime === null) {
+          console.log(`🎬 Video slide protection: Video not started yet - click play button first`);
+          return; // Block navigation if video hasn't been played
+        }
+        
         const currentTime = Date.now();
         const videoPlayTime = (currentTime - videoStartTime) / 1000; // Convert to seconds
         
