@@ -1291,14 +1291,26 @@ FOR THIS, WE NEED YOUR HELP.
         video.currentTime = 2;
         
         // Play video audio synced with video
+        console.log('🔊 Video audio element:', videoAudio);
         if (videoAudio) {
-          videoAudio.currentTime = 2; // Start at same time as video
-          videoAudio.volume = 0.7; // Set volume
-          videoAudio.play().then(() => {
-            console.log('🔊 Video audio playing synced with video');
-          }).catch(err => {
-            console.log('❌ Video audio play failed:', err.message);
-          });
+          videoAudio.volume = 1.0; // Full volume
+          videoAudio.muted = false;
+          
+          console.log('🔊 Attempting to play video audio... Volume:', videoAudio.volume, 'Muted:', videoAudio.muted);
+          
+          // Wait for audio to be ready, then sync and play
+          videoAudio.addEventListener('canplaythrough', () => {
+            videoAudio.currentTime = 2; // Start at same time as video
+            videoAudio.play().then(() => {
+              console.log('✅ Video audio playing synced with video - CurrentTime:', videoAudio.currentTime);
+            }).catch(err => {
+              console.error('❌ Video audio play failed:', err.message);
+            });
+          }, { once: true });
+          
+          videoAudio.load();
+        } else {
+          console.error('❌ Video audio element not found!');
         }
         
         // Add event listener for when video ends
@@ -2485,15 +2497,15 @@ FOR THIS, WE NEED YOUR HELP.
         // Audio control: only allow audio on video slide (3)
         const allowedAudioSlides = [2]; // Slide 3 (video) - using 0-based index
         if (!allowedAudioSlides.includes(pageIndex)) {
-          // Stop all audio when not on allowed slides
+          // Stop all audio when not on allowed slides (but skip video-audio element)
           if (currentAudio) {
             console.log(`🛑 Stopping audio - not on allowed audio slide (current: slide ${pageIndex + 1})`);
             stopCurrentAudio();
           }
-          // Also stop any other audio elements
+          // Also stop any other audio elements except video-audio
           document.querySelectorAll('audio').forEach(audio => {
-            if (!audio.paused) {
-              console.log('🛑 Stopping additional audio element');
+            if (audio.id !== 'video-audio' && !audio.paused) {
+              console.log('🛑 Stopping additional audio element:', audio.id);
               audio.pause();
               audio.currentTime = 0;
             }
