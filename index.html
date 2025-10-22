@@ -251,17 +251,8 @@
       border-left: 40px solid var(--fg);
       border-top: 25px solid transparent;
       border-bottom: 25px solid transparent;
-      margin: 0 auto 1rem auto;
+      margin: 0 auto;
       filter: drop-shadow(0 0 5px var(--fg)) drop-shadow(0 0 15px var(--fg));
-    }
-    
-    #video-play-text {
-      color: var(--fg);
-      font-family: var(--font-family);
-      font-size: 1rem;
-      text-shadow: 0 0 3px var(--fg), 0 0 10px var(--fg);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
     }
     
     @media (max-width: 768px) {
@@ -1003,7 +994,6 @@ z-index: 2 !important;
   <!-- Video play button -->
   <div id="video-play-button">
     <div id="video-play-triangle"></div>
-    <div id="video-play-text">A MESSAGE FROM THE PAST</div>
   </div>
   
   <!-- Text overlay on top of video -->
@@ -2681,9 +2671,10 @@ FOR THIS, WE NEED YOUR HELP.
 
     /* ================== NAV ================== */
     let lastAdvance = 0;
-    function throttle(){ const now=Date.now(); if (now-lastAdvance<300) return false; lastAdvance=now; return true; }
+    let isNavigating = false;
+    function throttle(){ const now=Date.now(); if (now-lastAdvance<800) return false; lastAdvance=now; return true; }
     function safeAdvance(){ 
-      if (!throttle()) return; 
+      if (!throttle() || isNavigating) return; 
       
       // Check if we're on the video slide (slide 3, index 2)
       if (currentPage === 2) {
@@ -2701,112 +2692,22 @@ FOR THIS, WE NEED YOUR HELP.
         }
       }
       
-      unlockAudioContext(); 
-      startPage(currentPage+1); 
+      unlockAudioContext();
+      isNavigating = true;
+      startPage(currentPage+1);
+      setTimeout(() => { isNavigating = false; }, 800);
     }
-    function goBack(){ if (!throttle()) return; unlockAudioContext(); startPage(currentPage-1); }
+    function goBack(){ 
+      if (!throttle() || isNavigating) return; 
+      unlockAudioContext(); 
+      isNavigating = true;
+      startPage(currentPage-1);
+      setTimeout(() => { isNavigating = false; }, 800);
+    }
 
-    document.getElementById('nav-prev').addEventListener('pointerdown', goBack, {passive:true});
-    document.getElementById('nav-next').addEventListener('pointerdown', safeAdvance, {passive:true});
-    document.getElementById('nav-prev').addEventListener('touchstart', goBack, {passive:true});
-    document.getElementById('nav-next').addEventListener('touchstart', safeAdvance, {passive:true});
+    // Use only click events to avoid double-firing
     document.getElementById('nav-prev').addEventListener('click', goBack);
     document.getElementById('nav-next').addEventListener('click', safeAdvance);
- document.addEventListener('pointerdown', (e)=>{ 
-      if (e.target.id==='nav-prev'||e.target.id==='nav-next') return;
-      
-      // Ignore clicks on play button and its children
-      if (e.target.id === 'video-play-button' || 
-          e.target.id === 'video-play-triangle' || 
-          e.target.id === 'video-play-text' ||
-          e.target.closest('#video-play-button')) {
-        return;
-      }
-      
-      // Unlock audio context on pointer interaction
-      unlockAudioContext();
-      
-      // Timeline reveal mode removed
-      
-      // If in line reveal mode, clicking anywhere advances to next line
-      if (isInLineRevealMode) {
-        showNextLineManual();
-        return;
-      }
-      
-      // Normal mode: Left half of screen goes back, right half goes forward
-      if (e.clientX < window.innerWidth / 2) {
-        goBack();
-      } else {
-        safeAdvance();
-      }
-    }, {passive:true});
-     
-     document.addEventListener('touchstart', (e)=>{ 
-       if (e.target.id==='nav-prev'||e.target.id==='nav-next') return;
-       
-       // Ignore clicks on play button and its children
-       if (e.target.id === 'video-play-button' || 
-           e.target.id === 'video-play-triangle' || 
-           e.target.id === 'video-play-text' ||
-           e.target.closest('#video-play-button')) {
-         return;
-       }
-       
-       const now = Date.now();
-       // Debounce touch events to prevent double-firing
-       if (now - lastTouchTime < 200) return;
-       lastTouchTime = now;
-       
-       // Unlock audio context on mobile touch
-       unlockAudioContext();
-       
-      // Timeline reveal mode removed
-       
-       // If in line reveal mode, tapping anywhere advances to next line
-       if (isInLineRevealMode) {
-         e.preventDefault(); // Prevent default touch behavior
-         showNextLineManual();
-         return;
-       }
-       
-       // Normal mode: Left half of screen goes back, right half goes forward
-       if (e.touches[0].clientX < window.innerWidth / 2) {
-         goBack();
-       } else {
-         safeAdvance();
-       }
-     }, {passive:false}); // Changed to passive:false to allow preventDefault
-     
-     // Add touchend event handler for better mobile responsiveness  
-     document.addEventListener('touchend', (e)=>{ 
-       if (e.target.id==='nav-prev'||e.target.id==='nav-next') return;
-       
-       // Ignore clicks on play button and its children
-       if (e.target.id === 'video-play-button' || 
-           e.target.id === 'video-play-triangle' || 
-           e.target.id === 'video-play-text' ||
-           e.target.closest('#video-play-button')) {
-         return;
-       }
-       
-       const now = Date.now();
-       // Debounce touch events to prevent double-firing
-       if (now - lastTouchTime < 200) return;
-       lastTouchTime = now;
-       
-       // Unlock audio context on mobile touch
-       unlockAudioContext();
-       
-      // Timeline reveal mode removed
-       
-       // If in line reveal mode, tapping anywhere advances to next line
-       if (isInLineRevealMode) {
-         e.preventDefault(); // Prevent default touch behavior
-         showNextLineManual();
-         return;
-       }
-     }, {passive:false});
 document.addEventListener('click', (e)=>{ 
       if (e.target.id==='nav-prev'||e.target.id==='nav-next') return;
       
@@ -2818,9 +2719,8 @@ document.addEventListener('click', (e)=>{
         return;
       }
       
-      const now = Date.now();
-      // Prevent click events that follow touch events too closely
-      if (now - lastTouchTime < 300) return;
+      // Don't navigate if already navigating
+      if (isNavigating) return;
       
       // Timeline reveal mode removed
       
