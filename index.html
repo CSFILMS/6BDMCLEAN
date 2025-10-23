@@ -1053,6 +1053,11 @@ z-index: 2 !important;
     <source src="TEXTAUDIO.mp4" type="audio/mp4">
   </audio>
   
+  <!-- Unscramble typing audio -->
+  <audio id="unscramble-audio" preload="auto">
+    <source src="VIDEOS/speduptyping.wav" type="audio/wav">
+  </audio>
+  
   <!-- Video audio track -->
   <audio id="video-audio" preload="auto">
     <source src="VIDEOS/AUDIOJOSE1_audio.m4a" type="audio/mp4">
@@ -2188,18 +2193,20 @@ FOR THIS, WE NEED YOUR HELP.
       
       // Don't play typing audio on video slide (slide 3, pageIndex 2)
       if (currentPage !== 2) {
-        // Create new audio instance for unscrambling
-        typingAudio = new Audio('TEXTAUDIO.mp4');
-        typingAudio.volume = 0.15;
-        typingAudio.loop = true;
-        typingAudio.muted = false;
-        
-        console.log('🔊 Playing unscramble audio...');
-        typingAudio.play().then(() => {
-          console.log('✅ Unscramble audio playing');
-        }).catch(err => {
-          console.log('❌ Unscramble audio play failed:', err);
-        });
+        // Use the unscramble audio element
+        const unscrambleAudio = document.getElementById('unscramble-audio');
+        if (unscrambleAudio) {
+          unscrambleAudio.volume = 0.3;
+          unscrambleAudio.loop = true;
+          unscrambleAudio.muted = false;
+          
+          console.log('🔊 Playing unscramble audio...');
+          unscrambleAudio.play().then(() => {
+            console.log('✅ Unscramble audio playing');
+          }).catch(err => {
+            console.log('❌ Unscramble audio play failed:', err);
+          });
+        }
       } else {
         console.log('🔇 Skipping unscramble audio on video slide');
       }
@@ -2228,6 +2235,14 @@ FOR THIS, WE NEED YOUR HELP.
             typingAudio = null;
           }
           
+          // Stop unscramble audio
+          const unscrambleAudio = document.getElementById('unscramble-audio');
+          if (unscrambleAudio) {
+            unscrambleAudio.pause();
+            unscrambleAudio.currentTime = 0;
+            console.log('🔇 Unscramble audio stopped');
+          }
+          
           // Wrap years in spans for styling
           wrapYearsInSpans(element);
           
@@ -2247,6 +2262,15 @@ FOR THIS, WE NEED YOUR HELP.
           } else {
             onComplete && onComplete();
           }
+          
+          // Stop unscramble audio when animation completes
+          const unscrambleAudio = document.getElementById('unscramble-audio');
+          if (unscrambleAudio) {
+            unscrambleAudio.pause();
+            unscrambleAudio.currentTime = 0;
+            console.log('🔇 Unscramble audio stopped');
+          }
+          
           return false; // Stop animation
         }
         return true; // Continue animation
@@ -2291,18 +2315,20 @@ FOR THIS, WE NEED YOUR HELP.
       
       // Don't play typing audio on video slide (slide 3, pageIndex 2)
       if (currentPage !== 2) {
-        // Create new audio instance for unscrambling
-        typingAudio = new Audio('TEXTAUDIO.mp4');
-        typingAudio.volume = 0.15;
-        typingAudio.loop = true;
-        typingAudio.muted = false;
-        
-        console.log('🔊 Playing unscramble audio (ultra-fast)...');
-        typingAudio.play().then(() => {
-          console.log('✅ Unscramble audio playing');
-        }).catch(err => {
-          console.log('❌ Unscramble audio play failed:', err);
-        });
+        // Use the unscramble audio element
+        const unscrambleAudio = document.getElementById('unscramble-audio');
+        if (unscrambleAudio) {
+          unscrambleAudio.volume = 0.3;
+          unscrambleAudio.loop = true;
+          unscrambleAudio.muted = false;
+          
+          console.log('🔊 Playing unscramble audio (ultra-fast)...');
+          unscrambleAudio.play().then(() => {
+            console.log('✅ Unscramble audio playing');
+          }).catch(err => {
+            console.log('❌ Unscramble audio play failed:', err);
+          });
+        }
       } else {
         console.log('🔇 Skipping unscramble audio on video slide');
       }
@@ -2329,6 +2355,14 @@ FOR THIS, WE NEED YOUR HELP.
             typingAudio.pause();
             typingAudio.currentTime = 0;
             typingAudio = null;
+          }
+          
+          // Stop unscramble audio
+          const unscrambleAudio = document.getElementById('unscramble-audio');
+          if (unscrambleAudio) {
+            unscrambleAudio.pause();
+            unscrambleAudio.currentTime = 0;
+            console.log('🔇 Unscramble audio stopped');
           }
           
           // Wrap years in spans for styling
@@ -2469,6 +2503,14 @@ FOR THIS, WE NEED YOUR HELP.
           // Wait for slide-out to complete, then update content and slide in
           setTimeout(() => {
             currentPage = pageIndex;
+            
+            // Stop unscramble audio when changing slides
+            const unscrambleAudio = document.getElementById('unscramble-audio');
+            if (unscrambleAudio) {
+              unscrambleAudio.pause();
+              unscrambleAudio.currentTime = 0;
+              console.log('🔇 Unscramble audio stopped on slide change');
+            }
             
             console.log(`🔍 Starting page ${pageIndex + 1}, content:`, pages[pageIndex] ? pages[pageIndex].substring(0, 100) : 'UNDEFINED');
             console.log(`🔍 DEBUG: Page ${pageIndex + 1} full content length:`, pages[pageIndex] ? pages[pageIndex].length : 0);
