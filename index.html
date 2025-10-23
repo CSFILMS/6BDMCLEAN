@@ -1313,9 +1313,36 @@ FOR THIS, WE NEED YOUR HELP.
       const playButton = document.getElementById('video-play-button');
       const textOverlay = document.getElementById('video-text-overlay');
       const textScanlines = document.getElementById('video-text-scanlines');
+      const nav = document.getElementById('nav');
+      const slideCounter = document.getElementById('slide-counter');
       
       // Reset video start time when entering slide
       videoStartTime = null;
+      
+      // Debug navbar visibility
+      if (nav) {
+        console.log('🔍 Nav element found:', nav);
+        console.log('🔍 Nav display:', nav.style.display);
+        console.log('🔍 Nav visibility:', nav.style.visibility);
+        console.log('🔍 Nav z-index:', nav.style.zIndex);
+        nav.style.display = 'flex';
+        nav.style.visibility = 'visible';
+        console.log('✅ Nav forced visible');
+      } else {
+        console.log('❌ Nav element not found!');
+      }
+      
+      // Debug slide counter visibility
+      if (slideCounter) {
+        console.log('🔍 Slide counter found:', slideCounter);
+        console.log('🔍 Slide counter display:', slideCounter.style.display);
+        console.log('🔍 Slide counter visibility:', slideCounter.style.visibility);
+        slideCounter.style.display = 'block';
+        slideCounter.style.visibility = 'visible';
+        console.log('✅ Slide counter forced visible');
+      } else {
+        console.log('❌ Slide counter element not found!');
+      }
       
       if (videoContainer) {
         videoContainer.style.setProperty('display', 'block', 'important');
