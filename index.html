@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>PRICEOFTRUTH</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta charset="UTF-8" />
+    <title>PRICEOFTRUTH</title>
+    <!-- Cache bust: d227112-fix-2 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
@@ -1087,6 +1088,9 @@ z-index: 2 !important;
   <div id="scanline-overlay"></div>
   
   <script>
+    // Cache bust: d227112-fix-2 - Force refresh
+    console.log('🔄 Script reloaded - cache bust');
+    
     // Detect device type and load appropriate video size
     (function() {
       const video = document.getElementById('bg-video3');
