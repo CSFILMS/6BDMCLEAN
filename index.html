@@ -1019,15 +1019,13 @@ z-index: 2 !important;
   <video
     id="bg-video3"
     class="bg-video bg-video3"
-    muted
     playsinline
     preload="metadata"
     aria-hidden="true"
     tabindex="-1"
     disablepictureinpicture
     controlslist="nodownload noplaybackrate noptimizequality nodatachannel"
-    volume="0"
-    defaultMuted
+    volume="1"
   >
      <!-- Mobile devices will use the smaller video, desktop uses the full quality -->
      <source id="video-source" src="" type="video/mp4" />
@@ -1319,7 +1317,6 @@ FOR THIS, WE NEED YOUR HELP.
     // Play video and audio when play button is clicked
     function playVideoAndAudio() {
       const video = document.getElementById('bg-video3');
-      const videoAudio = document.getElementById('video-audio');
       const playButton = document.getElementById('video-play-button');
       
       // Hide play button
@@ -1328,36 +1325,15 @@ FOR THIS, WE NEED YOUR HELP.
       }
       
       if (video) {
-        // Ensure video is completely muted
-        video.muted = true;
-        video.volume = 0;
-        video.defaultMuted = true;
+        // Enable video audio
+        video.muted = false;
+        video.volume = 1.0;
         
         // Skip first 2 seconds
         video.currentTime = 2;
         
-        // Play video audio synced with video
-        console.log('🔊 Video audio element:', videoAudio);
-        if (videoAudio) {
-          videoAudio.volume = 1.0; // Full volume
-          videoAudio.muted = false;
-          
-          console.log('🔊 Attempting to play video audio... Volume:', videoAudio.volume, 'Muted:', videoAudio.muted);
-          
-          // Wait for audio to be ready, then sync and play
-          videoAudio.addEventListener('canplaythrough', () => {
-            videoAudio.currentTime = 2; // Start at same time as video
-            videoAudio.play().then(() => {
-              console.log('✅ Video audio playing synced with video - CurrentTime:', videoAudio.currentTime);
-            }).catch(err => {
-              console.error('❌ Video audio play failed:', err.message);
-            });
-          }, { once: true });
-          
-          videoAudio.load();
-        } else {
-          console.error('❌ Video audio element not found!');
-        }
+        // Play video with its built-in audio
+        console.log('🔊 Playing video with built-in audio... Volume:', video.volume, 'Muted:', video.muted);
         
         // Add event listener for when video ends
         video.addEventListener('ended', () => {
@@ -1367,7 +1343,7 @@ FOR THIS, WE NEED YOUR HELP.
         
         // Play video
         video.play().then(() => {
-          console.log('✅ Video playing from start (muted)');
+          console.log('✅ Video playing with audio');
           videoStartTime = Date.now();
         }).catch(err => {
           console.log('❌ Video play failed:', err.message);
@@ -1449,8 +1425,6 @@ FOR THIS, WE NEED YOUR HELP.
       console.log('🛑 Hiding video...');
       const videoContainer = document.getElementById('video-container');
       const video = document.getElementById('bg-video3');
-      const videoAudio = document.getElementById('video-audio');
-      const textAudio = document.getElementById('text-audio');
       const textOverlay = document.getElementById('video-text-overlay');
       const textScanlines = document.getElementById('video-text-scanlines');
       const playButton = document.getElementById('video-play-button');
@@ -1463,25 +1437,13 @@ FOR THIS, WE NEED YOUR HELP.
       
       if (video) {
         video.pause();
+        video.currentTime = 0;
+        console.log('🔇 Video stopped');
       }
       
       // Hide play button
       if (playButton) {
         playButton.style.display = 'none';
-      }
-      
-      // Stop video audio
-      if (videoAudio) {
-        videoAudio.pause();
-        videoAudio.currentTime = 0;
-        console.log('🔇 Video audio stopped');
-      }
-      
-      // Stop text audio
-      if (textAudio) {
-        textAudio.pause();
-        textAudio.currentTime = 0;
-        console.log('🔇 Text audio stopped');
       }
       
       // Stop typing audio
