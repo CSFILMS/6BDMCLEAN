@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>PRICEOFTRUTH</title>
-    <!-- Cache bust: d227112-fix-2 -->
+    <!-- Cache bust: mobile-video-reset-fix -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
@@ -1318,6 +1318,7 @@ FOR THIS, WE NEED YOUR HELP.
     function showVideo3Background() {
       console.log('🎬 Showing video slide...');
       const videoContainer = document.getElementById('video-container');
+      const video = document.getElementById('bg-video3');
       const playButton = document.getElementById('video-play-button');
       const textOverlay = document.getElementById('video-text-overlay');
       const textScanlines = document.getElementById('video-text-scanlines');
@@ -1326,6 +1327,14 @@ FOR THIS, WE NEED YOUR HELP.
       
       // Reset video start time when entering slide
       videoStartTime = null;
+      
+      // Reset video to beginning when showing the slide
+      if (video) {
+        video.pause();
+        video.currentTime = 0;
+        video.muted = true; // Start muted until play button is clicked
+        console.log('🔄 Video reset to beginning on slide entry');
+      }
       
       // Debug navbar visibility
       if (nav) {
@@ -1389,9 +1398,20 @@ FOR THIS, WE NEED YOUR HELP.
       }
       
       if (video) {
+        // CRITICAL: Reset video to beginning before playing
+        video.currentTime = 0;
+        console.log('🔄 Video reset to beginning (currentTime = 0)');
+        
         // Enable video audio
         video.muted = false;
         video.volume = 1.0;
+        
+        // Mobile-specific: Force video to load from beginning
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+          console.log('📱 Mobile detected - forcing video reload from beginning');
+          video.load(); // Force reload on mobile
+          video.currentTime = 0; // Set again after load
+        }
         
         // Play video with its built-in audio from the beginning
         console.log('🔊 Playing video with built-in audio... Volume:', video.volume, 'Muted:', video.muted);
@@ -1404,7 +1424,7 @@ FOR THIS, WE NEED YOUR HELP.
         
         // Play video
         video.play().then(() => {
-          console.log('✅ Video playing with audio');
+          console.log('✅ Video playing with audio from time:', video.currentTime);
           videoStartTime = Date.now();
         }).catch(err => {
           console.log('❌ Video play failed:', err.message);
