@@ -2217,8 +2217,20 @@ FOR THIS, WE NEED YOUR HELP.
       
       // Don't play typing audio on video slide (slide 3, pageIndex 2)
       if (currentPage !== 2) {
-        // Temporarily disabled unscramble audio to fix site
-        console.log('🔇 Unscramble audio temporarily disabled');
+        // Play unscramble audio for slides 1-2
+        const unscrambleAudioEl = document.getElementById('unscramble-audio');
+        if (unscrambleAudioEl) {
+          unscrambleAudioEl.volume = 0.3;
+          unscrambleAudioEl.loop = true;
+          unscrambleAudioEl.muted = false;
+          
+          console.log('🔊 Playing unscramble audio...');
+          unscrambleAudioEl.play().then(() => {
+            console.log('✅ Unscramble audio playing');
+          }).catch(err => {
+            console.log('❌ Unscramble audio play failed:', err);
+          });
+        }
       } else {
         console.log('🔇 Skipping unscramble audio on video slide');
       }
@@ -2247,7 +2259,13 @@ FOR THIS, WE NEED YOUR HELP.
             typingAudio = null;
           }
           
-          // Unscramble audio stopping temporarily disabled
+          // Stop unscramble audio
+          const unscrambleAudioStop2 = document.getElementById('unscramble-audio');
+          if (unscrambleAudioStop2) {
+            unscrambleAudioStop2.pause();
+            unscrambleAudioStop2.currentTime = 0;
+            console.log('🔇 Unscramble audio stopped');
+          }
           
           // Wrap years in spans for styling
           wrapYearsInSpans(element);
@@ -2269,7 +2287,13 @@ FOR THIS, WE NEED YOUR HELP.
             onComplete && onComplete();
           }
           
-          // Unscramble audio stopping temporarily disabled
+          // Stop unscramble audio when animation completes
+          const unscrambleAudioStop = document.getElementById('unscramble-audio');
+          if (unscrambleAudioStop) {
+            unscrambleAudioStop.pause();
+            unscrambleAudioStop.currentTime = 0;
+            console.log('🔇 Unscramble audio stopped');
+          }
           
           return false; // Stop animation
         }
@@ -2315,8 +2339,20 @@ FOR THIS, WE NEED YOUR HELP.
       
       // Don't play typing audio on video slide (slide 3, pageIndex 2)
       if (currentPage !== 2) {
-        // Temporarily disabled unscramble audio to fix site
-        console.log('🔇 Unscramble audio temporarily disabled (ultra-fast)');
+        // Play unscramble audio for slides 1-2 (ultra-fast)
+        const unscrambleAudioEl2 = document.getElementById('unscramble-audio');
+        if (unscrambleAudioEl2) {
+          unscrambleAudioEl2.volume = 0.3;
+          unscrambleAudioEl2.loop = true;
+          unscrambleAudioEl2.muted = false;
+          
+          console.log('🔊 Playing unscramble audio (ultra-fast)...');
+          unscrambleAudioEl2.play().then(() => {
+            console.log('✅ Unscramble audio playing');
+          }).catch(err => {
+            console.log('❌ Unscramble audio play failed:', err);
+          });
+        }
       } else {
         console.log('🔇 Skipping unscramble audio on video slide');
       }
@@ -2345,7 +2381,13 @@ FOR THIS, WE NEED YOUR HELP.
             typingAudio = null;
           }
           
-          // Unscramble audio stopping temporarily disabled
+          // Stop unscramble audio
+          const unscrambleAudioStop2 = document.getElementById('unscramble-audio');
+          if (unscrambleAudioStop2) {
+            unscrambleAudioStop2.pause();
+            unscrambleAudioStop2.currentTime = 0;
+            console.log('🔇 Unscramble audio stopped');
+          }
           
           // Wrap years in spans for styling
           wrapYearsInSpans(element);
@@ -2486,7 +2528,13 @@ FOR THIS, WE NEED YOUR HELP.
           setTimeout(() => {
             currentPage = pageIndex;
             
-            // Unscramble audio stopping temporarily disabled
+            // Stop unscramble audio
+          const unscrambleAudioStop2 = document.getElementById('unscramble-audio');
+          if (unscrambleAudioStop2) {
+            unscrambleAudioStop2.pause();
+            unscrambleAudioStop2.currentTime = 0;
+            console.log('🔇 Unscramble audio stopped');
+          }
             
             console.log(`🔍 Starting page ${pageIndex + 1}, content:`, pages[pageIndex] ? pages[pageIndex].substring(0, 100) : 'UNDEFINED');
             console.log(`🔍 DEBUG: Page ${pageIndex + 1} full content length:`, pages[pageIndex] ? pages[pageIndex].length : 0);
