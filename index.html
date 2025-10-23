@@ -1385,14 +1385,13 @@ FOR THIS, WE NEED YOUR HELP.
         const isMobile = window.innerWidth <= 768;
         subtitleEl.style.cssText = `
           position: fixed;
-          top: 67%;
-          left: ${isMobile ? '2rem' : '3rem'};
-          padding-left: 0.5rem;
-          transform: translateY(-50%);
+          bottom: 25vh;
+          left: 50%;
+          transform: translateX(-50%);
           color: var(--fg);
           font-family: var(--font-family);
           font-size: ${isMobile ? '1.2rem' : '1.5rem'};
-          text-align: left;
+          text-align: center;
           z-index: 2147483648;
           pointer-events: none;
           white-space: pre-wrap;
