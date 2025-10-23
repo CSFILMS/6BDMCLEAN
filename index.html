@@ -1417,16 +1417,16 @@ FOR THIS, WE NEED YOUR HELP.
         const isMobile = window.innerWidth <= 768;
         subtitleEl.style.cssText = `
           position: fixed;
-          bottom: 20vh;
+          bottom: 25vh;
           left: 2rem;
-          color: var(--fg);
+          color: var(--accent);
           font-family: var(--font-family);
           font-size: ${isMobile ? '1.2rem' : '1.5rem'};
           text-align: left;
           z-index: 2147483648;
           pointer-events: none;
           white-space: pre-wrap;
-          text-shadow: 0 0 3px var(--fg), 0 0 10px var(--fg), 0 0 20px var(--fg);
+          text-shadow: 0 0 2px var(--accent), 0 0 5px var(--accent);
         `;
         document.body.appendChild(subtitleEl);
       }
