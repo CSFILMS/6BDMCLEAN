@@ -1414,17 +1414,17 @@ FOR THIS, WE NEED YOUR HELP.
       }
       
       // Create a new audio instance for typing sound
-      typingAudio = new Audio('TEXTAUDIO.mp4');
-      typingAudio.volume = 0.15; // Quieter volume
+      typingAudio = new Audio('VIDEOS/speduptyping.wav');
+      typingAudio.volume = 0.3; // Match unscramble audio volume
       typingAudio.loop = true; // Loop during typing
       typingAudio.muted = false; // Ensure not muted
       
       // Play typing audio
-      console.log('🔊 Playing TEXTAUDIO for video end subtitle... Volume:', typingAudio.volume, 'Muted:', typingAudio.muted);
+      console.log('🔊 Playing speduptyping.wav for 6BDM message... Volume:', typingAudio.volume, 'Muted:', typingAudio.muted);
       typingAudio.play().then(() => {
-        console.log('✅ TEXTAUDIO playing successfully - Volume:', typingAudio.volume, 'Paused:', typingAudio.paused);
+        console.log('✅ speduptyping.wav playing successfully - Volume:', typingAudio.volume, 'Paused:', typingAudio.paused);
       }).catch(err => {
-        console.error('❌ TEXTAUDIO play failed:', err.message);
+        console.error('❌ speduptyping.wav play failed:', err.message);
       });
       
       let charIndex = 0;
