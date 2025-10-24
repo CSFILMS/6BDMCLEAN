@@ -1454,8 +1454,10 @@ FOR THIS, WE NEED YOUR HELP.
         
         // Add event listener for when video ends
         video.addEventListener('ended', () => {
-          console.log('🎬 Video ended - starting subtitle typing');
-          startVideoEndSubtitle();
+          console.log('🎬 Video ended - waiting 1 second before starting subtitle typing');
+          setTimeout(() => {
+            startVideoEndSubtitle();
+          }, 1000); // 1 second delay before 6BDM message
         }, { once: true });
         
         // Play video
