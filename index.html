@@ -359,6 +359,7 @@
         margin: 0 !important;
         left: 0 !important;
         right: 0 !important;
+        position: relative !important; /* Override desktop positioning */
         box-sizing: border-box !important;
         overflow-x: hidden !important;
       }
@@ -370,7 +371,10 @@
         padding: 1.5rem 2vw !important; /* Better padding for mobile */
         box-sizing: border-box !important;
         overflow-x: hidden !important;
-        position: relative !important;
+        position: relative !important; /* Override desktop fixed positioning */
+        top: auto !important; /* Override desktop centering */
+        left: auto !important; /* Override desktop centering */
+        transform: none !important; /* Override desktop centering */
         z-index: 9999999 !important;
       }
       
@@ -538,15 +542,18 @@
       }
     }
     #page {
-      position:relative; 
+      position: relative;
+      width: 70vh; /* Slightly wider than square (70vh vs 60vh height) */
       height: 60vh;
-      min-height: 20em; 
-      padding:2rem 2rem 2rem 4rem; /* More left padding to push text right */
-      border-radius:10px;
-      background-size:cover; 
-      background-position:center; 
-      background-repeat:no-repeat;
-      overflow: visible; /* Allow text to be visible */
+      min-height: 20em;
+      margin: 0 auto; /* Center horizontally */
+      padding: 2rem;
+      border-radius: 10px;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      overflow: visible;
+      box-sizing: border-box;
     }
     
  /* Simple image display */
@@ -772,19 +779,19 @@ z-index: 1;
     
  #text-wrap { 
        position: fixed;
-       top: 0;
-       left: 0;
-       width: 100vw;
-       height: 100vh;
+       top: 50%;
+       left: 50%;
+       transform: translate(-50%, -50%);
+       width: 70vh; /* Match page width - slightly wider than square */
+       height: 60vh; /* Match page height */
        box-sizing: border-box;
        overflow: hidden !important;
-       max-width: 100vw;
-       padding: 4rem 0.5rem 6rem 3rem; /* More left padding to push text right on desktop */
+       padding: 2rem;
        z-index: 2;
        -webkit-backface-visibility: hidden;
        backface-visibility: hidden;
-       transform: translateZ(0);
-       -webkit-transform: translateZ(0);
+       transform: translate(-50%, -50%) translateZ(0);
+       -webkit-transform: translate(-50%, -50%) translateZ(0);
      }
      
     /* Mobile-specific text-wrap overrides */
