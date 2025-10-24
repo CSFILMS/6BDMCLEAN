@@ -32,6 +32,14 @@
       overflow: visible !important;
     }
     
+    /* Desktop - align video left edge with "A FILM BY" text */
+    @media (min-width: 769px) {
+      .video-container {
+        left: calc(42% - 35vh) !important;
+        width: calc(100vw - (42% - 35vh)) !important;
+      }
+    }
+    
     /* Background video - inside container with contain */
     .bg-video {
       position: absolute !important;
