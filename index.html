@@ -144,6 +144,21 @@
         transform: none !important;
       }
       
+      /* Restore mobile image sizes to original */
+      #cannes-photo-container,
+      #arrest-photo-container,
+      #correa-photo-container {
+        max-width: 60vw !important;
+        max-height: 28vh !important;
+        width: 60vw !important;
+      }
+      
+      #collateral-photo-container {
+        max-width: 75vw !important;
+        max-height: 35vh !important;
+        width: 75vw !important;
+      }
+      
       /* Mobile video slide UI adjustments */
       #nav {
         bottom: 12vh; /* Move up slightly on mobile */
@@ -705,12 +720,12 @@ z-index: 1;
       height: 100% !important;
     }
     
-    /* Slides 4, 5, 6, 7 - fix text cutoff with proper padding */
+    /* Slides 4, 5, 6, 7 - fix text positioning for image slides */
     #page[data-page="4"] #text-wrap,
     #page[data-page="5"] #text-wrap,
     #page[data-page="6"] #text-wrap,
     #page[data-page="7"] #text-wrap {
-      padding-top: 1.5rem !important; /* More padding to prevent cutoff */
+      padding-top: 0.5rem !important; /* Less padding to move text down */
       padding-bottom: 4rem !important;
       overflow: hidden !important;
       height: 100vh !important;
