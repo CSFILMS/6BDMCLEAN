@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>PRICEOFTRUTH</title>
+  <meta charset="UTF-8" />
+  <title>PRICEOFTRUTH</title>
     <!-- Cache bust: new-video-shhhitisalmostdone -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
@@ -105,7 +105,7 @@
     #nav-scanlines {
       position: fixed;
       bottom: 15vh;
-      left: 50%;
+        left: 50%;
       transform: translateX(-50%);
       width: 30rem;
       height: 7vh;
@@ -579,7 +579,7 @@
       position: relative;
       width: 70vh; /* Smaller video box */
       height: 60vh; /* Smaller video box */
-      min-height: 20em;
+      min-height: 20em; 
       margin: 0 auto; /* Center horizontally */
       padding: 2rem;
       border-radius: 10px;
@@ -1728,7 +1728,7 @@ FOR THIS, WE NEED YOUR HELP.
           const lines = currentText.split('\n');
           if (lines.length > 1) {
             subtitleEl.innerHTML = lines[0] + '<br><span style="font-size: 0.75em;">' + lines[1] + '</span>';
-          } else {
+      } else {
             subtitleEl.textContent = currentText;
           }
           charIndex++;
@@ -1759,7 +1759,7 @@ FOR THIS, WE NEED YOUR HELP.
       if (video) {
         // Add 1-second delay before pausing video
         setTimeout(() => {
-          video.pause();
+        video.pause();
           video.currentTime = 0;
           console.log('🔇 Video stopped (after 1-second delay)');
         }, 1000);
@@ -2053,17 +2053,20 @@ FOR THIS, WE NEED YOUR HELP.
       // Remove any existing images first
       removeAllImages();
       
+      // Check if mobile
+      const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      
       // Create container for Cannes photo
       const imageContainer = document.createElement('div');
       imageContainer.id = 'cannes-photo-container';
       imageContainer.style.cssText = `
         position: fixed !important;
-        bottom: 20vh !important;
+        bottom: ${isMobile ? '25vh' : '20vh'} !important;
         left: 50% !important;
         transform: translateX(-50%) !important;
-        max-width: 40vw !important;
-        max-height: 20vh !important;
-        width: 40vw !important;
+        max-width: ${isMobile ? '60vw' : '40vw'} !important;
+        max-height: ${isMobile ? '28vh' : '20vh'} !important;
+        width: ${isMobile ? '60vw' : '40vw'} !important;
         height: auto !important;
         z-index: 1 !important;
         pointer-events: none !important;
@@ -2110,17 +2113,20 @@ FOR THIS, WE NEED YOUR HELP.
       // Remove any existing images first
       removeAllImages();
       
+      // Check if mobile
+      const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      
       // Create container for Arrest photo
       const imageContainer = document.createElement('div');
       imageContainer.id = 'arrest-photo-container';
       imageContainer.style.cssText = `
         position: fixed !important;
-        bottom: 20vh !important;
+        bottom: ${isMobile ? '25vh' : '20vh'} !important;
         left: 50% !important;
         transform: translateX(-50%) !important;
-        max-width: 40vw !important;
-        max-height: 20vh !important;
-        width: 40vw !important;
+        max-width: ${isMobile ? '60vw' : '40vw'} !important;
+        max-height: ${isMobile ? '28vh' : '20vh'} !important;
+        width: ${isMobile ? '60vw' : '40vw'} !important;
         height: auto !important;
         z-index: 1 !important;
         pointer-events: none !important;
@@ -2160,17 +2166,20 @@ FOR THIS, WE NEED YOUR HELP.
       // Remove any existing images first
       removeAllImages();
       
+      // Check if mobile
+      const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      
       // Create container for Collateral photo
       const imageContainer = document.createElement('div');
       imageContainer.id = 'collateral-photo-container';
       imageContainer.style.cssText = `
         position: fixed !important;
-        bottom: 18vh !important;
+        bottom: ${isMobile ? '22vh' : '18vh'} !important;
         left: 50% !important;
         transform: translateX(-50%) !important;
-        max-width: 50vw !important;
-        max-height: 25vh !important;
-        width: 50vw !important;
+        max-width: ${isMobile ? '75vw' : '50vw'} !important;
+        max-height: ${isMobile ? '35vh' : '25vh'} !important;
+        width: ${isMobile ? '75vw' : '50vw'} !important;
         height: auto !important;
         z-index: 1 !important;
         pointer-events: none !important;
@@ -2250,17 +2259,20 @@ FOR THIS, WE NEED YOUR HELP.
       // Remove any existing images first
       removeAllImages();
       
+      // Check if mobile
+      const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      
       // Create container for Correa photo
       const imageContainer = document.createElement('div');
       imageContainer.id = 'correa-photo-container';
       imageContainer.style.cssText = `
         position: fixed !important;
-        bottom: 20vh !important;
+        bottom: ${isMobile ? '25vh' : '20vh'} !important;
         left: 50% !important;
         transform: translateX(-50%) !important;
-        max-width: 40vw !important;
-        max-height: 20vh !important;
-        width: 40vw !important;
+        max-width: ${isMobile ? '60vw' : '40vw'} !important;
+        max-height: ${isMobile ? '28vh' : '20vh'} !important;
+        width: ${isMobile ? '60vw' : '40vw'} !important;
         height: auto !important;
         z-index: 1 !important;
         pointer-events: none !important;
@@ -2380,7 +2392,7 @@ FOR THIS, WE NEED YOUR HELP.
             element.textContent = currentText;
           }
         } else {
-          element.textContent = baseText + currentText;
+        element.textContent = baseText + currentText;
         }
         
         
@@ -2577,10 +2589,10 @@ FOR THIS, WE NEED YOUR HELP.
             // Hide the text element since video will show everything
             element.textContent = '';
             
-            onComplete && onComplete();
-          } else {
-            onComplete && onComplete();
-          }
+                  onComplete && onComplete();
+              } else {
+                onComplete && onComplete();
+              }
           
           // Stop unscramble audio when animation completes
           const unscrambleAudioStop = document.getElementById('unscramble-audio');
@@ -2821,7 +2833,7 @@ FOR THIS, WE NEED YOUR HELP.
           
           // Wait for slide-out to complete, then update content and slide in
           setTimeout(() => {
-            currentPage = pageIndex;
+        currentPage = pageIndex;
             
             // Stop unscramble audio
           const unscrambleAudioStop2 = document.getElementById('unscramble-audio');
@@ -2830,11 +2842,11 @@ FOR THIS, WE NEED YOUR HELP.
             unscrambleAudioStop2.currentTime = 0;
             console.log('🔇 Unscramble audio stopped');
           }
-            
-            console.log(`🔍 Starting page ${pageIndex + 1}, content:`, pages[pageIndex] ? pages[pageIndex].substring(0, 100) : 'UNDEFINED');
-            console.log(`🔍 DEBUG: Page ${pageIndex + 1} full content length:`, pages[pageIndex] ? pages[pageIndex].length : 0);
-            console.log(`🔍 DEBUG: Total pages available:`, pages.length);
-            
+        
+        console.log(`🔍 Starting page ${pageIndex + 1}, content:`, pages[pageIndex] ? pages[pageIndex].substring(0, 100) : 'UNDEFINED');
+        console.log(`🔍 DEBUG: Page ${pageIndex + 1} full content length:`, pages[pageIndex] ? pages[pageIndex].length : 0);
+        console.log(`🔍 DEBUG: Total pages available:`, pages.length);
+        
             // Update content (rest of function)
             continuePageSetup(pageIndex, pageEl, el, promptElem);
             
@@ -3079,9 +3091,9 @@ FOR THIS, WE NEED YOUR HELP.
         }
       }
       
-      unlockAudioContext();
+      unlockAudioContext(); 
       isNavigating = true;
-      startPage(currentPage+1);
+      startPage(currentPage+1); 
       setTimeout(() => { isNavigating = false; }, 600);
     }
     function goBack(){ 
@@ -3096,7 +3108,7 @@ FOR THIS, WE NEED YOUR HELP.
     document.getElementById('nav-prev').addEventListener('click', goBack);
     document.getElementById('nav-next').addEventListener('click', safeAdvance);
 document.addEventListener('click', (e)=>{ 
-      if (e.target.id==='nav-prev'||e.target.id==='nav-next') return;
+      if (e.target.id==='nav-prev'||e.target.id==='nav-next') return; 
       
       // Ignore clicks on play button and its children
       if (e.target.id === 'video-play-button' || 
