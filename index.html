@@ -945,6 +945,12 @@ z-index: 1;
       height: 7vh;
     }
     
+    /* Push slide counter down on pages 1 and 2 */
+    #page[data-page="1"] ~ #slide-counter,
+    #page[data-page="2"] ~ #slide-counter {
+      bottom: 12vh;
+    }
+    
    /* Side mode: text on left, image on right */
       #text-wrap.side-mode {
 width: 50% !important;
@@ -1885,7 +1891,7 @@ FOR THIS, WE NEED YOUR HELP.
       imageContainer.id = 'cannes-photo-container';
       imageContainer.style.cssText = `
         position: fixed !important;
-        bottom: 10rem !important;
+        bottom: 20vh !important;
         left: 50% !important;
         transform: translateX(-50%) !important;
         max-width: 40vw !important;
@@ -1942,7 +1948,7 @@ FOR THIS, WE NEED YOUR HELP.
       imageContainer.id = 'arrest-photo-container';
       imageContainer.style.cssText = `
         position: fixed !important;
-        bottom: 10rem !important;
+        bottom: 20vh !important;
         left: 50% !important;
         transform: translateX(-50%) !important;
         max-width: 40vw !important;
@@ -1992,7 +1998,7 @@ FOR THIS, WE NEED YOUR HELP.
       imageContainer.id = 'collateral-photo-container';
       imageContainer.style.cssText = `
         position: fixed !important;
-        bottom: 5rem !important;
+        bottom: 18vh !important;
         left: 50% !important;
         transform: translateX(-50%) !important;
         max-width: 50vw !important;
@@ -2082,7 +2088,7 @@ FOR THIS, WE NEED YOUR HELP.
       imageContainer.id = 'correa-photo-container';
       imageContainer.style.cssText = `
         position: fixed !important;
-        bottom: 10rem !important;
+        bottom: 20vh !important;
         left: 50% !important;
         transform: translateX(-50%) !important;
         max-width: 40vw !important;
