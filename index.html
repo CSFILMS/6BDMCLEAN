@@ -76,14 +76,14 @@
       pointer-events: none;
       white-space: pre-wrap;
       text-shadow: 0 0 3px var(--fg), 0 0 10px var(--fg), 0 0 20px var(--fg);
-      background-color: rgba(0, 0, 0, 0.7);
+      background-color: transparent; /* Remove black background */
     }
     
     /* Scanline patch over video text */
     #video-text-scanlines {
       position: fixed;
-      top: calc(40% - 30vh); /* Position at top-left of smaller video area - higher */
-      left: calc(42% - 35vh); /* Position at top-left of smaller video area */
+      top: calc(40% - 30vh + 0.7rem); /* Match text position with padding offset */
+      left: calc(42% - 35vh + 0.7rem); /* Match text position with padding offset */
       width: 25rem;
       height: 3rem;
       z-index: 2147483649 !important;
@@ -96,6 +96,9 @@
         transparent 6px
       );
       display: none;
+      /* Create clipping mask using mix-blend-mode */
+      mix-blend-mode: multiply;
+      opacity: 0.8;
     }
     
     /* Scanline patch over navbar */
