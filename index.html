@@ -1544,9 +1544,12 @@ FOR THIS, WE NEED YOUR HELP.
       }
       
       if (video) {
-        video.pause();
-        video.currentTime = 0;
-        console.log('🔇 Video stopped');
+        // Add 1-second delay before pausing video
+        setTimeout(() => {
+          video.pause();
+          video.currentTime = 0;
+          console.log('🔇 Video stopped (after 1-second delay)');
+        }, 1000);
       }
       
       // Hide play button
