@@ -798,7 +798,7 @@ z-index: 1;
       }
     }
     
-    /* Desktop-specific styling to match old version */
+    /* Desktop-specific styling to match old version exactly */
     @media (min-width: 769px) {
       body {
         padding: 5vw;
@@ -806,46 +806,6 @@ z-index: 1;
         max-width: 80vw;
         margin: 2vh auto;
         min-height: 100vh;
-      }
-      
-      #text-wrap {
-        min-width: 0;
-        margin-top: -1.4rem;
-        width: 100%;
-        height: calc(100% - 2rem);
-        position: relative;
-        top: auto;
-        left: auto;
-        transform: none;
-        padding: 0;
-        z-index: auto;
-      }
-      
-      #unscramble {
-        font-size: 1.8rem;
-      }
-      
-      #nav {
-        margin: 3vh 0 1vh;
-        font-size: 1.8rem;
-        min-height: 5vh;
-        position: relative;
-        bottom: auto;
-        left: auto;
-        transform: none;
-        gap: 4vw;
-        text-align: center;
-        padding: 0;
-      }
-      
-      #nav-msg {
-        flex-grow: 1;
-        font-size: 0.9rem;
-        min-height: 1.5rem;
-        max-width: none;
-        line-height: normal;
-        white-space: normal;
-        display: block;
       }
       
       #page {
@@ -858,9 +818,57 @@ z-index: 1;
         background-position: center;
         background-repeat: no-repeat;
         overflow: visible;
+      }
+      
+      #text-wrap {
+        min-width: 0;
+        margin-top: -1.4rem;
         width: 100%;
-        max-width: none;
-        margin: 0;
+        height: calc(100% - 2rem);
+        box-sizing: border-box;
+        overflow: hidden;
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        padding: 0;
+        z-index: auto;
+      }
+      
+      #unscramble {
+        white-space: pre-wrap;
+        font-size: 1.8rem;
+        line-height: 1.5;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        height: 100%;
+        overflow: hidden;
+        width: 100%;
+        box-sizing: border-box;
+        max-width: 100%;
+        text-indent: 0;
+        word-break: normal;
+        hyphens: none;
+      }
+      
+      #nav {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 3vh 0 1vh;
+        font-size: 1.8rem;
+        min-height: 5vh;
+        position: relative;
+        gap: 4vw;
+        text-align: center;
+      }
+      
+      #nav-msg {
+        flex-grow: 1;
+        text-align: center;
+        font-size: 0.9rem;
+        min-height: 1.5rem;
+        visibility: hidden;
       }
       
       /* Desktop image display classes - matching old version */
@@ -912,6 +920,46 @@ z-index: 1;
         height: 60%;
         object-fit: cover;
         z-index: 1;
+      }
+      
+      /* Side mode: text on left, image on right */
+      #text-wrap.side-mode {
+        width: 50% !important;
+        max-width: 50% !important;
+        position: relative !important;
+        z-index: 2 !important;
+      }
+      
+      /* Small side mode: text on left, smaller image on right */
+      #text-wrap.small-side-mode {
+        width: 75% !important;
+        max-width: 75% !important;
+        position: relative !important;
+        z-index: 2 !important;
+      }
+      
+      #text-wrap.side-mode #unscramble {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow: hidden !important;
+        white-space: pre-wrap !important;
+        word-wrap: normal !important;
+        overflow-wrap: normal !important;
+        hyphens: none !important;
+        text-indent: 0 !important;
+      }
+      
+      #text-wrap.small-side-mode #unscramble {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow: hidden !important;
+        white-space: pre-wrap !important;
+        word-wrap: normal !important;
+        overflow-wrap: normal !important;
+        hyphens: none !important;
+        text-indent: 0 !important;
+        font-size: 1.0rem !important;
+        line-height: 1.3 !important;
       }
     }
     
