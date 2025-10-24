@@ -58,15 +58,18 @@
       box-sizing: border-box !important;
     }
     
-    /* Mobile - same as desktop */
+    /* Mobile - edge to edge fullscreen */
     @media (max-width: 768px) {
       .video-container {
         width: 100vw !important;
         height: 100vh !important;
+        left: 0 !important;
+        right: 0 !important;
       }
       
       .bg-video {
-        object-fit: contain !important;
+        object-fit: cover !important;
+        object-position: center center !important;
       }
     }
     
@@ -85,6 +88,17 @@
       white-space: pre-wrap;
       text-shadow: 0 0 3px var(--fg), 0 0 10px var(--fg), 0 0 20px var(--fg);
       background-color: transparent; /* Remove black background */
+    }
+    
+    /* Mobile video text overlay - centered for fullscreen video */
+    @media (max-width: 768px) {
+      #video-text-overlay {
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        text-align: center !important;
+        font-size: 1.2rem !important;
+      }
     }
     
     /* Scanline patch over video text */
@@ -107,6 +121,17 @@
       /* Create clipping mask using mix-blend-mode */
       mix-blend-mode: multiply;
       opacity: 0.8;
+    }
+    
+    /* Mobile scanlines - centered for fullscreen video */
+    @media (max-width: 768px) {
+      #video-text-scanlines {
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        width: 20rem !important;
+        height: 2.5rem !important;
+      }
     }
     
     /* Scanline patch over navbar */
