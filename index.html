@@ -65,8 +65,8 @@
     /* Video text overlay */
     #video-text-overlay {
       position: fixed;
-      top: calc(45% - 40vh); /* Position at top-left of content area */
-      left: calc(42% - 42.5vh); /* Position at top-left of content area */
+      top: calc(45% - 30vh); /* Position at top-left of smaller video area */
+      left: calc(42% - 35vh); /* Position at top-left of smaller video area */
       z-index: 2147483648 !important;
       color: var(--fg);
       font-family: var(--font-family);
@@ -82,8 +82,8 @@
     /* Scanline patch over video text */
     #video-text-scanlines {
       position: fixed;
-      top: calc(45% - 40vh); /* Position at top-left of content area */
-      left: calc(42% - 42.5vh); /* Position at top-left of content area */
+      top: calc(45% - 30vh); /* Position at top-left of smaller video area */
+      left: calc(42% - 35vh); /* Position at top-left of smaller video area */
       width: 25rem;
       height: 3rem;
       z-index: 2147483649 !important;
@@ -557,8 +557,8 @@
     }
     #page {
       position: relative;
-      width: 85vh; /* Much wider box */
-      height: 80vh; /* Much taller box */
+      width: 70vh; /* Smaller video box */
+      height: 60vh; /* Smaller video box */
       min-height: 20em;
       margin: 0 auto; /* Center horizontally */
       padding: 2rem;
@@ -796,8 +796,8 @@ z-index: 1;
        top: 45%; /* Lowered a bit from 40% to 45% */
        left: 42%; /* Further left - moved from 50% to 42% */
        transform: translate(-50%, -50%);
-       width: 85vh; /* Match page width - much wider */
-       height: 80vh; /* Match page height - much taller */
+       width: 70vh; /* Match smaller page width */
+       height: 60vh; /* Match smaller page height */
        box-sizing: border-box;
        overflow: hidden !important;
        padding: 2rem;
@@ -1484,8 +1484,8 @@ FOR THIS, WE NEED YOUR HELP.
         const isMobile = window.innerWidth <= 768;
         subtitleEl.style.cssText = `
           position: fixed;
-          top: calc(45% - 40vh);
-          left: calc(42% - 42.5vh);
+          top: calc(45% + 30vh);
+          left: calc(42% - 35vh);
           color: var(--accent);
           font-family: var(--font-family);
           font-size: ${isMobile ? '1.2rem' : '1.5rem'};
