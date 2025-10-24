@@ -543,8 +543,8 @@
     }
     #page {
       position: relative;
-      width: 70vh; /* Slightly wider than square (70vh vs 60vh height) */
-      height: 60vh;
+      width: 85vh; /* Much wider box */
+      height: 80vh; /* Much taller box */
       min-height: 20em;
       margin: 0 auto; /* Center horizontally */
       padding: 2rem;
@@ -779,11 +779,11 @@ z-index: 1;
     
  #text-wrap { 
        position: fixed;
-       top: 50%;
-       left: 50%;
+       top: 40%; /* Higher up - moved from 50% to 40% */
+       left: 42%; /* Further left - moved from 50% to 42% */
        transform: translate(-50%, -50%);
-       width: 70vh; /* Match page width - slightly wider than square */
-       height: 60vh; /* Match page height */
+       width: 85vh; /* Match page width - much wider */
+       height: 80vh; /* Match page height - much taller */
        box-sizing: border-box;
        overflow: hidden !important;
        padding: 2rem;
