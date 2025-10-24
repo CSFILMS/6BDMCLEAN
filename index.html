@@ -3031,7 +3031,7 @@ FOR THIS, WE NEED YOUR HELP.
        const slideCounter = document.getElementById('slide-counter');
        
        if (pageIndex <= 1) {
-         // Slides 1-2: Show PRESS SPACEBAR in nav-msg, show slide counter below
+         // Slides 1-2: Show PRESS SPACEBAR in nav-msg, hide slide counter
          if (navMsg) {
            navMsg.innerHTML = 'PRESS&nbsp;SPACEBAR<br>TO&nbsp;CONTINUE';
            navMsg.style.fontSize = '0.7rem';
@@ -3043,8 +3043,7 @@ FOR THIS, WE NEED YOUR HELP.
            navMsg.style.whiteSpace = 'normal';
          }
          if (slideCounter) {
-           slideCounter.textContent = `SLIDE ${pageIndex + 1} / ${pages.length}`;
-           slideCounter.style.visibility = 'visible';
+           slideCounter.style.visibility = 'hidden';
          }
        } else {
          // Slide 3 onwards: Show slide counter in nav-msg area, hide bottom counter
