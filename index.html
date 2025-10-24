@@ -2975,6 +2975,18 @@ FOR THIS, WE NEED YOUR HELP.
            // Slide 3 (video slide) - no scrambling, just clear text
            console.log(`🎬 Video slide ${pageIndex + 1}: Skipping scramble, showing play button`);
            el.textContent = '';
+         } else if (pageIndex === 1) {
+           // Slide 2 - wait for slide animation to complete before unscrambling
+           console.log(`🎯 SLIDE 2: Waiting for slide animation to complete before unscrambling`);
+           el.textContent = '';
+           // Wait for slide animation to complete (750ms total: 250ms slide-out + 250ms delay + 250ms slide-in)
+           setTimeout(() => {
+             console.log(`🎯 SCRAMBLE: Starting delayed unscrambling for slide ${pageIndex + 1}:`, pages[pageIndex].substring(0, 100));
+             scrambleFastChunks(el, pages[pageIndex], () => {
+               // Text displayed
+               console.log(`✅ Slide 2 unscrambling completed`);
+             });
+           }, 750);
          } else {
            console.log(`🎯 SCRAMBLE: Displaying content for slide ${pageIndex + 1}:`, pages[pageIndex].substring(0, 100));
            scrambleFastChunks(el, pages[pageIndex], () => {
