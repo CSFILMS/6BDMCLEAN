@@ -9,6 +9,14 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <style>
+    /* 
+     * MOBILE STABILITY NOTICE:
+     * This video system has been optimized for mobile stability.
+     * Code marked with "MOBILE STABILITY ZONE - DO NOT MODIFY" 
+     * should NEVER be changed as it ensures consistent mobile behavior.
+     * Desktop improvements should be made outside these zones.
+     */
+    
     /* Video container - fullscreen edge to edge */
     .video-container {
       position: fixed !important;
@@ -1328,13 +1336,16 @@ FOR THIS, WE NEED YOUR HELP.
       // Reset video start time when entering slide
       videoStartTime = null;
       
-      // Reset video to beginning when showing the slide
+      // ================== MOBILE STABILITY ZONE - DO NOT MODIFY ==================
+      // This video reset is critical for mobile stability
+      // DO NOT CHANGE - MOBILE DEPENDS ON THIS EXACT BEHAVIOR
       if (video) {
         video.pause();
         video.currentTime = 0;
         video.muted = true; // Start muted until play button is clicked
         console.log('🔄 Video reset to beginning on slide entry');
       }
+      // ================== END MOBILE STABILITY ZONE ==================
       
       // Debug navbar visibility
       if (nav) {
@@ -1398,6 +1409,10 @@ FOR THIS, WE NEED YOUR HELP.
       }
       
       if (video) {
+        // ================== MOBILE STABILITY ZONE - DO NOT MODIFY ==================
+        // This section is critical for mobile video playback stability
+        // DO NOT CHANGE ANYTHING IN THIS SECTION - MOBILE DEPENDS ON IT
+        
         // CRITICAL: Reset video to beginning before playing
         video.currentTime = 0;
         console.log('🔄 Video reset to beginning (currentTime = 0)');
@@ -1429,6 +1444,12 @@ FOR THIS, WE NEED YOUR HELP.
         }).catch(err => {
           console.log('❌ Video play failed:', err.message);
         });
+        // ================== END MOBILE STABILITY ZONE ==================
+        
+        // ================== DESKTOP ENHANCEMENT ZONE ==================
+        // Future desktop-only improvements can be added here
+        // This zone is safe to modify without affecting mobile stability
+        // ================== END DESKTOP ENHANCEMENT ZONE ==================
       }
     }
     
