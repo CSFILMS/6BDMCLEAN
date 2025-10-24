@@ -65,9 +65,8 @@
     /* Video text overlay */
     #video-text-overlay {
       position: fixed;
-      top: 45%; /* Match main text positioning */
-      left: 42%; /* Match main text positioning */
-      transform: translate(-50%, -50%);
+      top: calc(45% - 40vh); /* Position at top-left of content area */
+      left: calc(42% - 42.5vh); /* Position at top-left of content area */
       z-index: 2147483648 !important;
       color: var(--fg);
       font-family: var(--font-family);
@@ -83,9 +82,8 @@
     /* Scanline patch over video text */
     #video-text-scanlines {
       position: fixed;
-      top: 45%; /* Match main text positioning */
-      left: 42%; /* Match main text positioning */
-      transform: translate(-50%, -50%);
+      top: calc(45% - 40vh); /* Position at top-left of content area */
+      left: calc(42% - 42.5vh); /* Position at top-left of content area */
       width: 25rem;
       height: 3rem;
       z-index: 2147483649 !important;
@@ -1486,9 +1484,8 @@ FOR THIS, WE NEED YOUR HELP.
         const isMobile = window.innerWidth <= 768;
         subtitleEl.style.cssText = `
           position: fixed;
-          top: 45%;
-          left: 42%;
-          transform: translate(-50%, -50%);
+          top: calc(45% - 40vh);
+          left: calc(42% - 42.5vh);
           color: var(--accent);
           font-family: var(--font-family);
           font-size: ${isMobile ? '1.2rem' : '1.5rem'};
