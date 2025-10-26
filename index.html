@@ -1714,6 +1714,8 @@ FOR THIS, WE NEED YOUR HELP.
         
         // Play video
         video.play().then(() => {
+          // Ensure video is at exactly 0
+          video.currentTime = 0;
           console.log('✅ Video playing with audio from time:', video.currentTime);
           videoStartTime = Date.now();
         }).catch(err => {
