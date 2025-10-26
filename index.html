@@ -1704,10 +1704,12 @@ FOR THIS, WE NEED YOUR HELP.
         
         // Add event listener for when video ends
         video.addEventListener('ended', () => {
-          console.log('🎬 Video ended - waiting 1 second before starting subtitle typing');
-          setTimeout(() => {
-            startVideoEndSubtitle();
-          }, 1000); // 1 second delay before 6BDM message
+          console.log('🎬 Video ended - freezing on last frame and showing 6BDM');
+          // Freeze video on last frame by seeking to the end
+          video.currentTime = video.duration - 0.01;
+          video.pause();
+          // Immediately show 6BDM message
+          startVideoEndSubtitle();
         }, { once: true });
         
         // Play video
