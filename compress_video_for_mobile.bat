@@ -4,8 +4,8 @@ echo Mobile Video Compression Script
 echo ================================================
 echo.
 echo This will create a mobile-optimized version of your video.
-echo Original: BEAMPERSP_3_1.mp4
-echo Target: BEAMPERSP_3_1_mobile.mp4 (approx 5-8 MB)
+echo Original: YAYYYMAYBETHISISTHEONE.mp4
+echo Target: YAYYYMAYBETHISISTHEONE_mobile.mp4 (approx 5-8 MB)
 echo.
 echo Settings:
 echo - Resolution: 720p (1280x720) or lower
@@ -21,18 +21,18 @@ echo.
 echo Starting compression...
 echo.
 
-ffmpeg -i BEAMPERSP_3_1.mp4 -vf "scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2" -c:v libx264 -preset slow -crf 28 -b:v 500k -maxrate 500k -bufsize 1000k -an -movflags +faststart BEAMPERSP_3_1_mobile.mp4
+ffmpeg -i YAYYYMAYBETHISISTHEONE.mp4 -vf "scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2" -c:v libx264 -preset slow -crf 28 -b:v 500k -maxrate 500k -bufsize 1000k -an -movflags +faststart YAYYYMAYBETHISISTHEONE_mobile.mp4
 
 echo.
 echo ================================================
 echo Compression complete!
 echo ================================================
 echo.
-echo Original file: BEAMPERSP_3_1.mp4
-echo Mobile file: BEAMPERSP_3_1_mobile.mp4
+echo Original file: YAYYYMAYBETHISISTHEONE.mp4
+echo Mobile file: YAYYYMAYBETHISISTHEONE_mobile.mp4
 echo.
 
-dir BEAMPERSP_3_1*.mp4
+dir YAYYYMAYBETHISISTHEONE*.mp4
 
 echo.
 echo The mobile version should be significantly smaller.
