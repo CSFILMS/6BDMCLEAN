@@ -1096,23 +1096,23 @@ z-index: 1;
       display: flex;
       justify-content: center;
       align-items: center;
-      margin: 0 auto; 
+      margin: 0; 
       font-size: 0.9rem;
       min-height: 7vh;
       position: fixed;
       bottom: 15vh;
-      left: 0;
-      right: 0;
+      left: 50%;
+      transform: translateX(-50%);
       width: auto;
       z-index: 2147483648;
-      padding: 0.75rem 1.5rem;
+      padding: 0.75rem 0;
       gap: 1.5rem;
     }
     
-    /* Desktop - reduced padding for closer arrows */
+    /* Desktop - reduced padding for closer arrows - removed redundant rule */
     @media (min-width: 769px) {
       #nav {
-        padding: 0.75rem 0;
+        /* Padding removed to fix centering */
       }
     }
     #nav span { cursor:pointer; -webkit-user-select: none; user-select: none; padding:0 0.5em; }
