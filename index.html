@@ -3472,14 +3472,17 @@ document.addEventListener('click', (e)=>{
         return;
       }
       
-      // Ignore clicks on video player and controls (for trailer on slide 7)
-      if (e.target.tagName === 'VIDEO' || 
-          e.target.closest('video') ||
-          e.target.closest('#video-container') ||
-          e.target.closest('.video-container') ||
-          e.target.classList.contains('video-controls') ||
-          e.target.closest('.video-controls')) {
-        return; // Let video controls handle the click
+      // Ignore clicks on video player and controls (for trailer on slide 7 only)
+      // Only ignore video container clicks if we're on slide 7 (trailer with controls)
+      if (currentPage === 6) { // Slide 7 - trailer with video controls
+        if (e.target.tagName === 'VIDEO' || 
+            e.target.closest('video') ||
+            e.target.closest('#video-container') ||
+            e.target.closest('.video-container') ||
+            e.target.classList.contains('video-controls') ||
+            e.target.closest('.video-controls')) {
+          return; // Let video controls handle the click on slide 7 only
+        }
       }
       
       // Don't navigate if already navigating
