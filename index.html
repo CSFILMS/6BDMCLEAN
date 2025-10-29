@@ -1738,7 +1738,7 @@ FOR THIS, WE NEED YOUR HELP.
     }
     
     // Play video and audio when play button is clicked
-    function playVideoAndAudio() {
+    async function playVideoAndAudio() {
       console.log('🎬 playVideoAndAudio() called');
       const video = document.getElementById('bg-video3');
       const playButton = document.getElementById('video-play-button');
@@ -1761,8 +1761,29 @@ FOR THIS, WE NEED YOUR HELP.
         // DO NOT CHANGE ANYTHING IN THIS SECTION - MOBILE DEPENDS ON IT
         
         // CRITICAL: Reset video to beginning before playing
+        console.log('🔄 Video reset to beginning');
+        
+        // Ensure video is loaded first
+        if (video.readyState < 2) {
+          console.log('⏳ Video not ready, loading...');
+          video.load();
+          // Wait for video to be ready
+          await new Promise((resolve) => {
+            const onLoadedData = () => {
+              video.removeEventListener('loadeddata', onLoadedData);
+              resolve();
+            };
+            video.addEventListener('loadeddata', onLoadedData);
+            
+            // Timeout after 5 seconds
+            setTimeout(() => {
+              video.removeEventListener('loadeddata', onLoadedData);
+              resolve();
+            }, 5000);
+          });
+        }
+        
         video.currentTime = 0;
-        console.log('🔄 Video reset to beginning (currentTime = 0)');
         
         // Enable video audio
         video.muted = false;
