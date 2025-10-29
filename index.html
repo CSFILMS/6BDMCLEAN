@@ -1826,64 +1826,32 @@ FOR THIS, WE NEED YOUR HELP.
           startVideoEndSubtitle();
         }, { once: true });
         
-        // Check if video is ready, if not wait for it
-        const tryPlayVideo = () => {
-          if (video.readyState >= 2) { // HAVE_CURRENT_DATA or higher
-            video.play().then(() => {
-              // Hide play button only after video successfully starts playing
-              if (playButton) {
-                playButton.style.display = 'none';
-                console.log('✅ Play button hidden - video playing');
-              }
-              
-              // Ensure video is at exactly 0
-              video.currentTime = 0;
-              console.log('✅ Video playing with audio from time:', video.currentTime);
-              videoStartTime = Date.now();
-              
-              // Start synced audio if it exists
-              if (videoAudio && currentPage === 2) {
-                videoAudio.currentTime = 0;
-                videoAudio.play().catch(err => {
-                  console.log('🔊 Video audio autoplay failed (may need user interaction):', err.message);
-                });
-              }
-            }).catch(err => {
-              console.error('❌ Video play failed:', err.message);
-              console.error('❌ Video error details:', err);
-              console.error('❌ Video src:', video.src || video.querySelector('source')?.src);
-              // Show play button again if play failed
-              if (playButton) {
-                playButton.style.display = 'block';
-                console.log('🔄 Play button restored due to play failure');
-              }
-            });
-          } else {
-            // Wait for video to be ready
-            console.log('⏳ Video not ready yet, waiting... ReadyState:', video.readyState);
-            video.addEventListener('loadeddata', () => {
-              console.log('✅ Video loaded, attempting playback...');
-              tryPlayVideo();
-            }, { once: true });
-            
-            video.addEventListener('error', (e) => {
-              console.error('❌ Video load error:', e);
-              console.error('❌ Video error code:', video.error ? video.error.code : 'unknown');
-              // Show play button again if video failed
-              if (playButton) {
-                playButton.style.display = 'block';
-                console.log('🔄 Play button restored due to video error');
-              }
-            }, { once: true });
-            
-            // Force load if not already loading
-            if (video.readyState === 0) {
-              video.load();
-            }
+        // Play video - simple approach
+        video.play().then(() => {
+          // Hide play button after successful play
+          if (playButton) {
+            playButton.style.display = 'none';
           }
-        };
-        
-        tryPlayVideo();
+          
+          // Ensure video is at exactly 0
+          video.currentTime = 0;
+          console.log('✅ Video playing with audio from time:', video.currentTime);
+          videoStartTime = Date.now();
+          
+          // Start synced audio if it exists
+          if (videoAudio && currentPage === 2) {
+            videoAudio.currentTime = 0;
+            videoAudio.play().catch(err => {
+              console.log('🔊 Video audio play failed:', err.message);
+            });
+          }
+        }).catch(err => {
+          console.error('❌ Video play failed:', err.message);
+          // Restore play button on failure
+          if (playButton) {
+            playButton.style.display = 'block';
+          }
+        });
         // ================== END MOBILE STABILITY ZONE ==================
         
         // ================== DESKTOP ENHANCEMENT ZONE ==================
@@ -3349,31 +3317,36 @@ FOR THIS, WE NEED YOUR HELP.
              } else {
                videoSource.src = 'VIDEOS/FADELONG.mp4?v=13';
              }
+             // Make sure video source is loaded
              video.load();
-             video.muted = false;
-             video.volume = 1.0;
-             videoContainer.style.display = 'block';
-             video.removeAttribute('controls');
              
-             // Show play button instead of autoplay
-             if (playButton) {
-               playButton.style.setProperty('display', 'block', 'important');
-               playButton.style.setProperty('visibility', 'visible', 'important');
-               playButton.style.setProperty('pointer-events', 'auto', 'important');
-               playButton.style.setProperty('z-index', '2147483649', 'important');
-               playButton.style.setProperty('opacity', '1', 'important');
-               console.log('✅ Play button shown for slide 3 with !important flags');
-               console.log('🔍 Play button computed styles:', {
-                 display: window.getComputedStyle(playButton).display,
-                 visibility: window.getComputedStyle(playButton).visibility,
-                 zIndex: window.getComputedStyle(playButton).zIndex,
-                 opacity: window.getComputedStyle(playButton).opacity
-               });
-               // Ensure click handler is attached
-               ensurePlayButtonHandler();
-             } else {
-               console.error('❌ Play button element not found on slide 3!');
-             }
+             // Wait for video to be ready before showing play button
+             video.addEventListener('loadedmetadata', () => {
+               console.log('✅ Video metadata loaded for slide 3');
+               video.muted = false;
+               video.volume = 1.0;
+               videoContainer.style.display = 'block';
+               video.removeAttribute('controls');
+               
+               // Show play button
+               if (playButton) {
+                 playButton.style.display = 'block';
+                 playButton.style.visibility = 'visible';
+                 playButton.style.pointerEvents = 'auto';
+                 playButton.style.zIndex = '2147483649';
+                 console.log('✅ Play button shown for slide 3');
+                 ensurePlayButtonHandler();
+               }
+             }, { once: true });
+             
+             // Also handle error case
+             video.addEventListener('error', (e) => {
+               console.error('❌ Video load error on slide 3:', e);
+               console.error('❌ Video error:', video.error);
+               if (playButton) {
+                 playButton.style.display = 'block';
+               }
+             }, { once: true });
              
              // Setup audio sync before playing (ONLY for slide 3)
              if (videoAudio && pageIndex + 1 === 3) {
