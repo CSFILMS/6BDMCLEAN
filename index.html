@@ -3270,39 +3270,53 @@ FOR THIS, WE NEED YOUR HELP.
                console.log('✅ Play button shown for slide 3');
              }
              
-             // Setup audio sync before playing
-             if (videoAudio) {
+             // Setup audio sync before playing (ONLY for slide 3)
+             if (videoAudio && pageIndex + 1 === 3) {
                videoAudio.volume = 1.0;
                videoAudio.muted = false;
                
-               // Sync audio with video playback
+               // Sync audio with video playback (only on slide 3)
                video.addEventListener('play', () => {
-                 videoAudio.currentTime = video.currentTime;
-                 videoAudio.play().catch(err => {
-                   console.log('🔊 Video audio play failed:', err.message);
-                 });
-                 console.log('🔊 Video audio synced and playing...');
-               }, { once: false });
+                 if (currentPage === 2) { // Only sync when actually on slide 3
+                   videoAudio.currentTime = video.currentTime;
+                   videoAudio.play().catch(err => {
+                     console.log('🔊 Video audio play failed:', err.message);
+                   });
+                   console.log('🔊 Video audio synced and playing...');
+                 }
+               });
                
                video.addEventListener('pause', () => {
-                 videoAudio.pause();
-                 console.log('🔊 Video audio paused...');
+                 if (currentPage === 2) { // Only sync when actually on slide 3
+                   videoAudio.pause();
+                   console.log('🔊 Video audio paused...');
+                 }
                });
                
                video.addEventListener('seeked', () => {
-                 videoAudio.currentTime = video.currentTime;
-                 console.log('🔊 Video audio seeked to:', video.currentTime);
+                 if (currentPage === 2) { // Only sync when actually on slide 3
+                   videoAudio.currentTime = video.currentTime;
+                   console.log('🔊 Video audio seeked to:', video.currentTime);
+                 }
                });
                
-               console.log('🔊 Video audio track ready and synced...');
+               console.log('🔊 Video audio track ready and synced for slide 3 only...');
              }
              
              // DO NOT autoplay - wait for play button click
              console.log('✅ Video loaded, waiting for play button click...');
            }
          } else if (pageIndex + 1 === 7) {
-           // Simple trailer video on slide 7
+           // Trailer video on slide 7 - uses its own built-in audio
            document.body.classList.add('trailer-slide');
+           
+           // Stop any video-audio sync that might be running from slide 3
+           const videoAudio = document.getElementById('video-audio');
+           if (videoAudio) {
+             videoAudio.pause();
+             videoAudio.currentTime = 0;
+             console.log('🔇 Stopped separate audio track for trailer');
+           }
            
            if (video && videoSource && videoContainer) {
              videoSource.src = 'VIDEOS/TRAILER.mp4';
@@ -3315,19 +3329,29 @@ FOR THIS, WE NEED YOUR HELP.
                playButton.style.display = 'none';
              }
              
+             // Trailer uses its own built-in audio (no separate audio track)
              video.muted = false;
              video.volume = 1.0;
              video.setAttribute('controls', 'true');
              video.setAttribute('playsinline', 'true');
              video.load();
              
-             console.log('🎬 TRAILER video ready');
+             console.log('🎬 TRAILER video ready (using built-in audio)');
            }
          }
        } else {
          console.log(`🎬 Not slide 3 or 7 (current: ${pageIndex + 1}), hiding video...`);
          document.body.classList.remove('video-slide-active');
          document.body.classList.remove('trailer-slide'); // Remove trailer class
+         
+         // Stop video-audio when leaving video slides
+         const videoAudio = document.getElementById('video-audio');
+         if (videoAudio) {
+           videoAudio.pause();
+           videoAudio.currentTime = 0;
+           console.log('🔇 Stopped video-audio track');
+         }
+         
          // Hide video on other pages
          hideVideo3Background();
          videoStartTime = null; // Reset video timing when leaving video slide
