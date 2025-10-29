@@ -1507,8 +1507,6 @@ FOR THIS, WE NEED YOUR HELP.
 
 
 
-[TRAILER]
-
 
 `;
 
@@ -1656,18 +1654,30 @@ FOR THIS, WE NEED YOUR HELP.
         console.log('✅ Video container shown');
       }
       
-      // Show play button
+      // Show play button (hide on slide 3 since it autoplays)
       if (playButton) {
-        playButton.style.display = 'block';
-        console.log('✅ Play button shown');
+        if (currentPage === 2) { // Slide 3 (0-based index) - autoplay, no play button
+          playButton.style.display = 'none';
+          console.log('✅ Play button hidden (slide 3 autoplays)');
+        } else {
+          playButton.style.display = 'block';
+          console.log('✅ Play button shown');
+        }
       }
       
-      // Show text overlay
+      // Show text overlay (hide on slide 7 - trailer slide)
       if (textOverlay) {
-        textOverlay.style.setProperty('display', 'block', 'important');
-        textOverlay.style.setProperty('visibility', 'visible', 'important');
-        textOverlay.style.setProperty('opacity', '1', 'important');
-        console.log('✅ Video text overlay shown');
+        if (currentPage === 6) { // Slide 7 (0-based index)
+          textOverlay.style.setProperty('display', 'none', 'important');
+          textOverlay.style.setProperty('visibility', 'hidden', 'important');
+          textOverlay.style.setProperty('opacity', '0', 'important');
+          console.log('✅ Video text overlay hidden on slide 7 (trailer)');
+        } else {
+          textOverlay.style.setProperty('display', 'block', 'important');
+          textOverlay.style.setProperty('visibility', 'visible', 'important');
+          textOverlay.style.setProperty('opacity', '1', 'important');
+          console.log('✅ Video text overlay shown');
+        }
       }
       
       // Show text scanlines
@@ -1822,6 +1832,8 @@ FOR THIS, WE NEED YOUR HELP.
       }
       
       if (video) {
+        // Remove controls when hiding video
+        video.removeAttribute('controls');
         // Add 1-second delay before pausing video
         setTimeout(() => {
         video.pause();
@@ -3026,6 +3038,10 @@ FOR THIS, WE NEED YOUR HELP.
            // Slide 3 (video slide) - no scrambling, just clear text
            console.log(`🎬 Video slide ${pageIndex + 1}: Skipping scramble, showing play button`);
            el.textContent = '';
+         } else if (pageIndex === 6) {
+           // Slide 7 (trailer video slide) - no text, just video
+           console.log(`🎬 Trailer slide ${pageIndex + 1}: Clearing text, showing video only`);
+           el.textContent = '';
          } else if (pageIndex === 1) {
            // Slide 2 - wait for slide animation to complete before unscrambling
            console.log(`🎯 SLIDE 2: Waiting for slide animation to complete before unscrambling`);
@@ -3089,18 +3105,97 @@ FOR THIS, WE NEED YOUR HELP.
         console.log('🔇 Audio disabled for page 15');
       }
        
-       // Show video on slide 3
-       console.log(`🔍 Debug: Current page ${pageIndex + 1}, checking for video on slide 3...`);
-       if (pageIndex + 1 === 3) {
-         console.log('🎬 SLIDE 3 - Showing video...');
+       // Show video on slide 3 (original video) or slide 7 (trailer)
+       console.log(`🔍 Debug: Current page ${pageIndex + 1}, checking for video on slide 3 or 7...`);
+       if (pageIndex + 1 === 3 || pageIndex + 1 === 7) {
+         console.log(`🎬 SLIDE ${pageIndex + 1} - Showing video...`);
          document.body.classList.add('video-slide-active');
          showVideo3Background();
+         
+         // Load appropriate video for each slide
+         if (pageIndex + 1 === 3) {
+           console.log('🎬 SLIDE 3 - Loading original video with autoplay...');
+           const video = document.getElementById('bg-video3');
+           const videoSource = document.getElementById('video-source');
+           const videoContainer = document.getElementById('video-container');
+           const videoAudio = document.getElementById('video-audio');
+           if (video && videoSource && videoContainer) {
+             // Load original video for slide 3
+             const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+             if (isMobile) {
+               videoSource.src = 'VIDEOS/FADELONG_mobile.mp4?v=13';
+             } else {
+               videoSource.src = 'VIDEOS/FADELONG.mp4?v=13';
+             }
+             video.load();
+             video.muted = false;
+             video.volume = 1.0;
+             videoContainer.style.display = 'block';
+             video.removeAttribute('controls');
+             
+             // Setup audio sync before playing
+             if (videoAudio) {
+               videoAudio.volume = 1.0;
+               videoAudio.muted = false;
+               
+               // Sync audio with video playback
+               video.addEventListener('play', () => {
+                 videoAudio.currentTime = video.currentTime;
+                 videoAudio.play().catch(err => {
+                   console.log('🔊 Video audio play failed:', err.message);
+                 });
+                 console.log('🔊 Video audio synced and playing...');
+               }, { once: false });
+               
+               video.addEventListener('pause', () => {
+                 videoAudio.pause();
+                 console.log('🔊 Video audio paused...');
+               });
+               
+               video.addEventListener('seeked', () => {
+                 videoAudio.currentTime = video.currentTime;
+                 console.log('🔊 Video audio seeked to:', video.currentTime);
+               });
+               
+               console.log('🔊 Video audio track ready and synced...');
+             }
+             
+             // Autoplay video and audio
+             video.play().then(() => {
+               video.currentTime = 0;
+               console.log('✅ Video autoplay started with audio from time:', video.currentTime);
+             }).catch(err => {
+               console.log('❌ Video autoplay failed:', err.message);
+             });
+           }
+         }
        } else {
-         console.log(`🎬 Not slide 3 (current: ${pageIndex + 1}), hiding video...`);
+         console.log(`🎬 Not slide 3 or 7 (current: ${pageIndex + 1}), hiding video...`);
          document.body.classList.remove('video-slide-active');
          // Hide video on other pages
          hideVideo3Background();
          videoStartTime = null; // Reset video timing when leaving video slide
+       }
+       
+       // Show trailer video on slide 7 - use video container with controls
+       if (pageIndex + 1 === 7) {
+         console.log('🎬 SLIDE 7 - Loading TRAILER video...');
+         const video = document.getElementById('bg-video3');
+         const videoSource = document.getElementById('video-source');
+         const videoContainer = document.getElementById('video-container');
+         if (video && videoSource && videoContainer) {
+           // Load TRAILER video
+           videoSource.src = 'VIDEOS/TRAILER.mp4';
+           video.load();
+           video.muted = false;
+           video.volume = 1.0;
+           
+           // Show video container with controls for user interaction
+           videoContainer.style.display = 'block';
+           video.setAttribute('controls', 'true'); // Add video controls
+           
+           console.log('🎬 TRAILER video loaded and ready (user controls)');
+         }
        }
        
        // Update nav message and slide counter
