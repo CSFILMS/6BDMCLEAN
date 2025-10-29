@@ -1733,13 +1733,22 @@ FOR THIS, WE NEED YOUR HELP.
     
     // Play video and audio when play button is clicked
     function playVideoAndAudio() {
+      console.log('🎬 playVideoAndAudio() called');
       const video = document.getElementById('bg-video3');
       const playButton = document.getElementById('video-play-button');
       const videoAudio = document.getElementById('video-audio');
       
+      console.log('🎬 Video element:', !!video, 'Play button:', !!playButton, 'Video audio:', !!videoAudio);
+      
+      if (!video) {
+        console.error('❌ Video element not found!');
+        return;
+      }
+      
       // Hide play button
       if (playButton) {
         playButton.style.display = 'none';
+        console.log('✅ Play button hidden');
       }
       
       if (video) {
@@ -1974,13 +1983,35 @@ FOR THIS, WE NEED YOUR HELP.
       const playButton = document.getElementById('video-play-button');
       if (playButton) {
         playButton.addEventListener('click', (e) => {
+          console.log('🎬 Play button clicked!');
           e.stopPropagation();
           e.preventDefault();
           playVideoAndAudio();
         });
         console.log('✅ Play button click listener added');
+      } else {
+        console.error('❌ Play button not found on DOMContentLoaded');
       }
     });
+    
+    // Also add click listener directly when play button is shown (in case DOMContentLoaded already fired)
+    function ensurePlayButtonHandler() {
+      const playButton = document.getElementById('video-play-button');
+      if (playButton) {
+        // Remove any existing listeners to avoid duplicates
+        const newButton = playButton.cloneNode(true);
+        playButton.parentNode.replaceChild(newButton, playButton);
+        
+        // Add fresh listener
+        document.getElementById('video-play-button').addEventListener('click', (e) => {
+          console.log('🎬 Play button clicked (direct handler)!');
+          e.stopPropagation();
+          e.preventDefault();
+          playVideoAndAudio();
+        });
+        console.log('✅ Play button direct handler added');
+      }
+    }
     
     // Enhanced audio context initialization with debugging
     function initAudioContext() {
@@ -3267,7 +3298,11 @@ FOR THIS, WE NEED YOUR HELP.
              // Show play button instead of autoplay
              if (playButton) {
                playButton.style.display = 'block';
+               playButton.style.pointerEvents = 'auto';
+               playButton.style.zIndex = '2147483649';
                console.log('✅ Play button shown for slide 3');
+               // Ensure click handler is attached
+               ensurePlayButtonHandler();
              }
              
              // Setup audio sync before playing (ONLY for slide 3)
