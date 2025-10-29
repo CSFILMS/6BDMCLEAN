@@ -3472,6 +3472,16 @@ document.addEventListener('click', (e)=>{
         return;
       }
       
+      // Ignore clicks on video player and controls (for trailer on slide 7)
+      if (e.target.tagName === 'VIDEO' || 
+          e.target.closest('video') ||
+          e.target.closest('#video-container') ||
+          e.target.closest('.video-container') ||
+          e.target.classList.contains('video-controls') ||
+          e.target.closest('.video-controls')) {
+        return; // Let video controls handle the click
+      }
+      
       // Don't navigate if already navigating
       if (isNavigating) return;
       
