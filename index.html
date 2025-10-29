@@ -1751,11 +1751,9 @@ FOR THIS, WE NEED YOUR HELP.
         return;
       }
       
-      // Hide play button
-      if (playButton) {
-        playButton.style.display = 'none';
-        console.log('✅ Play button hidden');
-      }
+      console.log('🎬 Video src:', video.src || video.querySelector('source')?.src);
+      console.log('🎬 Video readyState:', video.readyState);
+      console.log('🎬 Video networkState:', video.networkState);
       
       if (video) {
         // ================== MOBILE STABILITY ZONE - DO NOT MODIFY ==================
@@ -1828,23 +1826,64 @@ FOR THIS, WE NEED YOUR HELP.
           startVideoEndSubtitle();
         }, { once: true });
         
-        // Play video
-        video.play().then(() => {
-          // Ensure video is at exactly 0
-          video.currentTime = 0;
-          console.log('✅ Video playing with audio from time:', video.currentTime);
-          videoStartTime = Date.now();
-          
-          // Start synced audio if it exists
-          if (videoAudio && currentPage === 2) {
-            videoAudio.currentTime = 0;
-            videoAudio.play().catch(err => {
-              console.log('🔊 Video audio autoplay failed (may need user interaction):', err.message);
+        // Check if video is ready, if not wait for it
+        const tryPlayVideo = () => {
+          if (video.readyState >= 2) { // HAVE_CURRENT_DATA or higher
+            video.play().then(() => {
+              // Hide play button only after video successfully starts playing
+              if (playButton) {
+                playButton.style.display = 'none';
+                console.log('✅ Play button hidden - video playing');
+              }
+              
+              // Ensure video is at exactly 0
+              video.currentTime = 0;
+              console.log('✅ Video playing with audio from time:', video.currentTime);
+              videoStartTime = Date.now();
+              
+              // Start synced audio if it exists
+              if (videoAudio && currentPage === 2) {
+                videoAudio.currentTime = 0;
+                videoAudio.play().catch(err => {
+                  console.log('🔊 Video audio autoplay failed (may need user interaction):', err.message);
+                });
+              }
+            }).catch(err => {
+              console.error('❌ Video play failed:', err.message);
+              console.error('❌ Video error details:', err);
+              console.error('❌ Video src:', video.src || video.querySelector('source')?.src);
+              // Show play button again if play failed
+              if (playButton) {
+                playButton.style.display = 'block';
+                console.log('🔄 Play button restored due to play failure');
+              }
             });
+          } else {
+            // Wait for video to be ready
+            console.log('⏳ Video not ready yet, waiting... ReadyState:', video.readyState);
+            video.addEventListener('loadeddata', () => {
+              console.log('✅ Video loaded, attempting playback...');
+              tryPlayVideo();
+            }, { once: true });
+            
+            video.addEventListener('error', (e) => {
+              console.error('❌ Video load error:', e);
+              console.error('❌ Video error code:', video.error ? video.error.code : 'unknown');
+              // Show play button again if video failed
+              if (playButton) {
+                playButton.style.display = 'block';
+                console.log('🔄 Play button restored due to video error');
+              }
+            }, { once: true });
+            
+            // Force load if not already loading
+            if (video.readyState === 0) {
+              video.load();
+            }
           }
-        }).catch(err => {
-          console.log('❌ Video play failed:', err.message);
-        });
+        };
+        
+        tryPlayVideo();
         // ================== END MOBILE STABILITY ZONE ==================
         
         // ================== DESKTOP ENHANCEMENT ZONE ==================
