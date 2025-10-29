@@ -3319,7 +3319,23 @@ FOR THIS, WE NEED YOUR HELP.
            }
            
            if (video && videoSource && videoContainer) {
-             videoSource.src = 'VIDEOS/TRAILER.mp4';
+             // Detect if we're on GitHub Pages vs local
+             const isLocal = window.location.protocol === 'file:' || 
+                            window.location.hostname === 'localhost' || 
+                            window.location.hostname === '127.0.0.1' ||
+                            window.location.hostname.includes('127.0.0.1');
+             
+             // GitHub Pages doesn't serve Git LFS files, use raw GitHub URL
+             // For local, use relative path
+             if (isLocal) {
+               videoSource.src = 'VIDEOS/TRAILER.mp4';
+               console.log('🎬 Using local TRAILER path');
+             } else {
+               // Use GitHub raw URL for LFS files on GitHub Pages
+               videoSource.src = 'https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/TRAILER.mp4';
+               console.log('🎬 Using GitHub raw URL for TRAILER (LFS file)');
+             }
+             
              videoContainer.style.display = 'flex';
              videoContainer.style.pointerEvents = 'auto';
              videoContainer.style.top = '15vh';
@@ -3334,6 +3350,14 @@ FOR THIS, WE NEED YOUR HELP.
              video.volume = 1.0;
              video.setAttribute('controls', 'true');
              video.setAttribute('playsinline', 'true');
+             
+             // Add error handler for video load failures
+             video.addEventListener('error', (e) => {
+               console.error('❌ TRAILER video load error:', e);
+               console.error('❌ Video error code:', video.error ? video.error.code : 'unknown');
+               console.error('❌ Video src tried:', videoSource.src);
+             }, { once: true });
+             
              video.load();
              
              console.log('🎬 TRAILER video ready (using built-in audio)');
