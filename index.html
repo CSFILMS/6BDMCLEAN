@@ -38,6 +38,27 @@
         left: calc(42% - 35vh) !important;
         width: calc(100vw - (42% - 35vh)) !important;
       }
+      
+      /* Slide 7 trailer - centered and lifted up */
+      body.video-slide-active.trailer-slide .video-container {
+        left: 50% !important;
+        right: auto !important;
+        top: 15vh !important;
+        bottom: auto !important;
+        width: 90vw !important;
+        transform: translateX(-50%) !important;
+        display: flex !important;
+        align-items: flex-start !important;
+        justify-content: center !important;
+        height: auto !important;
+      }
+      
+      body.video-slide-active.trailer-slide .bg-video {
+        position: relative !important;
+        max-width: 100% !important;
+        max-height: 85vh !important;
+        pointer-events: auto !important;
+      }
     }
     
     /* Background video - inside container with contain */
@@ -80,6 +101,26 @@
         padding: 0 !important;
         transform: none !important;
         position: absolute !important;
+      }
+      
+      /* Slide 7 trailer - centered and lifted up on mobile */
+      body.video-slide-active.trailer-slide .video-container {
+        left: 50% !important;
+        top: 15vh !important;
+        bottom: auto !important;
+        transform: translateX(-50%) !important;
+        display: flex !important;
+        align-items: flex-start !important;
+        justify-content: center !important;
+        height: auto !important;
+      }
+      
+      body.video-slide-active.trailer-slide .bg-video {
+        position: relative !important;
+        max-width: 95vw !important;
+        max-height: 85vh !important;
+        margin-left: 0 !important;
+        pointer-events: auto !important;
       }
     }
     
@@ -1376,7 +1417,7 @@ z-index: 2 !important;
   
   <!-- Video audio track -->
   <audio id="video-audio" preload="auto">
-    <source src="VIDEOS/AUDIOJOSE1_audio.m4a" type="audio/mp4">
+    <source src="VIDEOS/AUDIO.mp4" type="audio/mp4">
   </audio>
   
   <!-- Scanline overlay on top of everything -->
@@ -1654,11 +1695,14 @@ FOR THIS, WE NEED YOUR HELP.
         console.log('✅ Video container shown');
       }
       
-      // Show play button (hide on slide 3 since it autoplays)
+      // Show play button (show on slide 3, hide on slide 7 which uses video controls)
       if (playButton) {
-        if (currentPage === 2) { // Slide 3 (0-based index) - autoplay, no play button
+        if (currentPage === 6) { // Slide 7 (0-based index) - uses video controls, no play button
           playButton.style.display = 'none';
-          console.log('✅ Play button hidden (slide 3 autoplays)');
+          console.log('✅ Play button hidden (slide 7 uses video controls)');
+        } else if (currentPage === 2) { // Slide 3 (0-based index) - show play button
+          playButton.style.display = 'block';
+          console.log('✅ Play button shown for slide 3');
         } else {
           playButton.style.display = 'block';
           console.log('✅ Play button shown');
@@ -1691,6 +1735,7 @@ FOR THIS, WE NEED YOUR HELP.
     function playVideoAndAudio() {
       const video = document.getElementById('bg-video3');
       const playButton = document.getElementById('video-play-button');
+      const videoAudio = document.getElementById('video-audio');
       
       // Hide play button
       if (playButton) {
@@ -1710,11 +1755,48 @@ FOR THIS, WE NEED YOUR HELP.
         video.muted = false;
         video.volume = 1.0;
         
+        // Setup audio sync if video-audio element exists (for slide 3)
+        if (videoAudio && currentPage === 2) {
+          videoAudio.volume = 1.0;
+          videoAudio.muted = false;
+          videoAudio.currentTime = 0;
+          
+          // Sync audio with video playback
+          const syncAudio = () => {
+            if (!videoAudio.paused && !video.paused) {
+              videoAudio.currentTime = video.currentTime;
+            }
+          };
+          
+          video.addEventListener('play', () => {
+            videoAudio.currentTime = video.currentTime;
+            videoAudio.play().catch(err => {
+              console.log('🔊 Video audio play failed:', err.message);
+            });
+            console.log('🔊 Video audio synced and playing...');
+          });
+          
+          video.addEventListener('timeupdate', syncAudio);
+          
+          video.addEventListener('pause', () => {
+            videoAudio.pause();
+            console.log('🔊 Video audio paused...');
+          });
+          
+          video.addEventListener('seeked', () => {
+            videoAudio.currentTime = video.currentTime;
+            console.log('🔊 Video audio seeked to:', video.currentTime);
+          });
+          
+          console.log('🔊 Video audio track ready and synced...');
+        }
+        
         // Mobile-specific: Force video to load from beginning
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
           console.log('📱 Mobile detected - forcing video reload from beginning');
           video.load(); // Force reload on mobile
           video.currentTime = 0; // Set again after load
+          if (videoAudio) videoAudio.currentTime = 0;
         }
         
         // Play video with its built-in audio from the beginning
@@ -1726,6 +1808,7 @@ FOR THIS, WE NEED YOUR HELP.
           // Freeze video on last frame by seeking to the end
           video.currentTime = video.duration - 0.01;
           video.pause();
+          if (videoAudio) videoAudio.pause();
           // Immediately show 6BDM message
           startVideoEndSubtitle();
         }, { once: true });
@@ -1736,6 +1819,14 @@ FOR THIS, WE NEED YOUR HELP.
           video.currentTime = 0;
           console.log('✅ Video playing with audio from time:', video.currentTime);
           videoStartTime = Date.now();
+          
+          // Start synced audio if it exists
+          if (videoAudio && currentPage === 2) {
+            videoAudio.currentTime = 0;
+            videoAudio.play().catch(err => {
+              console.log('🔊 Video audio autoplay failed (may need user interaction):', err.message);
+            });
+          }
         }).catch(err => {
           console.log('❌ Video play failed:', err.message);
         });
@@ -1826,8 +1917,12 @@ FOR THIS, WE NEED YOUR HELP.
       const playButton = document.getElementById('video-play-button');
       const videoEndSubtitle = document.getElementById('video-end-subtitle');
       
+      // Remove trailer-slide class when hiding
+      document.body.classList.remove('trailer-slide');
+      
       if (videoContainer) {
         videoContainer.style.setProperty('display', 'none', 'important');
+        videoContainer.style.pointerEvents = 'none';
         console.log('✅ Video container hidden');
       }
       
@@ -1942,10 +2037,39 @@ FOR THIS, WE NEED YOUR HELP.
 
     /* ================== PREP ================== */
     const fullText = fullTextRaw.toUpperCase();
-    const pages = fullText.split(/\n{4,}/).filter(page => page.trim().length > 0);
+    let pages = fullText.split(/\n{4,}/).filter(page => page.trim().length > 0);
     console.log('📄 Page 2 content:', pages[1] ? pages[1].substring(0, 100) : 'UNDEFINED');
     console.log('📄 Total pages created:', pages.length);
     console.log('📄 Pages:', pages.map((p, i) => `Page ${i + 1}: ${p.substring(0, 50)}...`));
+    
+    // Ensure we have at least 7 pages for trailer slide
+    // Check if "IN 2025" content exists and ensure it's a separate page
+    const in2025Index = pages.findIndex(p => p.includes('IN 2025, THE SIX BILLION DOLLAR MAN'));
+    if (in2025Index === -1 || pages.length < 7) {
+      console.log('⚠️ IN 2025 content not found as separate page, ensuring slide 7 exists...');
+      // Find the last page and split it if it contains IN 2025
+      if (pages.length > 0) {
+        const lastPage = pages[pages.length - 1];
+        if (lastPage.includes('IN 2025')) {
+          // Split at IN 2025 if it's part of another page
+          const in2025Split = lastPage.split(/\n{2,}/);
+          const beforeIn2025 = in2025Split[0].trim();
+          const in2025Content = in2025Split.slice(1).join('\n\n').trim();
+          
+          if (beforeIn2025 && in2025Content) {
+            pages[pages.length - 1] = beforeIn2025;
+            pages.push(in2025Content);
+            console.log('✅ Split last page to create slide 7');
+          }
+        } else {
+          // If no IN 2025 found, add an empty slide 7 that will show the trailer
+          pages.push(''); // Empty page for trailer
+          console.log('✅ Added empty slide 7 for trailer');
+        }
+      }
+    }
+    
+    console.log('📄 Final total pages:', pages.length);
     
     // Debug: Show detailed content for each page
     pages.forEach((page, index) => {
@@ -3042,6 +3166,11 @@ FOR THIS, WE NEED YOUR HELP.
            // Slide 7 (trailer video slide) - no text, just video
            console.log(`🎬 Trailer slide ${pageIndex + 1}: Clearing text, showing video only`);
            el.textContent = '';
+           // Hide text wrap on trailer slide
+           const textWrap = document.getElementById('text-wrap');
+           if (textWrap) {
+             textWrap.style.display = 'none';
+           }
          } else if (pageIndex === 1) {
            // Slide 2 - wait for slide animation to complete before unscrambling
            console.log(`🎯 SLIDE 2: Waiting for slide animation to complete before unscrambling`);
@@ -3112,13 +3241,15 @@ FOR THIS, WE NEED YOUR HELP.
          document.body.classList.add('video-slide-active');
          showVideo3Background();
          
+         const video = document.getElementById('bg-video3');
+         const videoSource = document.getElementById('video-source');
+         const videoContainer = document.getElementById('video-container');
+         const videoAudio = document.getElementById('video-audio');
+         const playButton = document.getElementById('video-play-button');
+         
          // Load appropriate video for each slide
          if (pageIndex + 1 === 3) {
-           console.log('🎬 SLIDE 3 - Loading original video with autoplay...');
-           const video = document.getElementById('bg-video3');
-           const videoSource = document.getElementById('video-source');
-           const videoContainer = document.getElementById('video-container');
-           const videoAudio = document.getElementById('video-audio');
+           console.log('🎬 SLIDE 3 - Loading original video with play button...');
            if (video && videoSource && videoContainer) {
              // Load original video for slide 3
              const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -3132,6 +3263,12 @@ FOR THIS, WE NEED YOUR HELP.
              video.volume = 1.0;
              videoContainer.style.display = 'block';
              video.removeAttribute('controls');
+             
+             // Show play button instead of autoplay
+             if (playButton) {
+               playButton.style.display = 'block';
+               console.log('✅ Play button shown for slide 3');
+             }
              
              // Setup audio sync before playing
              if (videoAudio) {
@@ -3160,42 +3297,40 @@ FOR THIS, WE NEED YOUR HELP.
                console.log('🔊 Video audio track ready and synced...');
              }
              
-             // Autoplay video and audio
-             video.play().then(() => {
-               video.currentTime = 0;
-               console.log('✅ Video autoplay started with audio from time:', video.currentTime);
-             }).catch(err => {
-               console.log('❌ Video autoplay failed:', err.message);
-             });
+             // DO NOT autoplay - wait for play button click
+             console.log('✅ Video loaded, waiting for play button click...');
+           }
+         } else if (pageIndex + 1 === 7) {
+           // Simple trailer video on slide 7
+           document.body.classList.add('trailer-slide');
+           
+           if (video && videoSource && videoContainer) {
+             videoSource.src = 'VIDEOS/TRAILER.mp4';
+             videoContainer.style.display = 'flex';
+             videoContainer.style.pointerEvents = 'auto';
+             videoContainer.style.top = '15vh';
+             videoContainer.style.bottom = 'auto';
+             
+             if (playButton) {
+               playButton.style.display = 'none';
+             }
+             
+             video.muted = false;
+             video.volume = 1.0;
+             video.setAttribute('controls', 'true');
+             video.setAttribute('playsinline', 'true');
+             video.load();
+             
+             console.log('🎬 TRAILER video ready');
            }
          }
        } else {
          console.log(`🎬 Not slide 3 or 7 (current: ${pageIndex + 1}), hiding video...`);
          document.body.classList.remove('video-slide-active');
+         document.body.classList.remove('trailer-slide'); // Remove trailer class
          // Hide video on other pages
          hideVideo3Background();
          videoStartTime = null; // Reset video timing when leaving video slide
-       }
-       
-       // Show trailer video on slide 7 - use video container with controls
-       if (pageIndex + 1 === 7) {
-         console.log('🎬 SLIDE 7 - Loading TRAILER video...');
-         const video = document.getElementById('bg-video3');
-         const videoSource = document.getElementById('video-source');
-         const videoContainer = document.getElementById('video-container');
-         if (video && videoSource && videoContainer) {
-           // Load TRAILER video
-           videoSource.src = 'VIDEOS/TRAILER.mp4';
-           video.load();
-           video.muted = false;
-           video.volume = 1.0;
-           
-           // Show video container with controls for user interaction
-           videoContainer.style.display = 'block';
-           video.setAttribute('controls', 'true'); // Add video controls
-           
-           console.log('🎬 TRAILER video loaded and ready (user controls)');
-         }
        }
        
        // Update nav message and slide counter
