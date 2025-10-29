@@ -1699,12 +1699,18 @@ FOR THIS, WE NEED YOUR HELP.
       if (playButton) {
         if (currentPage === 6) { // Slide 7 (0-based index) - uses video controls, no play button
           playButton.style.display = 'none';
+          playButton.style.visibility = 'hidden';
           console.log('✅ Play button hidden (slide 7 uses video controls)');
         } else if (currentPage === 2) { // Slide 3 (0-based index) - show play button
           playButton.style.display = 'block';
-          console.log('✅ Play button shown for slide 3');
+          playButton.style.visibility = 'visible';
+          playButton.style.pointerEvents = 'auto';
+          playButton.style.zIndex = '2147483649';
+          playButton.style.opacity = '1';
+          console.log('✅ Play button shown for slide 3 with all styles');
         } else {
           playButton.style.display = 'block';
+          playButton.style.visibility = 'visible';
           console.log('✅ Play button shown');
         }
       }
@@ -3297,12 +3303,22 @@ FOR THIS, WE NEED YOUR HELP.
              
              // Show play button instead of autoplay
              if (playButton) {
-               playButton.style.display = 'block';
-               playButton.style.pointerEvents = 'auto';
-               playButton.style.zIndex = '2147483649';
-               console.log('✅ Play button shown for slide 3');
+               playButton.style.setProperty('display', 'block', 'important');
+               playButton.style.setProperty('visibility', 'visible', 'important');
+               playButton.style.setProperty('pointer-events', 'auto', 'important');
+               playButton.style.setProperty('z-index', '2147483649', 'important');
+               playButton.style.setProperty('opacity', '1', 'important');
+               console.log('✅ Play button shown for slide 3 with !important flags');
+               console.log('🔍 Play button computed styles:', {
+                 display: window.getComputedStyle(playButton).display,
+                 visibility: window.getComputedStyle(playButton).visibility,
+                 zIndex: window.getComputedStyle(playButton).zIndex,
+                 opacity: window.getComputedStyle(playButton).opacity
+               });
                // Ensure click handler is attached
                ensurePlayButtonHandler();
+             } else {
+               console.error('❌ Play button element not found on slide 3!');
              }
              
              // Setup audio sync before playing (ONLY for slide 3)
