@@ -1383,6 +1383,7 @@ z-index: 2 !important;
     disablepictureinpicture
     controlslist="nodownload noplaybackrate noptimizequality nodatachannel"
     volume="1"
+    crossorigin="anonymous"
   >
      <!-- Mobile devices will use the smaller video, desktop uses the full quality -->
      <source id="video-source" src="" type="video/mp4" />
@@ -1416,7 +1417,7 @@ z-index: 2 !important;
   </audio>
   
   <!-- Video audio track -->
-  <audio id="video-audio" preload="auto">
+  <audio id="video-audio" preload="auto" crossorigin="anonymous">
     <source src="VIDEOS/AUDIO.mp4" type="audio/mp4">
   </audio>
   
@@ -3351,9 +3352,9 @@ FOR THIS, WE NEED YOUR HELP.
             } else {
               // Use GitHub raw URLs for LFS files on GitHub Pages
               if (isMobile) {
-                videoSource.src = 'https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/FADELONG_mobile.mp4?v=13';
+                videoSource.src = 'https://raw.githubusercontent.com/CSFILMS/6BDMCLEAN/main/VIDEOS/FADELONG_mobile.mp4?v=13';
               } else {
-                videoSource.src = 'https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/FADELONG.mp4?v=13';
+                videoSource.src = 'https://raw.githubusercontent.com/CSFILMS/6BDMCLEAN/main/VIDEOS/FADELONG.mp4?v=13';
               }
               console.log('🎬 Using GitHub raw URL for slide 3 (LFS file)');
             }
@@ -3361,7 +3362,7 @@ FOR THIS, WE NEED YOUR HELP.
             // Also ensure separate audio track is loaded and ready for slide 3 only
             try {
               const audioLocal = 'VIDEOS/AUDIO.mp4';
-              const audioRemote = 'https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/AUDIO.mp4';
+              const audioRemote = 'https://raw.githubusercontent.com/CSFILMS/6BDMCLEAN/main/VIDEOS/AUDIO.mp4';
               const desiredAudioSrc = isLocal ? audioLocal : audioRemote;
               if (videoAudio) {
                 // Set src directly on the element for reliability
