@@ -465,6 +465,36 @@
       filter: drop-shadow(0 0 5px var(--fg)) drop-shadow(0 0 15px var(--fg)) blur(0.8px);
     }
     
+    /* Unmute button */
+    #video-unmute-button {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 2147483650;
+      cursor: pointer;
+      display: none;
+      pointer-events: auto;
+      padding: 15px;
+      border-radius: 50%;
+      background-color: rgba(0, 0, 0, 0.5);
+      transition: background-color 0.2s ease, transform 0.2s ease;
+      color: var(--fg);
+    }
+    
+    #video-unmute-button:hover {
+      background-color: rgba(0, 221, 0, 0.2);
+      transform: scale(1.1);
+    }
+    
+    #video-unmute-button svg {
+      filter: drop-shadow(0 0 5px var(--fg)) drop-shadow(0 0 15px var(--fg));
+    }
+    
+    /* Unmute button when unmuted - show sound icon instead */
+    #video-unmute-button.unmuted svg line {
+      display: none;
+    }
+    
     @media (max-width: 768px) {
       body {
         padding: 0 !important;
@@ -1395,6 +1425,14 @@ z-index: 2 !important;
     <div id="video-play-triangle"></div>
   </div>
   
+  <!-- Unmute button -->
+  <div id="video-unmute-button" style="display: none;">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" fill="currentColor"/>
+      <line x1="2" y1="2" x2="22" y2="22" stroke="currentColor" stroke-width="2" opacity="0.8"/>
+    </svg>
+  </div>
+  
   <!-- Text overlay on top of video -->
   <div id="video-text-overlay" style="display: none;">
     A FILM BY EUGENE JARECKI
@@ -1416,9 +1454,9 @@ z-index: 2 !important;
     <source src="VIDEOS/speduptyping.wav" type="audio/wav">
   </audio>
   
-  <!-- Video audio track -->
+  <!-- Video audio track - FADELONG audio -->
   <audio id="video-audio" preload="auto" crossorigin="anonymous">
-    <source src="VIDEOS/AUDIO.mp4" type="audio/mp4">
+    <source src="VIDEOS/FADELONG_audio.m4a" type="audio/mp4">
   </audio>
   
   <!-- Scanline overlay on top of everything -->
@@ -1786,15 +1824,18 @@ FOR THIS, WE NEED YOUR HELP.
         
         video.currentTime = 0;
         
-        // Enable video audio
-        video.muted = false;
+        // Mute video's built-in audio - we'll use separate FADELONG audio track
+        video.muted = true;
         video.volume = 1.0;
         
-        // Setup audio sync if video-audio element exists (for slide 3)
+        // Setup FADELONG audio sync if video-audio element exists (for slide 3)
         if (videoAudio && currentPage === 2) {
           videoAudio.volume = 1.0;
-          videoAudio.muted = false;
+          videoAudio.muted = true; // Start muted - user can unmute with button
           videoAudio.currentTime = 0;
+          
+          // Get unmute button
+          const unmuteButton = document.getElementById('video-unmute-button');
           
           // Sync audio with video playback
           const syncAudio = () => {
@@ -1806,24 +1847,55 @@ FOR THIS, WE NEED YOUR HELP.
           video.addEventListener('play', () => {
             videoAudio.currentTime = video.currentTime;
             videoAudio.play().catch(err => {
-              console.log('🔊 Video audio play failed:', err.message);
+              console.log('🔊 FADELONG audio play failed:', err.message);
             });
-            console.log('🔊 Video audio synced and playing...');
+            // Show unmute button when video plays
+            if (unmuteButton) {
+              unmuteButton.style.display = 'block';
+              unmuteButton.style.visibility = 'visible';
+              unmuteButton.style.pointerEvents = 'auto';
+            }
+            console.log('🔊 FADELONG audio synced and playing (muted)...');
           });
           
           video.addEventListener('timeupdate', syncAudio);
           
           video.addEventListener('pause', () => {
             videoAudio.pause();
-            console.log('🔊 Video audio paused...');
+            console.log('🔊 FADELONG audio paused...');
           });
           
           video.addEventListener('seeked', () => {
             videoAudio.currentTime = video.currentTime;
-            console.log('🔊 Video audio seeked to:', video.currentTime);
+            console.log('🔊 FADELONG audio seeked to:', video.currentTime);
           });
           
-          console.log('🔊 Video audio track ready and synced...');
+          // Unmute button click handler
+          if (unmuteButton) {
+            unmuteButton.addEventListener('click', () => {
+              if (videoAudio.muted) {
+                videoAudio.muted = false;
+                unmuteButton.classList.add('unmuted');
+                // Update icon to show unmuted state
+                const svg = unmuteButton.querySelector('svg');
+                if (svg) {
+                  svg.innerHTML = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" fill="currentColor"/>';
+                }
+                console.log('🔊 FADELONG audio unmuted!');
+              } else {
+                videoAudio.muted = true;
+                unmuteButton.classList.remove('unmuted');
+                // Update icon to show muted state
+                const svg = unmuteButton.querySelector('svg');
+                if (svg) {
+                  svg.innerHTML = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" fill="currentColor"/><line x1="2" y1="2" x2="22" y2="22" stroke="currentColor" stroke-width="2" opacity="0.8"/>';
+                }
+                console.log('🔇 FADELONG audio muted');
+              }
+            });
+          }
+          
+          console.log('🔊 FADELONG audio track ready and synced (muted initially)...');
         }
         
         // Mobile-specific: Force video to load from beginning
@@ -1834,8 +1906,8 @@ FOR THIS, WE NEED YOUR HELP.
           if (videoAudio) videoAudio.currentTime = 0;
         }
         
-        // Play video with its built-in audio from the beginning
-        console.log('🔊 Playing video with built-in audio... Volume:', video.volume, 'Muted:', video.muted);
+        // Play video muted - FADELONG audio track will play muted in sync
+        console.log('🔊 Playing video muted - FADELONG audio track will sync... Video muted:', video.muted);
         
         // Add event listener for when video ends
         video.addEventListener('ended', () => {
@@ -1844,6 +1916,11 @@ FOR THIS, WE NEED YOUR HELP.
           video.currentTime = video.duration - 0.01;
           video.pause();
           if (videoAudio) videoAudio.pause();
+          // Hide unmute button
+          const unmuteButton = document.getElementById('video-unmute-button');
+          if (unmuteButton) {
+            unmuteButton.style.display = 'none';
+          }
           // Immediately show 6BDM message
           startVideoEndSubtitle();
         }, { once: true });
@@ -3353,32 +3430,25 @@ FOR THIS, WE NEED YOUR HELP.
               console.log('🎬 Using GitHub raw URL for slide 3 (LFS file)');
             }
 
-            // Also ensure separate audio track is loaded and ready for slide 3 only
+            // Load FADELONG audio track for slide 3 - will play muted and sync with video
             try {
-              const audioLocal = 'VIDEOS/AUDIO.mp4';
-              const audioRemote = 'https://raw.githubusercontent.com/CSFILMS/6BDMCLEAN/main/VIDEOS/AUDIO.mp4';
+              const audioLocal = 'VIDEOS/FADELONG_audio.m4a';
+              const audioRemote = 'https://raw.githubusercontent.com/CSFILMS/6BDMCLEAN/main/VIDEOS/FADELONG_audio.m4a';
               const desiredAudioSrc = isLocal ? audioLocal : audioRemote;
               if (videoAudio) {
                 // Set src directly on the element for reliability
-                if (!videoAudio.currentSrc || !videoAudio.currentSrc.endsWith('AUDIO.mp4')) {
+                if (!videoAudio.currentSrc || !videoAudio.currentSrc.endsWith('FADELONG_audio.m4a')) {
                   videoAudio.src = desiredAudioSrc;
                   videoAudio.load();
-                  console.log('🎵 Loaded slide 3 audio track:', desiredAudioSrc);
+                  console.log('🎵 Loaded FADELONG audio track:', desiredAudioSrc);
                 }
-                videoAudio.muted = false;
+                // Start muted - user can unmute with button
+                videoAudio.muted = true;
                 videoAudio.volume = 1.0;
+                console.log('🔇 FADELONG audio loaded - muted initially');
               }
             } catch (err) {
-              console.warn('⚠️ Unable to set slide 3 audio source:', err);
-            }
-            // Ensure we use the FADELONG video's own audio on slide 3
-            if (videoAudio) {
-              try {
-                videoAudio.pause();
-                videoAudio.currentTime = 0;
-                videoAudio.muted = true; // disable separate track for slide 3
-                console.log('🔇 Separate audio track disabled for slide 3 (use video audio)');
-              } catch {}
+              console.warn('⚠️ Unable to set FADELONG audio source:', err);
             }
 
             // Make sure video source is loaded
@@ -3387,7 +3457,7 @@ FOR THIS, WE NEED YOUR HELP.
              // Wait for video to be ready before showing play button
              video.addEventListener('loadedmetadata', () => {
                console.log('✅ Video metadata loaded for slide 3');
-               video.muted = false;
+               video.muted = true; // Keep video muted - FADELONG audio track will be used
                video.volume = 1.0;
                videoContainer.style.display = 'block';
                video.removeAttribute('controls');
@@ -3485,6 +3555,12 @@ FOR THIS, WE NEED YOUR HELP.
            videoAudio.pause();
            videoAudio.currentTime = 0;
            console.log('🔇 Stopped video-audio track');
+         }
+         
+         // Hide unmute button when leaving video slides
+         const unmuteButton = document.getElementById('video-unmute-button');
+         if (unmuteButton) {
+           unmuteButton.style.display = 'none';
          }
          
          // Hide video on other pages
