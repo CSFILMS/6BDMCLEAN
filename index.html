@@ -1860,13 +1860,7 @@ FOR THIS, WE NEED YOUR HELP.
           console.log('✅ Video playing with audio from time:', video.currentTime);
           videoStartTime = Date.now();
           
-          // Start synced audio if it exists
-          if (videoAudio && currentPage === 2) {
-            videoAudio.currentTime = 0;
-            videoAudio.play().catch(err => {
-              console.log('🔊 Video audio play failed:', err.message);
-            });
-          }
+        // Use built-in video audio only on slide 3
         }).catch(err => {
           console.error('❌ Video play failed:', err.message);
           // Restore play button on failure
@@ -3377,7 +3371,17 @@ FOR THIS, WE NEED YOUR HELP.
             } catch (err) {
               console.warn('⚠️ Unable to set slide 3 audio source:', err);
             }
-             // Make sure video source is loaded
+            // Ensure we use the FADELONG video's own audio on slide 3
+            if (videoAudio) {
+              try {
+                videoAudio.pause();
+                videoAudio.currentTime = 0;
+                videoAudio.muted = true; // disable separate track for slide 3
+                console.log('🔇 Separate audio track disabled for slide 3 (use video audio)');
+              } catch {}
+            }
+
+            // Make sure video source is loaded
              video.load();
              
              // Wait for video to be ready before showing play button
@@ -3408,38 +3412,7 @@ FOR THIS, WE NEED YOUR HELP.
                }
              }, { once: true });
              
-             // Setup audio sync before playing (ONLY for slide 3)
-             if (videoAudio && pageIndex + 1 === 3) {
-               videoAudio.volume = 1.0;
-               videoAudio.muted = false;
-               
-               // Sync audio with video playback (only on slide 3)
-               video.addEventListener('play', () => {
-                 if (currentPage === 2) { // Only sync when actually on slide 3
-                   videoAudio.currentTime = video.currentTime;
-                   videoAudio.play().catch(err => {
-                     console.log('🔊 Video audio play failed:', err.message);
-                   });
-                   console.log('🔊 Video audio synced and playing...');
-                 }
-               });
-               
-               video.addEventListener('pause', () => {
-                 if (currentPage === 2) { // Only sync when actually on slide 3
-                   videoAudio.pause();
-                   console.log('🔊 Video audio paused...');
-                 }
-               });
-               
-               video.addEventListener('seeked', () => {
-                 if (currentPage === 2) { // Only sync when actually on slide 3
-                   videoAudio.currentTime = video.currentTime;
-                   console.log('🔊 Video audio seeked to:', video.currentTime);
-                 }
-               });
-               
-               console.log('🔊 Video audio track ready and synced for slide 3 only...');
-             }
+            // Do not use separate audio on slide 3; use built-in video audio
              
              // DO NOT autoplay - wait for play button click
              console.log('✅ Video loaded, waiting for play button click...');
