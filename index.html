@@ -3337,26 +3337,45 @@ FOR THIS, WE NEED YOUR HELP.
                             window.location.hostname === '127.0.0.1' ||
                             window.location.hostname.includes('127.0.0.1');
              
-             // Load original video for slide 3
-             const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-             
-             if (isLocal) {
-               // Use local paths for local testing
-               if (isMobile) {
-                 videoSource.src = 'VIDEOS/FADELONG_mobile.mp4?v=13';
-               } else {
-                 videoSource.src = 'VIDEOS/FADELONG.mp4?v=13';
-               }
-               console.log('🎬 Using local video path for slide 3');
-             } else {
-               // Use GitHub raw URLs for LFS files on GitHub Pages
-               if (isMobile) {
-                 videoSource.src = 'https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/FADELONG_mobile.mp4?v=13';
-               } else {
-                 videoSource.src = 'https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/FADELONG.mp4?v=13';
-               }
-               console.log('🎬 Using GitHub raw URL for slide 3 (LFS file)');
-             }
+            // Load original video for slide 3
+            const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            if (isLocal) {
+              // Use local paths for local testing
+              if (isMobile) {
+                videoSource.src = 'VIDEOS/FADELONG_mobile.mp4?v=13';
+              } else {
+                videoSource.src = 'VIDEOS/FADELONG.mp4?v=13';
+              }
+              console.log('🎬 Using local video path for slide 3');
+            } else {
+              // Use GitHub raw URLs for LFS files on GitHub Pages
+              if (isMobile) {
+                videoSource.src = 'https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/FADELONG_mobile.mp4?v=13';
+              } else {
+                videoSource.src = 'https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/FADELONG.mp4?v=13';
+              }
+              console.log('🎬 Using GitHub raw URL for slide 3 (LFS file)');
+            }
+
+            // Also ensure separate audio track is loaded and ready for slide 3 only
+            try {
+              const audioLocal = 'VIDEOS/AUDIO.mp4';
+              const audioRemote = 'https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/AUDIO.mp4';
+              const desiredAudioSrc = isLocal ? audioLocal : audioRemote;
+              if (videoAudio) {
+                // Set src directly on the element for reliability
+                if (!videoAudio.currentSrc || !videoAudio.currentSrc.endsWith('AUDIO.mp4')) {
+                  videoAudio.src = desiredAudioSrc;
+                  videoAudio.load();
+                  console.log('🎵 Loaded slide 3 audio track:', desiredAudioSrc);
+                }
+                videoAudio.muted = false;
+                videoAudio.volume = 1.0;
+              }
+            } catch (err) {
+              console.warn('⚠️ Unable to set slide 3 audio source:', err);
+            }
              // Make sure video source is loaded
              video.load();
              
