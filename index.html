@@ -1895,13 +1895,42 @@ FOR THIS, WE NEED YOUR HELP.
           console.log('🔊 FADELONG audio track ready and synced (muted initially)...');
         }
         
-        // Mobile-specific: Force video to load from beginning
-        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-          console.log('📱 Mobile detected - forcing video reload from beginning');
-          video.load(); // Force reload on mobile
-          video.currentTime = 0; // Set again after load
-          if (videoAudio) videoAudio.currentTime = 0;
+        // Mobile-specific: Only reload if video isn't already ready and wait for load to complete
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        if (isMobile && video.readyState < 3) {
+          console.log('📱 Mobile detected - video not fully ready, ensuring load complete...');
+          // Wait for load to complete before playing
+          await new Promise((resolve) => {
+            const onCanPlay = () => {
+              video.removeEventListener('canplay', onCanPlay);
+              video.removeEventListener('error', onError);
+              resolve();
+            };
+            const onError = () => {
+              video.removeEventListener('canplay', onCanPlay);
+              video.removeEventListener('error', onError);
+              resolve(); // Resolve even on error to not block
+            };
+            video.addEventListener('canplay', onCanPlay);
+            video.addEventListener('error', onError);
+            
+            // Only call load() if truly needed
+            if (video.readyState === 0 || video.networkState === 3) {
+              video.load();
+            }
+            
+            // Timeout after 5 seconds
+            setTimeout(() => {
+              video.removeEventListener('canplay', onCanPlay);
+              video.removeEventListener('error', onError);
+              resolve();
+            }, 5000);
+          });
         }
+        
+        // Ensure currentTime is 0 before playing
+        video.currentTime = 0;
+        if (videoAudio) videoAudio.currentTime = 0;
         
         // Play video muted - FADELONG audio track will play muted in sync
         console.log('🔊 Playing video muted - FADELONG audio track will sync... Video muted:', video.muted);
