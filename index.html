@@ -81,20 +81,20 @@
     
     /* FADELONG video - EXACT V3 PATTERN (position: fixed, no container) */
     #bg-video-fadelong {
-      position: fixed;
-      top: 50%;
-      left: 60%;
-      transform: translate(-50%, -50%) scaleX(0.8);
-      width: calc(50vw - 2rem);
-      height: calc(60vh - 2rem);
-      object-fit: cover;
-      object-position: center center;
-      z-index: -1;
-      pointer-events: none;
+      position: fixed !important;
+      top: 50% !important;
+      left: 60% !important;
+      transform: translate(-50%, -50%) scaleX(0.8) !important;
+      width: calc(50vw - 2rem) !important;
+      height: calc(60vh - 2rem) !important;
+      object-fit: cover !important;
+      object-position: center center !important;
+      z-index: 0 !important; /* Changed from -1 to 0 so it's above background but below content */
+      pointer-events: none !important;
       display: none;
-      filter: grayscale(1) brightness(0.64) contrast(1.2) sepia(1) hue-rotate(60deg) saturate(2);
-      animation: videoFlicker 0.06s steps(1, end) infinite, hologramRoll 3s linear infinite, hologramGlitch 0.8s infinite;
-      overflow: hidden;
+      filter: grayscale(1) brightness(0.64) contrast(1.2) sepia(1) hue-rotate(60deg) saturate(2) !important;
+      animation: videoFlicker 0.06s steps(1, end) infinite, hologramRoll 3s linear infinite, hologramGlitch 0.8s infinite !important;
+      overflow: hidden !important;
     }
     
     /* Mobile video - 15% bigger (V3 pattern) */
@@ -1469,6 +1469,7 @@ z-index: 2 !important;
     autoplay
     muted
     playsinline
+    loop
     preload="metadata"
     aria-hidden="true"
     tabindex="-1"
@@ -1731,32 +1732,75 @@ FOR THIS, WE NEED YOUR HELP.
       const video = document.getElementById('bg-video-fadelong');
       const audio = document.getElementById('fadelong-audio');
       
+      console.log('🔍 Video element found:', !!video);
+      console.log('🔍 Audio element found:', !!audio);
+      
       if (video) {
+        console.log('🎬 Video element properties:', {
+          id: video.id,
+          src: video.src || video.querySelector('source')?.src,
+          display: window.getComputedStyle(video).display,
+          zIndex: window.getComputedStyle(video).zIndex,
+          position: window.getComputedStyle(video).position,
+          width: window.getComputedStyle(video).width,
+          height: window.getComputedStyle(video).height,
+          opacity: window.getComputedStyle(video).opacity
+        });
+        
         // Show video immediately
         video.style.setProperty('display', 'block', 'important');
         video.muted = true;   // Keep video muted
         video.loop = true;    // Video loops visually
         video.currentTime = 0;
         
+        console.log('🎬 After setting display block:', {
+          inlineDisplay: video.style.display,
+          computedDisplay: window.getComputedStyle(video).display,
+          offsetWidth: video.offsetWidth,
+          offsetHeight: video.offsetHeight
+        });
+        
         // Set up video event listeners
         const onCanPlay = () => {
           console.log('✅ FADELONG video ready to play');
+          console.log('🎬 Video dimensions:', video.videoWidth, 'x', video.videoHeight);
+          console.log('🎬 Video playing:', !video.paused);
+          console.log('🎬 Video visible:', video.offsetWidth > 0 && video.offsetHeight > 0);
           video.removeEventListener('canplay', onCanPlay);
           video.removeEventListener('error', onError);
         };
         
         const onError = (e) => {
           console.log('❌ FADELONG video failed to load:', e);
+          console.log('❌ Error code:', video.error ? video.error.code : 'unknown');
+          console.log('❌ Error message:', video.error ? video.error.message : 'unknown');
           video.removeEventListener('canplay', onCanPlay);
           video.removeEventListener('error', onError);
         };
         
+        const onPlay = () => {
+          console.log('▶️ FADELONG video play event fired');
+          console.log('🎬 Video visible check:', {
+            computedDisplay: window.getComputedStyle(video).display,
+            offsetWidth: video.offsetWidth,
+            offsetHeight: video.offsetHeight,
+            paused: video.paused,
+            readyState: video.readyState
+          });
+        };
+        
         video.addEventListener('canplay', onCanPlay);
         video.addEventListener('error', onError);
+        video.addEventListener('play', onPlay);
         
-        video.play().catch(err => {
-          console.log('FADELONG video play failed:', err.message);
+        console.log('▶️ Attempting to play FADELONG video...');
+        video.play().then(() => {
+          console.log('✅ FADELONG video play() promise resolved');
+        }).catch(err => {
+          console.log('❌ FADELONG video play failed:', err.message);
         });
+      } else {
+        console.error('❌ FADELONG video element not found!');
       }
       
       if (audio) {
