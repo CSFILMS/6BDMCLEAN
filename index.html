@@ -17,339 +17,127 @@
      * Desktop improvements should be made outside these zones.
      */
     
-    /* Video container - fullscreen edge to edge */
-    .video-container {
-      position: fixed !important;
-      top: 0 !important;
-      left: 0 !important;
-      right: 0 !important;
-      bottom: 0 !important;
-      width: 100vw !important;
-      height: 100vh !important;
-      z-index: 2147483647 !important;
-      pointer-events: none !important;
-      display: none;
-      overflow: visible !important;
-    }
-    
-    /* Desktop - align video left edge with "A FILM BY" text */
-    @media (min-width: 769px) {
-      .video-container {
-        left: calc(42% - 35vh) !important;
-        width: calc(100vw - (42% - 35vh)) !important;
-      }
-      
-      /* Slide 7 trailer - centered and lifted up */
-      body.video-slide-active.trailer-slide .video-container {
-        left: 50% !important;
-        right: auto !important;
-        top: 15vh !important;
-        bottom: auto !important;
-        width: 90vw !important;
-        transform: translateX(-50%) !important;
-        display: flex !important;
-        align-items: flex-start !important;
-        justify-content: center !important;
-        height: auto !important;
-      }
-      
-      body.video-slide-active.trailer-slide .bg-video {
-        position: relative !important;
-        max-width: 100% !important;
-        max-height: 85vh !important;
-        pointer-events: auto !important;
-      }
-    }
-    
-    /* Background video - inside container with contain */
+    /* Background video - V3 simple fixed positioning with hologram effects */
     .bg-video {
-      position: absolute !important;
-      top: 0 !important;
-      left: 0 !important;
-      width: 100% !important;
-      height: 100% !important;
-      object-fit: contain !important;
-      object-position: center 30% !important;
-      pointer-events: none !important;
-      display: block !important;
-      animation: none;
-      border: none !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      box-sizing: border-box !important;
-    }
-    
-    /* Mobile - balanced fullscreen, left-aligned */
-    @media (max-width: 768px) {
-      .video-container {
-        width: 100vw !important;
-        height: 100vh !important;
-        left: 0 !important;
-        right: 0 !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        transform: none !important;
-      }
-      
-      .bg-video {
-        object-fit: contain !important;
-        object-position: 0% center !important;
-        width: 100% !important;
-        height: 100% !important;
-        left: 0 !important;
-        margin-left: -15% !important;
-        padding: 0 !important;
-        transform: none !important;
-        position: absolute !important;
-      }
-      
-      /* Slide 7 trailer - centered and lifted up on mobile */
-      body.video-slide-active.trailer-slide .video-container {
-        left: 50% !important;
-        top: 15vh !important;
-        bottom: auto !important;
-        transform: translateX(-50%) !important;
-        display: flex !important;
-        align-items: flex-start !important;
-        justify-content: center !important;
-        height: auto !important;
-      }
-      
-      body.video-slide-active.trailer-slide .bg-video {
-        position: relative !important;
-        max-width: 95vw !important;
-        max-height: 85vh !important;
-        margin-left: 0 !important;
-        pointer-events: auto !important;
-      }
-    }
-    
-    /* Video text overlay */
-    #video-text-overlay {
       position: fixed;
-      top: calc(40% - 30vh); /* Position at top-left of smaller video area - higher */
-      left: calc(42% - 35vh); /* Position at top-left of smaller video area */
-      z-index: 2147483648 !important;
-      color: var(--fg);
-      font-family: var(--font-family);
-      font-size: 1.05rem;
-      text-align: left;
-      padding: 0.7rem 1.05rem;
+      top: 50%;
+      left: 60%;
+      transform: translate(-50%, -50%) scaleX(0.8);
+      width: calc(50vw - 2rem);
+      height: calc(60vh - 2rem);
+      object-fit: cover;
+      object-position: center center;
+      z-index: -1;
       pointer-events: none;
-      white-space: pre-wrap;
-      text-shadow: 0 0 3px var(--fg), 0 0 10px var(--fg), 0 0 20px var(--fg);
-      background-color: transparent; /* Remove black background */
-    }
-    
-    /* Mobile video text overlay - positioned for contained video */
-    @media (max-width: 768px) {
-      #video-text-overlay {
-        top: 20% !important;
-        left: 10% !important;
-        right: 10% !important;
-        transform: none !important;
-        text-align: left !important;
-        font-size: 1.1rem !important;
-        max-width: 80% !important;
-      }
-    }
-    
-    /* Scanline patch over video text */
-    #video-text-scanlines {
-      position: fixed;
-      top: calc(40% - 30vh + 0.7rem); /* Match text position with padding offset */
-      left: calc(42% - 35vh + 0.7rem); /* Match text position with padding offset */
-      width: 25rem;
-      height: 3rem;
-      z-index: 2147483649 !important;
-      pointer-events: none;
-      background-image: repeating-linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0.3) 0px,
-        rgba(0, 0, 0, 0.3) 3px,
-        transparent 3px,
-        transparent 6px
-      );
       display: none;
-      /* Create clipping mask using mix-blend-mode */
-      mix-blend-mode: multiply;
-      opacity: 0.8;
+      filter: grayscale(1) brightness(0.64) contrast(1.2) sepia(1) hue-rotate(60deg) saturate(2);
+      animation: videoFlicker 0.06s steps(1, end) infinite, hologramRoll 3s linear infinite, hologramGlitch 0.8s infinite;
+      overflow: hidden;
     }
     
-    /* Mobile scanlines - positioned for contained video */
+    /* Mobile video - 15% bigger */
     @media (max-width: 768px) {
-      #video-text-scanlines {
-        top: calc(20% + 0.7rem) !important;
-        left: 10% !important;
-        right: 10% !important;
-        transform: none !important;
-        width: 80% !important;
-        height: 2.5rem !important;
+      .bg-video {
+        width: calc(57.5vw - 2rem); /* 50vw * 1.15 = 57.5vw */
+        height: calc(69vh - 2rem);  /* 60vh * 1.15 = 69vh */
       }
     }
     
-    /* Scanline patch over navbar */
-    #nav-scanlines {
-      position: fixed;
-      bottom: 15vh;
-        left: 50%;
-      transform: translateX(-50%);
-      width: 30rem;
-      height: 7vh;
-      z-index: 2147483650;
-      pointer-events: none;
-      background-image: repeating-linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0.3) 0px,
-        rgba(0, 0, 0, 0.3) 3px,
-        transparent 3px,
-        transparent 6px
+    /* Add hologram container for better effect control */
+    .bg-video::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        0deg,
+        transparent 0%,
+        rgba(0, 255, 0, 0.1) 25%,
+        rgba(0, 255, 0, 0.2) 50%,
+        rgba(0, 255, 0, 0.1) 75%,
+        transparent 100%
       );
+      animation: verticalRoll 2s linear infinite;
+      pointer-events: none;
+      z-index: 1;
     }
     
-    /* Video text scanlines removed */
+    /* Video flicker animation */
+    @keyframes videoFlicker {
+      0% { filter: grayscale(1) brightness(0.64) contrast(1.2) sepia(1) hue-rotate(60deg) saturate(2); }
+      8% { filter: grayscale(1) brightness(0.58) contrast(1.25) sepia(1) hue-rotate(59deg) saturate(2.1); }
+      15% { filter: grayscale(1) brightness(0.71) contrast(1.15) sepia(1) hue-rotate(61deg) saturate(1.9); }
+      23% { filter: grayscale(1) brightness(0.55) contrast(1.28) sepia(1) hue-rotate(58deg) saturate(2.2); }
+      31% { filter: grayscale(1) brightness(0.68) contrast(1.18) sepia(1) hue-rotate(62deg) saturate(1.8); }
+      38% { filter: grayscale(1) brightness(0.61) contrast(1.22) sepia(1) hue-rotate(60deg) saturate(2.0); }
+      46% { filter: grayscale(1) brightness(0.73) contrast(1.16) sepia(1) hue-rotate(61deg) saturate(1.9); }
+      54% { filter: grayscale(1) brightness(0.57) contrast(1.26) sepia(1) hue-rotate(59deg) saturate(2.1); }
+      62% { filter: grayscale(1) brightness(0.66) contrast(1.19) sepia(1) hue-rotate(60deg) saturate(2.0); }
+      69% { filter: grayscale(1) brightness(0.59) contrast(1.24) sepia(1) hue-rotate(58deg) saturate(2.2); }
+      77% { filter: grayscale(1) brightness(0.72) contrast(1.17) sepia(1) hue-rotate(62deg) saturate(1.8); }
+      85% { filter: grayscale(1) brightness(0.62) contrast(1.21) sepia(1) hue-rotate(60deg) saturate(2.0); }
+      92% { filter: grayscale(1) brightness(0.67) contrast(1.18) sepia(1) hue-rotate(61deg) saturate(1.9); }
+      100% { filter: grayscale(1) brightness(0.64) contrast(1.2) sepia(1) hue-rotate(60deg) saturate(2); }
+    }
     
-    @media (max-width: 768px) {
-      #video-text-overlay {
-        font-size: 0.84rem;
-        top: 1.5rem !important;
-        left: 1.5rem !important;
-        transform: none !important;
-        padding: 0.52rem 0.7rem;
+    /* Vertical roll displacement effect */
+    @keyframes verticalRoll {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100%); }
+    }
+    
+    /* Hologram rolling wave effect */
+    @keyframes hologramRoll {
+      0% { 
+        transform: translate(-50%, -50%) scaleX(0.8) scaleY(1);
+        filter: grayscale(1) brightness(0.64) contrast(1.2) sepia(1) hue-rotate(60deg) saturate(2);
       }
-      
-      #video-text-scanlines {
-        top: 1.5rem !important;
-        left: 2rem !important;
-        transform: none !important;
+      25% { 
+        transform: translate(-50%, -50%) scaleX(0.8) scaleY(1.02);
+        filter: grayscale(1) brightness(0.68) contrast(1.15) sepia(1) hue-rotate(62deg) saturate(2.1);
       }
-      
-      #video-end-subtitle {
-        top: auto !important;
-        left: 2rem !important;
-        bottom: 25vh !important;
-        transform: none !important;
+      50% { 
+        transform: translate(-50%, -50%) scaleX(0.8) scaleY(0.98);
+        filter: grayscale(1) brightness(0.6) contrast(1.25) sepia(1) hue-rotate(58deg) saturate(1.9);
       }
-      
-      /* Mobile image positioning and sizing */
-      #cannes-photo-container,
-      #arrest-photo-container,
-      #correa-photo-container {
-        max-width: 60vw !important;
-        max-height: 28vh !important;
-        width: 60vw !important;
-        bottom: 25vh !important; /* Move up from 20vh */
+      75% { 
+        transform: translate(-50%, -50%) scaleX(0.8) scaleY(1.01);
+        filter: grayscale(1) brightness(0.66) contrast(1.18) sepia(1) hue-rotate(61deg) saturate(2.05);
       }
-      
-      #collateral-photo-container {
-        max-width: 75vw !important;
-        max-height: 35vh !important;
-        width: 75vw !important;
-        bottom: 22vh !important; /* Move up from 18vh */
-      }
-      
-      /* Mobile video slide UI adjustments */
-      #nav {
-        bottom: 12vh; /* Move up slightly on mobile */
-        z-index: 2147483648 !important;
-        font-size: 0.8rem;
-        padding: 0.5rem 1rem;
-      }
-      
-      #slide-counter {
-        bottom: 6vh; /* Move up slightly on mobile */
-        z-index: 2147483649 !important;
-        font-size: 0.6rem;
-      }
-      
-      #nav-scanlines {
-        bottom: 12vh; /* Match navbar position */
-        z-index: 2147483650 !important;
-        width: 25rem; /* Slightly smaller on mobile */
+      100% { 
+        transform: translate(-50%, -50%) scaleX(0.8) scaleY(1);
+        filter: grayscale(1) brightness(0.64) contrast(1.2) sepia(1) hue-rotate(60deg) saturate(2);
       }
     }
     
-    /* Desktop body reset to ensure no padding/margin interference */
-    @media (min-width: 769px) {
-      body {
-        padding: 0 !important;
-        margin: 0 !important;
-        overflow: hidden;
-      }
-    }
-    
-    /* Hologram overlay removed */
-    
-    /* Video effects removed - clean video display */
-    
-    /* Slide transition animations */
-    @keyframes slideOutLeft {
-      0% {
-        transform: translateX(0);
+    /* Hologram glitch effect */
+    @keyframes hologramGlitch {
+      0%, 90%, 100% { 
+        transform: translate(-50%, -50%) scaleX(0.8);
         opacity: 1;
       }
-      100% {
-        transform: translateX(-100%);
-        opacity: 0;
+      92% { 
+        transform: translate(-50.1%, -50%) scaleX(0.8);
+        opacity: 0.95;
+      }
+      94% { 
+        transform: translate(-49.9%, -50.05%) scaleX(0.8);
+        opacity: 0.98;
+      }
+      96% { 
+        transform: translate(-50.05%, -49.95%) scaleX(0.8);
+        opacity: 0.96;
+      }
+      98% { 
+        transform: translate(-49.95%, -50%) scaleX(0.8);
+        opacity: 0.97;
       }
     }
-    
-    @keyframes slideInRight {
-      0% {
-        transform: translateX(100%);
-        opacity: 0;
-      }
-      100% {
-        transform: translateX(0);
-        opacity: 1;
-      }
-    }
-    
-    @keyframes slideOutRight {
-      0% {
-        transform: translateX(0);
-        opacity: 1;
-      }
-      100% {
-        transform: translateX(100%);
-        opacity: 0;
-      }
-    }
-    
-    @keyframes slideInLeft {
-      0% {
-        transform: translateX(-100%);
-        opacity: 0;
-      }
-      100% {
-        transform: translateX(0);
-        opacity: 1;
-      }
-    }
-    
-    #page.slide-out-left {
-      animation: slideOutLeft 0.25s cubic-bezier(0.4, 0.0, 1, 1) forwards;
-    }
-    
-    #page.slide-in-right {
-      animation: slideInRight 0.25s cubic-bezier(0.0, 0.0, 0.2, 1) forwards;
-    }
-    
-    #page.slide-out-right {
-      animation: slideOutRight 0.25s cubic-bezier(0.4, 0.0, 1, 1) forwards;
-    }
-    
-    #page.slide-in-left {
-      animation: slideInLeft 0.25s cubic-bezier(0.0, 0.0, 0.2, 1) forwards;
-    }
-    
     
     /* Video overlay (disabled for small centered video) */
     .bg-overlay {
-      display: none;
-    }
-    
-    #bg-overlay {
       display: none;
     }
     /* Your actual content goes above (z-index > 0) */
@@ -407,34 +195,43 @@
       box-sizing: border-box;
     }
     
-    /* Scanline overlay */
-    #scanline-overlay {
-      position: fixed !important;
-      top: 0 !important;
-      left: 0 !important;
-      right: 0 !important;
-      bottom: 0 !important;
-      width: 100% !important;
-      height: 100% !important;
-      background-image: repeating-linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0.2) 0px,
-        rgba(0, 0, 0, 0.2) 3px,
-        transparent 3px,
-        transparent 6px
-      ) !important;
-      pointer-events: none !important;
-      z-index: 2147483647 !important;
-      display: block !important;
-      visibility: visible !important;
+    /* CRT scanline effect */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: repeating-linear-gradient(
+0deg,
+transparent 0px,
+transparent 2px,
+rgba(0, 255, 0, 0.03) 2px,
+rgba(0, 255, 0, 0.03) 4px
+      );
+      pointer-events: none;
+      z-index: 99998;
     }
     
-    /* Hide scanlines on video slide */
-    body.video-slide-active #scanline-overlay {
-      display: none !important;
+    /* Black scanlines on top */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: repeating-linear-gradient(
+0deg,
+rgba(0, 0, 0, 0.26) 0px,
+rgba(0, 0, 0, 0.26) 2px,
+transparent 2px,
+transparent 4px
+      );
+      pointer-events: none;
+      z-index: 99999;
     }
-    
-    
     
     @media (max-width: 768px) {
       body {
@@ -749,10 +546,7 @@ z-index: 1;
       }
     }
 
-    /* Year styling - match regular text */
-    .year-text {
-      /* Years inherit parent styling - no special formatting */
-    }
+    /* Year styling - match regular text (years inherit parent styling - no special formatting) */
     
     /* Ensure text content appears above video and photos */
     @media (min-width: 769px) {
@@ -1138,12 +932,7 @@ z-index: 1;
       gap: 1.5rem;
     }
     
-    /* Desktop - reduced padding for closer arrows - removed redundant rule */
-    @media (min-width: 769px) {
-      #nav {
-        /* Padding removed to fix centering */
-      }
-    }
+    /* Desktop - reduced padding for closer arrows (padding removed to fix centering) */
     #nav span { cursor:pointer; -webkit-user-select: none; user-select: none; padding:0 0.5em; }
           #nav-msg { 
       flex-grow:0; 
@@ -1341,17 +1130,34 @@ z-index: 2 !important;
 </head>
 <body>
 
-  <!-- video2 removed - defunct -->
-
-  <div class="video-container" id="video-container">
-  <!-- Video for slide 3: FADELONG_mobile.mp4 -->
+  <!-- Video for slide 3: FADELONG_mobile.mp4 (simple V3 pattern) -->
   <video
-    id="bg-video-fadelong"
-    class="bg-video bg-video-fadelong"
+    id="bg-video2"
+    class="bg-video"
     autoplay
     muted
     playsinline
     loop
+    preload="metadata"
+    poster="./assets/bg-poster.jpg"
+    aria-hidden="true"
+    tabindex="-1"
+    disablepictureinpicture
+    controlslist="nodownload noplaybackrate noptimizequality nodatachannel"
+    volume="0"
+    defaultMuted
+    style="display: none;"
+  >
+    <source src="VIDEOS/FADELONG_mobile.mp4" type="video/mp4" />
+  </video>
+
+  <!-- Video for slide 7 and 6BDM hologram -->
+  <video
+    id="bg-video3"
+    class="bg-video"
+    autoplay
+    muted
+    playsinline
     preload="metadata"
     aria-hidden="true"
     tabindex="-1"
@@ -1361,63 +1167,19 @@ z-index: 2 !important;
     defaultMuted
     style="display: none;"
   >
-    <source src="VIDEOS/FADELONG_mobile.mp4?v=fadelong-v1" type="video/mp4" />
+    <source src="HOLOGRAMJ.mp4" type="video/mp4" />
   </video>
   
-  <!-- Video for slide 7: TRAILER.mp4 -->
-  <video
-    id="bg-video3"
-    class="bg-video bg-video3"
-    playsinline
-    preload="metadata"
-    aria-hidden="true"
-    tabindex="-1"
-    disablepictureinpicture
-    controlslist="nodownload noplaybackrate noptimizequality nodatachannel"
-    volume="1"
-    style="display: none;"
-  >
-  </video>
-  </div>
-  
-  
-  <!-- Audio for FADELONG video (slide 3) - separate audio track -->
+  <!-- Audio for 6BDM hologram video (video3) -->
   <audio
-    id="fadelong-audio"
+    id="obiwan-audio"
     preload="metadata"
     style="display: none;"
   >
-    <source src="VIDEOS/FADELONG_audio.m4a?v=fadelong-audio-v1" type="audio/mp4" />
+    <source src="OBIWAN_REAL.mp4" type="audio/mp4" />
   </audio>
-  
-  <!-- Text overlay on top of video -->
-  <div id="video-text-overlay" style="display: none;">
-    A FILM BY EUGENE JARECKI
-  </div>
-  
-  <!-- Scanline patch over video text -->
-  <div id="video-text-scanlines"></div>
-  
-  <!-- Scanline patch over navbar -->
-  <div id="nav-scanlines"></div>
-  
-  <!-- Text unscramble audio -->
-  <audio id="text-audio" preload="auto">
-    <source src="TEXTAUDIO.mp4" type="audio/mp4">
-  </audio>
-  
-  <!-- Unscramble typing audio -->
-  <audio id="unscramble-audio" preload="auto">
-    <source src="VIDEOS/speduptyping.wav" type="audio/wav">
-  </audio>
-  
-  <!-- Scanline overlay on top of everything -->
-  <div id="scanline-overlay"></div>
-  
-  
-  <!-- OBIWAN_REAL audio removed - defunct -->
 
-  <div class="bg-overlay" id="bg-overlay"></div>
+  <div class="bg-overlay" id="bg-overlay" style="display: none;"></div>
 
   <div id="page">
     <div id="text-wrap">
@@ -1607,186 +1369,75 @@ FOR THIS, WE NEED YOUR HELP.
     }
 
 
-    // FADELONG video functions - for slide 3, with separate audio track (same pattern as V3 file)
-    function showFadelongVideo() {
-      console.log('🎬 Showing FADELONG_mobile video with audio...');
-      const video = document.getElementById('bg-video-fadelong');
-      const audio = document.getElementById('fadelong-audio');
-      const videoContainer = document.getElementById('video-container');
+    // Video2 background functions - for slide 3 (V3 simple pattern)
+    function showVideo2Background() {
+      console.log('🎬 Showing video2...');
+      const video = document.getElementById('bg-video2');
       
       if (video) {
-        // Show video container first - ensure it's visible
-        if (videoContainer) {
-          videoContainer.style.display = 'flex';
-          videoContainer.style.visibility = 'visible';
-          videoContainer.style.opacity = '1';
-        }
+        console.log('✅ Video2 element found, showing...');
         
-        // Override inline display: none - ensure video is visible
         video.style.setProperty('display', 'block', 'important');
-        video.style.setProperty('visibility', 'visible', 'important');
-        video.style.setProperty('opacity', '1', 'important');
+        console.log('🎬 Video2 display set to block with !important');
+        console.log('🎬 Video2 computed style:', window.getComputedStyle(video).display);
         
-        console.log('🎬 Video element styles applied:', {
-          display: window.getComputedStyle(video).display,
-          visibility: window.getComputedStyle(video).visibility,
-          opacity: window.getComputedStyle(video).opacity
-        });
+        // Ensure video is completely muted
+        video.muted = true;
+        video.volume = 0;
+        video.defaultMuted = true;
         
-        // Keep video muted - audio plays separately
-        video.muted = true;   // Keep video muted
-        video.volume = 0;     // Ensure volume is 0
-        video.loop = true;    // Video loops visually
-        video.currentTime = 0; // Reset to beginning
+        // Reset video to beginning for sync
+        video.currentTime = 0;
         
-        // Set up video event listeners BEFORE calling load/play
+        // Set up video event listeners
         const onCanPlay = () => {
-          console.log('✅ FADELONG video ready to play');
-          console.log('🎬 Video dimensions:', video.videoWidth, 'x', video.videoHeight);
-          console.log('🎬 Video playing:', !video.paused);
+          console.log('✅ Video2 ready to play');
           video.removeEventListener('canplay', onCanPlay);
           video.removeEventListener('error', onError);
         };
         
         const onError = (e) => {
-          console.error('❌ FADELONG video failed to load:', e);
-          console.error('❌ Video error code:', video.error ? video.error.code : 'unknown');
-          console.error('❌ Video src:', video.src || video.querySelector('source')?.src || 'not set');
-          console.error('❌ Video networkState:', video.networkState);
-          console.error('❌ Video readyState:', video.readyState);
+          console.log('❌ Video2 failed to load:', e);
           video.removeEventListener('canplay', onCanPlay);
           video.removeEventListener('error', onError);
         };
         
-        const onLoadedMetadata = () => {
-          console.log('✅ FADELONG video metadata loaded');
-          console.log('🎬 Video src:', video.src || video.querySelector('source')?.src);
-        };
-        
-        const onLoadedData = () => {
-          console.log('✅ FADELONG video data loaded');
-        };
-        
-        const onPlay = () => {
-          console.log('▶️ FADELONG video started playing');
-        };
-        
-        // Add event listeners
         video.addEventListener('canplay', onCanPlay);
         video.addEventListener('error', onError);
-        video.addEventListener('loadedmetadata', onLoadedMetadata);
-        video.addEventListener('loadeddata', onLoadedData);
-        video.addEventListener('play', onPlay);
         
-        // Explicitly call load() to ensure video loads - this helps avoid CORS issues
-        // For GitHub Pages, verify the video source is accessible
-        const videoSource = video.querySelector('source');
-        if (videoSource) {
-          console.log('🔄 Loading FADELONG video from:', videoSource.src);
-          
-          // If on GitHub Pages and file doesn't load, try absolute path
-          const isGitHubPages = window.location.hostname.includes('github.io') || 
-                               window.location.hostname.includes('github.com');
-          
-          if (isGitHubPages && !videoSource.src.includes('http')) {
-            // Try to detect repo path for GitHub Pages
-            const repoPath = window.location.pathname.split('/').slice(0, 2).join('/');
-            const absolutePath = `${window.location.origin}${repoPath}/VIDEOS/FADELONG_mobile.mp4?v=fadelong-v1`;
-            console.log('🌐 GitHub Pages detected, checking path:', absolutePath);
-            
-            // Test if file exists by creating a test image request
-            fetch(absolutePath, { method: 'HEAD' })
-              .then(response => {
-                if (response.ok) {
-                  console.log('✅ Video file found at:', absolutePath);
-                } else {
-                  console.warn('⚠️ Video file not found at absolute path, using relative path');
-                }
-              })
-              .catch(() => {
-                console.warn('⚠️ Could not verify absolute path, using relative path');
-              });
-          }
-        }
-        
-        video.load();
-        
-        // Wait a brief moment for load to start, then attempt to play
-        setTimeout(() => {
-          // Attempt to play - autoplay requires muted video
-          video.play().then(() => {
-            console.log('✅ FADELONG video playing successfully (autoplay, muted)');
-            console.log('🎬 Video visible check:', {
-              computedDisplay: window.getComputedStyle(video).display,
-              offsetWidth: video.offsetWidth,
-              offsetHeight: video.offsetHeight,
-              paused: video.paused
-            });
-          }).catch(err => {
-            console.log('⚠️ FADELONG video autoplay failed (may require user interaction):', err.message);
-            // Autoplay can fail on some browsers - video will play when user interacts
-          });
-        }, 100);
-      } else {
-        console.error('❌ FADELONG video element not found!');
-      }
-      
-      // Play separate audio track
-      if (audio) {
-        audio.volume = 0.7;   // Set audio volume (matching V3 pattern)
-        audio.muted = false;  // Ensure not muted
-        audio.currentTime = 0;
-        
-        // Try to play with better error handling
-        console.log('🔊 Attempting to play FADELONG audio...');
-        audio.play().then(() => {
-          console.log('✅ FADELONG audio playing successfully');
+        video.play().then(() => {
+          console.log('✅ Video2 playing from start (muted)');
+          console.log('🎬 Video2 dimensions:', video.videoWidth, 'x', video.videoHeight);
+          console.log('🎬 Video2 position:', video.getBoundingClientRect());
         }).catch(err => {
-          console.log('❌ FADELONG audio play failed:', err.message);
-          console.log('🔧 This might require user interaction first');
+          console.log('❌ Video2 play failed:', err.message);
         });
-      }
-    }
-    
-    function hideFadelongVideo() {
-      console.log('🛑 Hiding FADELONG video and stopping audio...');
-      const video = document.getElementById('bg-video-fadelong');
-      const audio = document.getElementById('fadelong-audio');
-      const videoContainer = document.getElementById('video-container');
-      
-      if (video) {
-        video.pause();
-        video.currentTime = 0; // Reset to beginning
-        video.style.setProperty('display', 'none', 'important');
-      }
-      
-      if (audio) {
-        audio.pause();
-        audio.currentTime = 0; // Reset to beginning
-      }
-      
-      // Only hide container if TRAILER is also not showing
-      const trailerVideo = document.getElementById('bg-video3');
-      if (videoContainer && (!trailerVideo || trailerVideo.style.display === 'none')) {
-        videoContainer.style.display = 'none';
+      } else {
+        console.error('❌ Video2 element not found!');
       }
     }
 
-    // Video3 functions - for trailer only (slide 7)
-    function showVideo3Background() {
-      console.log('🎬 Showing trailer video...');
-      const video = document.getElementById('bg-video3');
-      const videoContainer = document.getElementById('video-container');
+    function hideVideo2Background() {
+      console.log('🛑 Hiding video2...');
+      const video = document.getElementById('bg-video2');
       
       if (video) {
-        // Show video container first
-        if (videoContainer) {
-          videoContainer.style.display = 'flex';
-          videoContainer.style.pointerEvents = 'auto';
-        }
-        
+        video.pause();
+        video.style.setProperty('display', 'none', 'important');
+      }
+    }
+
+    // Video3 (JA_OBIWAN) functions - with audio that stops when slide changes
+    function showVideo3Background() {
+      console.log('🎬 Showing JA_OBIWAN hologram video with audio...');
+      const video = document.getElementById('bg-video3');
+      const audio = document.getElementById('obiwan-audio');
+      
+      if (video) {
         // Show video immediately
         video.style.setProperty('display', 'block', 'important');
+        video.muted = true;   // Keep video muted
+        video.loop = true;    // Video loops visually
         video.currentTime = 0;
         
         // Set up video event listeners
@@ -1805,9 +1456,22 @@ FOR THIS, WE NEED YOUR HELP.
         video.addEventListener('canplay', onCanPlay);
         video.addEventListener('error', onError);
         
-        // Autoplay trailer
         video.play().catch(err => {
           console.log('Video3 play failed:', err.message);
+        });
+      }
+      
+      if (audio) {
+        audio.volume = 0.7;   // Set audio volume
+        audio.muted = false;  // Ensure not muted
+        audio.currentTime = 0;
+        
+        // Try to play with better error handling
+        console.log('🔊 Attempting to play audio...');
+        audio.play().then(() => {
+          console.log('✅ Audio playing successfully');
+        }).catch(err => {
+          console.log('❌ Audio play failed:', err.message);
         });
       }
     }
@@ -1882,20 +1546,18 @@ FOR THIS, WE NEED YOUR HELP.
     }
 
     function hideVideo3Background() {
-      console.log('🛑 Hiding video...');
+      console.log('🛑 Hiding video3...');
       const video = document.getElementById('bg-video3');
-      const videoContainer = document.getElementById('video-container');
+      const audio = document.getElementById('obiwan-audio');
       
       if (video) {
         video.pause();
-        video.currentTime = 0; // Reset to beginning
         video.style.setProperty('display', 'none', 'important');
       }
       
-      // Only hide container if FADELONG is also not showing
-      const fadelongVideo = document.getElementById('bg-video-fadelong');
-      if (videoContainer && (!fadelongVideo || fadelongVideo.style.display === 'none')) {
-        videoContainer.style.display = 'none';
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0; // Reset audio when hiding video
       }
     }
     
@@ -3130,81 +2792,24 @@ FOR THIS, WE NEED YOUR HELP.
         console.log('🔇 Audio disabled for page 15');
       }
        
-       // Show FADELONG_mobile video on slide 3
-       console.log(`🔍 Debug: Current page ${pageIndex + 1}, checking for FADELONG video on slide 3...`);
+       // Show video2 on slide 3
+       console.log(`🔍 Debug: Current page ${pageIndex + 1}, checking for video2 on slide 3...`);
        if (pageIndex + 1 === 3) {
-         console.log(`🎬 SLIDE 3 - Showing FADELONG_mobile video...`);
-         document.body.classList.add('video-slide-active');
-         showFadelongVideo();
+         console.log('🎬 SLIDE 3 - Showing video2...');
+         showVideo2Background();
        } else {
-         hideFadelongVideo();
+         console.log(`🎬 Not slide 3 (current: ${pageIndex + 1}), hiding video2...`);
+         // Hide video2 on other pages
+         hideVideo2Background();
        }
        
-       // Show video on slide 7 (trailer)
-       console.log(`🔍 Debug: Current page ${pageIndex + 1}, checking for video on slide 7...`);
-       if (pageIndex + 1 === 7) {
-         console.log(`🎬 SLIDE 7 - Showing trailer...`);
-         document.body.classList.add('video-slide-active');
+       // Show video3 on 6BDM slide (only the main 6BDM slide with timeline content)
+       if (pageContent.includes('6BDM: JULIAN ASSANGE AND THE PRICE OF TRUTH')) {
+         console.log('🎬 6BDM slide - Showing video3...');
          showVideo3Background();
-         
-         const video = document.getElementById('bg-video3');
-         const videoContainer = document.getElementById('video-container');
-         
-         if (pageIndex + 1 === 7) {
-           // Trailer video on slide 7 - uses its own built-in audio
-           document.body.classList.add('trailer-slide');
-           
-           if (video && videoContainer) {
-             // Detect if we're on GitHub Pages vs local
-             const isLocal = window.location.protocol === 'file:' || 
-                            window.location.hostname === 'localhost' || 
-                            window.location.hostname === '127.0.0.1' ||
-                            window.location.hostname.includes('127.0.0.1');
-             
-             // GitHub Pages doesn't serve Git LFS files, use raw GitHub URL
-             // For local, use relative path
-             if (isLocal) {
-               video.src = 'VIDEOS/TRAILER.mp4';
-               console.log('🎬 Using local TRAILER path');
-             } else {
-               // Use GitHub raw URL for LFS files on GitHub Pages
-               video.src = 'https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/TRAILER.mp4';
-               console.log('🎬 Using GitHub raw URL for TRAILER (LFS file)');
-             }
-             
-             videoContainer.style.display = 'flex';
-             videoContainer.style.pointerEvents = 'auto';
-             videoContainer.style.top = '15vh';
-             videoContainer.style.bottom = 'auto';
-             
-             
-             // Trailer uses its own built-in audio (no separate audio track)
-             video.muted = false;
-             video.volume = 1.0;
-             video.setAttribute('controls', 'true');
-             video.setAttribute('playsinline', 'true');
-             
-             // Add error handler for video load failures
-             video.addEventListener('error', (e) => {
-               console.error('❌ TRAILER video load error:', e);
-               console.error('❌ Video error code:', video.error ? video.error.code : 'unknown');
-               console.error('❌ Video src tried:', video.src);
-             }, { once: true });
-             
-             video.load();
-             
-             console.log('🎬 TRAILER video ready (using built-in audio)');
-           }
-         }
        } else {
-         console.log(`🎬 Not slide 7 (current: ${pageIndex + 1}), hiding trailer...`);
-         document.body.classList.remove('trailer-slide');
-         
-         // Hide trailer video on other pages
+         console.log(`🎬 Not 6BDM slide, hiding video3...`);
          hideVideo3Background();
-         if (typeof videoStartTime !== 'undefined') {
-           videoStartTime = null; // Reset video timing when leaving video slide
-         }
        }
        
        // Update nav message and slide counter
