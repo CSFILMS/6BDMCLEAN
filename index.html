@@ -1607,7 +1607,7 @@ FOR THIS, WE NEED YOUR HELP.
     }
 
 
-    // FADELONG video functions - for slide 3, with separate audio track (EXACT V3 pattern)
+    // FADELONG video functions - for slide 3, with separate audio track (EXACT V3 pattern + GitHub Pages fix)
     function showFadelongVideo() {
       console.log('🎬 Showing FADELONG_mobile video with audio...');
       const video = document.getElementById('bg-video-fadelong');
@@ -1620,32 +1620,108 @@ FOR THIS, WE NEED YOUR HELP.
           videoContainer.style.display = 'flex';
         }
         
+        // For GitHub Pages, ensure video source is set correctly
+        const isGitHubPages = window.location.hostname.includes('github.io');
+        const sourceElement = video.querySelector('source');
+        
+        if (isGitHubPages && sourceElement) {
+          // Detect repo path for GitHub Pages (e.g., /CSFILMS/6BDMCLEAN)
+          const pathParts = window.location.pathname.split('/').filter(p => p);
+          const repoPath = pathParts.length >= 2 ? `/${pathParts[0]}/${pathParts[1]}` : '';
+          const videoPath = repoPath ? `${repoPath}/VIDEOS/FADELONG_mobile.mp4?v=fadelong-v1` : '/VIDEOS/FADELONG_mobile.mp4?v=fadelong-v1';
+          
+          // Set both source element and video.src for GitHub Pages compatibility
+          sourceElement.src = videoPath;
+          video.src = videoPath; // Also set video.src directly for better compatibility
+          
+          console.log('🌐 GitHub Pages detected');
+          console.log('🌐 Repo path:', repoPath);
+          console.log('🌐 Using video path:', videoPath);
+          console.log('🌐 Full URL would be:', window.location.origin + videoPath);
+          
+          // Force reload of video with new source
+          video.load();
+        } else if (sourceElement) {
+          // For local, ensure relative path
+          const videoPath = 'VIDEOS/FADELONG_mobile.mp4?v=fadelong-v1';
+          sourceElement.src = videoPath;
+          console.log('💻 Local environment, using path:', videoPath);
+        }
+        
         // Show video immediately (EXACT V3 pattern - no load(), no setTimeout)
         video.style.setProperty('display', 'block', 'important');
         video.muted = true;   // Keep video muted
         video.loop = true;    // Video loops visually
         video.currentTime = 0;
         
-        // Set up video event listeners (V3 uses simpler listeners)
+        // Set up video event listeners with better error reporting
         const onCanPlay = () => {
           console.log('✅ FADELONG video ready to play');
+          console.log('🎬 Video src:', video.src || video.querySelector('source')?.src);
+          console.log('🎬 Video dimensions:', video.videoWidth, 'x', video.videoHeight);
           video.removeEventListener('canplay', onCanPlay);
           video.removeEventListener('error', onError);
         };
         
         const onError = (e) => {
-          console.log('❌ FADELONG video failed to load:', e);
+          console.error('❌ FADELONG video failed to load:', e);
+          console.error('❌ Video error code:', video.error ? video.error.code : 'unknown');
+          console.error('❌ Video src attempted:', video.src || video.querySelector('source')?.src);
+          console.error('❌ Video networkState:', video.networkState);
+          console.error('❌ Video readyState:', video.readyState);
+          
+          // Try fallback path if error occurs
+          if (isGitHubPages && video.error) {
+            const fallbackPath = 'VIDEOS/FADELONG_mobile.mp4?v=fadelong-v1';
+            console.log('🔄 Trying fallback path:', fallbackPath);
+            const sourceElement = video.querySelector('source');
+            if (sourceElement) {
+              sourceElement.src = fallbackPath;
+              video.load();
+              video.play().catch(err => {
+                console.error('❌ Fallback path also failed:', err);
+              });
+            }
+          }
+          
           video.removeEventListener('canplay', onCanPlay);
           video.removeEventListener('error', onError);
         };
         
+        const onLoadedMetadata = () => {
+          console.log('✅ FADELONG video metadata loaded');
+        };
+        
         video.addEventListener('canplay', onCanPlay);
         video.addEventListener('error', onError);
+        video.addEventListener('loadedmetadata', onLoadedMetadata);
         
-        // Direct play (NO load(), NO setTimeout - EXACT V3 pattern)
-        video.play().catch(err => {
-          console.log('FADELONG video play failed:', err.message);
-        });
+        // Play video - wait for load() on GitHub Pages, immediate play for local
+        if (isGitHubPages) {
+          // On GitHub Pages, wait for load() to complete, then play
+          const playAfterLoad = () => {
+            console.log('▶️ Attempting to play FADELONG video (after load)...');
+            video.play().then(() => {
+              console.log('✅ FADELONG video playing successfully');
+              video.removeEventListener('canplay', playAfterLoad);
+            }).catch(err => {
+              console.error('❌ FADELONG video play failed:', err.message);
+              console.error('⚠️ This might require user interaction first');
+            });
+          };
+          video.addEventListener('canplay', playAfterLoad, { once: true });
+        } else {
+          // Local: Direct play (EXACT V3 pattern - no load(), no setTimeout)
+          console.log('▶️ Attempting to play FADELONG video...');
+          video.play().then(() => {
+            console.log('✅ FADELONG video playing successfully');
+          }).catch(err => {
+            console.error('❌ FADELONG video play failed:', err.message);
+            console.error('⚠️ This might require user interaction first');
+          });
+        }
+      } else {
+        console.error('❌ FADELONG video element not found!');
       }
       
       // Play separate audio track (EXACT V3 pattern)
