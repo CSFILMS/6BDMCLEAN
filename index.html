@@ -1351,10 +1351,19 @@ FOR THIS, WE NEED YOUR HELP.
       
       if (video) {
         console.log('✅ Video2 element found, showing...');
+        console.log('🎬 Video2 BEFORE - display:', window.getComputedStyle(video).display);
+        console.log('🎬 Video2 BEFORE - z-index:', window.getComputedStyle(video).zIndex);
+        console.log('🎬 Video2 BEFORE - visibility:', window.getComputedStyle(video).visibility);
+        console.log('🎬 Video2 BEFORE - opacity:', window.getComputedStyle(video).opacity);
         
         video.style.setProperty('display', 'block', 'important');
-        console.log('🎬 Video2 display set to block with !important');
-        console.log('🎬 Video2 computed style:', window.getComputedStyle(video).display);
+        video.style.setProperty('visibility', 'visible', 'important');
+        video.style.setProperty('opacity', '1', 'important');
+        
+        console.log('🎬 Video2 AFTER - display:', window.getComputedStyle(video).display);
+        console.log('🎬 Video2 AFTER - z-index:', window.getComputedStyle(video).zIndex);
+        console.log('🎬 Video2 AFTER - position:', window.getComputedStyle(video).position);
+        console.log('🎬 Video2 src:', video.querySelector('source')?.src || 'no source');
         
         // Ensure video is completely muted
         video.muted = true;
@@ -1367,12 +1376,15 @@ FOR THIS, WE NEED YOUR HELP.
         // Set up video event listeners
         const onCanPlay = () => {
           console.log('✅ Video2 ready to play');
+          console.log('🎬 Video2 final dimensions:', video.videoWidth, 'x', video.videoHeight);
+          console.log('🎬 Video2 final rect:', video.getBoundingClientRect());
           video.removeEventListener('canplay', onCanPlay);
           video.removeEventListener('error', onError);
         };
         
         const onError = (e) => {
           console.log('❌ Video2 failed to load:', e);
+          console.log('❌ Video2 error details:', video.error);
           video.removeEventListener('canplay', onCanPlay);
           video.removeEventListener('error', onError);
         };
@@ -1382,8 +1394,6 @@ FOR THIS, WE NEED YOUR HELP.
         
         video.play().then(() => {
           console.log('✅ Video2 playing from start (muted)');
-          console.log('🎬 Video2 dimensions:', video.videoWidth, 'x', video.videoHeight);
-          console.log('🎬 Video2 position:', video.getBoundingClientRect());
         }).catch(err => {
           console.log('❌ Video2 play failed:', err.message);
         });
