@@ -61,8 +61,8 @@
       }
     }
     
-    /* Background video - inside container with contain */
-    .bg-video {
+    /* Background video - inside container with contain (for trailer) */
+    .bg-video.bg-video3 {
       position: absolute !important;
       top: 0 !important;
       left: 0 !important;
@@ -77,6 +77,125 @@
       margin: 0 !important;
       padding: 0 !important;
       box-sizing: border-box !important;
+    }
+    
+    /* FADELONG video - EXACT V3 PATTERN (position: fixed, no container) */
+    #bg-video-fadelong {
+      position: fixed;
+      top: 50%;
+      left: 60%;
+      transform: translate(-50%, -50%) scaleX(0.8);
+      width: calc(50vw - 2rem);
+      height: calc(60vh - 2rem);
+      object-fit: cover;
+      object-position: center center;
+      z-index: -1;
+      pointer-events: none;
+      display: none;
+      filter: grayscale(1) brightness(0.64) contrast(1.2) sepia(1) hue-rotate(60deg) saturate(2);
+      animation: videoFlicker 0.06s steps(1, end) infinite, hologramRoll 3s linear infinite, hologramGlitch 0.8s infinite;
+      overflow: hidden;
+    }
+    
+    /* Mobile video - 15% bigger (V3 pattern) */
+    @media (max-width: 768px) {
+      #bg-video-fadelong {
+        width: calc(57.5vw - 2rem); /* 50vw * 1.15 = 57.5vw */
+        height: calc(69vh - 2rem);  /* 60vh * 1.15 = 69vh */
+      }
+    }
+    
+    /* Add hologram container for better effect control (V3 pattern) */
+    #bg-video-fadelong::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        0deg,
+        transparent 0%,
+        rgba(0, 255, 0, 0.1) 25%,
+        rgba(0, 255, 0, 0.2) 50%,
+        rgba(0, 255, 0, 0.1) 75%,
+        transparent 100%
+      );
+      animation: verticalRoll 2s linear infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    /* Video flicker animation (V3 pattern) */
+    @keyframes videoFlicker {
+      0% { filter: grayscale(1) brightness(0.64) contrast(1.2) sepia(1) hue-rotate(60deg) saturate(2); }
+      8% { filter: grayscale(1) brightness(0.58) contrast(1.25) sepia(1) hue-rotate(59deg) saturate(2.1); }
+      15% { filter: grayscale(1) brightness(0.71) contrast(1.15) sepia(1) hue-rotate(61deg) saturate(1.9); }
+      23% { filter: grayscale(1) brightness(0.55) contrast(1.28) sepia(1) hue-rotate(58deg) saturate(2.2); }
+      31% { filter: grayscale(1) brightness(0.68) contrast(1.18) sepia(1) hue-rotate(62deg) saturate(1.8); }
+      38% { filter: grayscale(1) brightness(0.61) contrast(1.22) sepia(1) hue-rotate(60deg) saturate(2.0); }
+      46% { filter: grayscale(1) brightness(0.73) contrast(1.16) sepia(1) hue-rotate(61deg) saturate(1.9); }
+      54% { filter: grayscale(1) brightness(0.57) contrast(1.26) sepia(1) hue-rotate(59deg) saturate(2.1); }
+      62% { filter: grayscale(1) brightness(0.66) contrast(1.19) sepia(1) hue-rotate(60deg) saturate(2.0); }
+      69% { filter: grayscale(1) brightness(0.59) contrast(1.24) sepia(1) hue-rotate(58deg) saturate(2.2); }
+      77% { filter: grayscale(1) brightness(0.72) contrast(1.17) sepia(1) hue-rotate(62deg) saturate(1.8); }
+      85% { filter: grayscale(1) brightness(0.62) contrast(1.21) sepia(1) hue-rotate(60deg) saturate(2.0); }
+      92% { filter: grayscale(1) brightness(0.67) contrast(1.18) sepia(1) hue-rotate(61deg) saturate(1.9); }
+      100% { filter: grayscale(1) brightness(0.64) contrast(1.2) sepia(1) hue-rotate(60deg) saturate(2); }
+    }
+    
+    /* Vertical roll displacement effect (V3 pattern) */
+    @keyframes verticalRoll {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100%); }
+    }
+    
+    /* Hologram rolling wave effect (V3 pattern) */
+    @keyframes hologramRoll {
+      0% { 
+        transform: translate(-50%, -50%) scaleX(0.8) scaleY(1);
+        filter: grayscale(1) brightness(0.64) contrast(1.2) sepia(1) hue-rotate(60deg) saturate(2);
+      }
+      25% { 
+        transform: translate(-50%, -50%) scaleX(0.8) scaleY(1.02);
+        filter: grayscale(1) brightness(0.68) contrast(1.15) sepia(1) hue-rotate(62deg) saturate(2.1);
+      }
+      50% { 
+        transform: translate(-50%, -50%) scaleX(0.8) scaleY(0.98);
+        filter: grayscale(1) brightness(0.6) contrast(1.25) sepia(1) hue-rotate(58deg) saturate(1.9);
+      }
+      75% { 
+        transform: translate(-50%, -50%) scaleX(0.8) scaleY(1.01);
+        filter: grayscale(1) brightness(0.66) contrast(1.18) sepia(1) hue-rotate(61deg) saturate(2.05);
+      }
+      100% { 
+        transform: translate(-50%, -50%) scaleX(0.8) scaleY(1);
+        filter: grayscale(1) brightness(0.64) contrast(1.2) sepia(1) hue-rotate(60deg) saturate(2);
+      }
+    }
+    
+    /* Hologram glitch effect (V3 pattern) */
+    @keyframes hologramGlitch {
+      0%, 90%, 100% { 
+        transform: translate(-50%, -50%) scaleX(0.8);
+        opacity: 1;
+      }
+      92% { 
+        transform: translate(-50.1%, -50%) scaleX(0.8);
+        opacity: 0.95;
+      }
+      94% { 
+        transform: translate(-49.9%, -50.05%) scaleX(0.8);
+        opacity: 0.98;
+      }
+      96% { 
+        transform: translate(-50.05%, -49.95%) scaleX(0.8);
+        opacity: 0.96;
+      }
+      98% { 
+        transform: translate(-49.95%, -50%) scaleX(0.8);
+        opacity: 0.97;
+      }
     }
     
     /* Mobile - balanced fullscreen, left-aligned */
@@ -1343,15 +1462,13 @@ z-index: 2 !important;
 
   <!-- video2 removed - defunct -->
 
-  <div class="video-container" id="video-container">
-  <!-- Video for slide 3: FADELONG_mobile.mp4 -->
+  <!-- Video for slide 3: FADELONG_mobile.mp4 - EXACT V3 PATTERN -->
   <video
     id="bg-video-fadelong"
-    class="bg-video bg-video-fadelong"
+    class="bg-video"
     autoplay
     muted
     playsinline
-    loop
     preload="metadata"
     aria-hidden="true"
     tabindex="-1"
@@ -1361,9 +1478,10 @@ z-index: 2 !important;
     defaultMuted
     style="display: none;"
   >
-    <source src="VIDEOS/FADELONG_mobile.mp4?v=fadelong-v1" type="video/mp4" />
+    <source src="VIDEOS/FADELONG_mobile.mp4" type="video/mp4" />
   </video>
   
+  <div class="video-container" id="video-container">
   <!-- Video for slide 7: TRAILER.mp4 -->
   <video
     id="bg-video3"
@@ -1381,13 +1499,13 @@ z-index: 2 !important;
   </div>
   
   
-  <!-- Audio for FADELONG video (slide 3) - separate audio track -->
+  <!-- Audio for FADELONG video (slide 3) - EXACT V3 PATTERN -->
   <audio
     id="fadelong-audio"
     preload="metadata"
     style="display: none;"
   >
-    <source src="VIDEOS/FADELONG_audio.m4a?v=fadelong-audio-v1" type="audio/mp4" />
+    <source src="VIDEOS/FADELONG_audio.m4a" type="audio/mp4" />
   </audio>
   
   <!-- Text overlay on top of video -->
@@ -1607,124 +1725,40 @@ FOR THIS, WE NEED YOUR HELP.
     }
 
 
-    // FADELONG video functions - for slide 3, with separate audio track (EXACT V3 pattern + GitHub Pages fix)
+    // FADELONG video functions - EXACT COPY FROM V3, only changed IDs and source
     function showFadelongVideo() {
       console.log('🎬 Showing FADELONG_mobile video with audio...');
       const video = document.getElementById('bg-video-fadelong');
       const audio = document.getElementById('fadelong-audio');
-      const videoContainer = document.getElementById('video-container');
       
       if (video) {
-        // Show video container first
-        if (videoContainer) {
-          videoContainer.style.display = 'flex';
-        }
-        
-        // For GitHub Pages, ensure video source is set correctly
-        const isGitHubPages = window.location.hostname.includes('github.io');
-        const sourceElement = video.querySelector('source');
-        
-        if (isGitHubPages && sourceElement) {
-          // Detect repo path for GitHub Pages (e.g., /CSFILMS/6BDMCLEAN)
-          const pathParts = window.location.pathname.split('/').filter(p => p);
-          const repoPath = pathParts.length >= 2 ? `/${pathParts[0]}/${pathParts[1]}` : '';
-          const videoPath = repoPath ? `${repoPath}/VIDEOS/FADELONG_mobile.mp4?v=fadelong-v1` : '/VIDEOS/FADELONG_mobile.mp4?v=fadelong-v1';
-          
-          // Set both source element and video.src for GitHub Pages compatibility
-          sourceElement.src = videoPath;
-          video.src = videoPath; // Also set video.src directly for better compatibility
-          
-          console.log('🌐 GitHub Pages detected');
-          console.log('🌐 Repo path:', repoPath);
-          console.log('🌐 Using video path:', videoPath);
-          console.log('🌐 Full URL would be:', window.location.origin + videoPath);
-          
-          // Force reload of video with new source
-          video.load();
-        } else if (sourceElement) {
-          // For local, ensure relative path
-          const videoPath = 'VIDEOS/FADELONG_mobile.mp4?v=fadelong-v1';
-          sourceElement.src = videoPath;
-          console.log('💻 Local environment, using path:', videoPath);
-        }
-        
-        // Show video immediately (EXACT V3 pattern - no load(), no setTimeout)
+        // Show video immediately
         video.style.setProperty('display', 'block', 'important');
         video.muted = true;   // Keep video muted
         video.loop = true;    // Video loops visually
         video.currentTime = 0;
         
-        // Set up video event listeners with better error reporting
+        // Set up video event listeners
         const onCanPlay = () => {
           console.log('✅ FADELONG video ready to play');
-          console.log('🎬 Video src:', video.src || video.querySelector('source')?.src);
-          console.log('🎬 Video dimensions:', video.videoWidth, 'x', video.videoHeight);
           video.removeEventListener('canplay', onCanPlay);
           video.removeEventListener('error', onError);
         };
         
         const onError = (e) => {
-          console.error('❌ FADELONG video failed to load:', e);
-          console.error('❌ Video error code:', video.error ? video.error.code : 'unknown');
-          console.error('❌ Video src attempted:', video.src || video.querySelector('source')?.src);
-          console.error('❌ Video networkState:', video.networkState);
-          console.error('❌ Video readyState:', video.readyState);
-          
-          // Try fallback path if error occurs
-          if (isGitHubPages && video.error) {
-            const fallbackPath = 'VIDEOS/FADELONG_mobile.mp4?v=fadelong-v1';
-            console.log('🔄 Trying fallback path:', fallbackPath);
-            const sourceElement = video.querySelector('source');
-            if (sourceElement) {
-              sourceElement.src = fallbackPath;
-              video.load();
-              video.play().catch(err => {
-                console.error('❌ Fallback path also failed:', err);
-              });
-            }
-          }
-          
+          console.log('❌ FADELONG video failed to load:', e);
           video.removeEventListener('canplay', onCanPlay);
           video.removeEventListener('error', onError);
         };
         
-        const onLoadedMetadata = () => {
-          console.log('✅ FADELONG video metadata loaded');
-        };
-        
         video.addEventListener('canplay', onCanPlay);
         video.addEventListener('error', onError);
-        video.addEventListener('loadedmetadata', onLoadedMetadata);
         
-        // Play video - wait for load() on GitHub Pages, immediate play for local
-        if (isGitHubPages) {
-          // On GitHub Pages, wait for load() to complete, then play
-          const playAfterLoad = () => {
-            console.log('▶️ Attempting to play FADELONG video (after load)...');
-            video.play().then(() => {
-              console.log('✅ FADELONG video playing successfully');
-              video.removeEventListener('canplay', playAfterLoad);
-            }).catch(err => {
-              console.error('❌ FADELONG video play failed:', err.message);
-              console.error('⚠️ This might require user interaction first');
-            });
-          };
-          video.addEventListener('canplay', playAfterLoad, { once: true });
-        } else {
-          // Local: Direct play (EXACT V3 pattern - no load(), no setTimeout)
-          console.log('▶️ Attempting to play FADELONG video...');
-          video.play().then(() => {
-            console.log('✅ FADELONG video playing successfully');
-          }).catch(err => {
-            console.error('❌ FADELONG video play failed:', err.message);
-            console.error('⚠️ This might require user interaction first');
-          });
-        }
-      } else {
-        console.error('❌ FADELONG video element not found!');
+        video.play().catch(err => {
+          console.log('FADELONG video play failed:', err.message);
+        });
       }
       
-      // Play separate audio track (EXACT V3 pattern)
       if (audio) {
         audio.volume = 0.7;   // Set audio volume
         audio.muted = false;  // Ensure not muted
@@ -1740,28 +1774,20 @@ FOR THIS, WE NEED YOUR HELP.
         });
       }
     }
-    
+
     function hideFadelongVideo() {
       console.log('🛑 Hiding FADELONG video and stopping audio...');
       const video = document.getElementById('bg-video-fadelong');
       const audio = document.getElementById('fadelong-audio');
-      const videoContainer = document.getElementById('video-container');
       
       if (video) {
         video.pause();
-        video.currentTime = 0; // Reset to beginning
         video.style.setProperty('display', 'none', 'important');
       }
       
       if (audio) {
         audio.pause();
         audio.currentTime = 0; // Reset to beginning
-      }
-      
-      // Only hide container if TRAILER is also not showing
-      const trailerVideo = document.getElementById('bg-video3');
-      if (videoContainer && (!trailerVideo || trailerVideo.style.display === 'none')) {
-        videoContainer.style.display = 'none';
       }
     }
 
