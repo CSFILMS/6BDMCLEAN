@@ -1607,7 +1607,7 @@ FOR THIS, WE NEED YOUR HELP.
     }
 
 
-    // FADELONG video functions - for slide 3, with separate audio track (same pattern as V3 file)
+    // FADELONG video functions - for slide 3, with separate audio track (EXACT V3 pattern)
     function showFadelongVideo() {
       console.log('🎬 Showing FADELONG_mobile video with audio...');
       const video = document.getElementById('bg-video-fadelong');
@@ -1615,125 +1615,42 @@ FOR THIS, WE NEED YOUR HELP.
       const videoContainer = document.getElementById('video-container');
       
       if (video) {
-        // Show video container first - ensure it's visible
+        // Show video container first
         if (videoContainer) {
           videoContainer.style.display = 'flex';
-          videoContainer.style.visibility = 'visible';
-          videoContainer.style.opacity = '1';
         }
         
-        // Override inline display: none - ensure video is visible
+        // Show video immediately (EXACT V3 pattern - no load(), no setTimeout)
         video.style.setProperty('display', 'block', 'important');
-        video.style.setProperty('visibility', 'visible', 'important');
-        video.style.setProperty('opacity', '1', 'important');
-        
-        console.log('🎬 Video element styles applied:', {
-          display: window.getComputedStyle(video).display,
-          visibility: window.getComputedStyle(video).visibility,
-          opacity: window.getComputedStyle(video).opacity
-        });
-        
-        // Keep video muted - audio plays separately
         video.muted = true;   // Keep video muted
-        video.volume = 0;     // Ensure volume is 0
         video.loop = true;    // Video loops visually
-        video.currentTime = 0; // Reset to beginning
+        video.currentTime = 0;
         
-        // Set up video event listeners BEFORE calling load/play
+        // Set up video event listeners (V3 uses simpler listeners)
         const onCanPlay = () => {
           console.log('✅ FADELONG video ready to play');
-          console.log('🎬 Video dimensions:', video.videoWidth, 'x', video.videoHeight);
-          console.log('🎬 Video playing:', !video.paused);
           video.removeEventListener('canplay', onCanPlay);
           video.removeEventListener('error', onError);
         };
         
         const onError = (e) => {
-          console.error('❌ FADELONG video failed to load:', e);
-          console.error('❌ Video error code:', video.error ? video.error.code : 'unknown');
-          console.error('❌ Video src:', video.src || video.querySelector('source')?.src || 'not set');
-          console.error('❌ Video networkState:', video.networkState);
-          console.error('❌ Video readyState:', video.readyState);
+          console.log('❌ FADELONG video failed to load:', e);
           video.removeEventListener('canplay', onCanPlay);
           video.removeEventListener('error', onError);
         };
         
-        const onLoadedMetadata = () => {
-          console.log('✅ FADELONG video metadata loaded');
-          console.log('🎬 Video src:', video.src || video.querySelector('source')?.src);
-        };
-        
-        const onLoadedData = () => {
-          console.log('✅ FADELONG video data loaded');
-        };
-        
-        const onPlay = () => {
-          console.log('▶️ FADELONG video started playing');
-        };
-        
-        // Add event listeners
         video.addEventListener('canplay', onCanPlay);
         video.addEventListener('error', onError);
-        video.addEventListener('loadedmetadata', onLoadedMetadata);
-        video.addEventListener('loadeddata', onLoadedData);
-        video.addEventListener('play', onPlay);
         
-        // Explicitly call load() to ensure video loads - this helps avoid CORS issues
-        // For GitHub Pages, verify the video source is accessible
-        const videoSource = video.querySelector('source');
-        if (videoSource) {
-          console.log('🔄 Loading FADELONG video from:', videoSource.src);
-          
-          // If on GitHub Pages and file doesn't load, try absolute path
-          const isGitHubPages = window.location.hostname.includes('github.io') || 
-                               window.location.hostname.includes('github.com');
-          
-          if (isGitHubPages && !videoSource.src.includes('http')) {
-            // Try to detect repo path for GitHub Pages
-            const repoPath = window.location.pathname.split('/').slice(0, 2).join('/');
-            const absolutePath = `${window.location.origin}${repoPath}/VIDEOS/FADELONG_mobile.mp4?v=fadelong-v1`;
-            console.log('🌐 GitHub Pages detected, checking path:', absolutePath);
-            
-            // Test if file exists by creating a test image request
-            fetch(absolutePath, { method: 'HEAD' })
-              .then(response => {
-                if (response.ok) {
-                  console.log('✅ Video file found at:', absolutePath);
-                } else {
-                  console.warn('⚠️ Video file not found at absolute path, using relative path');
-                }
-              })
-              .catch(() => {
-                console.warn('⚠️ Could not verify absolute path, using relative path');
-              });
-          }
-        }
-        
-        video.load();
-        
-        // Wait a brief moment for load to start, then attempt to play
-        setTimeout(() => {
-          // Attempt to play - autoplay requires muted video
-          video.play().then(() => {
-            console.log('✅ FADELONG video playing successfully (autoplay, muted)');
-            console.log('🎬 Video visible check:', {
-              computedDisplay: window.getComputedStyle(video).display,
-              offsetWidth: video.offsetWidth,
-              offsetHeight: video.offsetHeight,
-              paused: video.paused
-            });
-          }).catch(err => {
-            console.log('⚠️ FADELONG video autoplay failed (may require user interaction):', err.message);
-            // Autoplay can fail on some browsers - video will play when user interacts
-          });
-        }, 100);
-      } else {
-        console.error('❌ FADELONG video element not found!');
+        // Direct play (NO load(), NO setTimeout - EXACT V3 pattern)
+        video.play().catch(err => {
+          console.log('FADELONG video play failed:', err.message);
+        });
       }
       
-      // Play separate audio track
+      // Play separate audio track (EXACT V3 pattern)
       if (audio) {
-        audio.volume = 0.7;   // Set audio volume (matching V3 pattern)
+        audio.volume = 0.7;   // Set audio volume
         audio.muted = false;  // Ensure not muted
         audio.currentTime = 0;
         
