@@ -346,13 +346,13 @@ transparent 4px
       }
       
       /* Additional mobile constraints to prevent overflow */
-      *:not(.bg-video):not(#bg-video3):not(.video-container):not(#video-container) {
+      *:not(.bg-video) {
         max-width: 100% !important;
         box-sizing: border-box !important;
       }
       
-      /* Allow video and container to scale beyond viewport */
-      .bg-video, #bg-video3, .video-container, #video-container {
+      /* Allow video to scale beyond viewport */
+      .bg-video {
         max-width: none !important;
       }
       
@@ -1293,25 +1293,7 @@ FOR THIS, WE NEED YOUR HELP.
 
     // Test audio function removed - defunct
 
-    // Video preloading system
-    const videoPreloadState = {
-      'bg-video3': false
-    };
-
-    function preloadVideo(videoId) {
-      const video = document.getElementById(videoId);
-      if (!video || videoPreloadState[videoId]) return;
-      
-      console.log(`🎬 Preloading ${videoId}...`);
-      video.preload = 'metadata';
-      video.load();
-      
-      video.addEventListener('canplay', () => {
-        console.log(`✅ ${videoId} preloaded successfully`);
-        videoPreloadState[videoId] = true;
-        video.removeEventListener('canplay', arguments.callee);
-      }, { once: true });
-    }
+    // Video preloading removed - not needed with simple V3 pattern
 
 
 
