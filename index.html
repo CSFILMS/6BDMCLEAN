@@ -1399,7 +1399,7 @@ FOR THIS, WE NEED YOUR HELP.
         const isMobile = window.innerWidth <= 768;
         subtitleEl.style.cssText = `
           position: fixed;
-          bottom: 20vh;
+          bottom: 30vh;
           left: 50%;
           transform: translateX(-50%);
           color: var(--fg);
@@ -1411,6 +1411,7 @@ FOR THIS, WE NEED YOUR HELP.
           white-space: pre-wrap;
           text-shadow: 0 0 2px var(--accent), 0 0 8px var(--accent), 0 0 16px var(--accent);
           filter: saturate(1.3);
+          line-height: 1.4;
         `;
         document.body.appendChild(subtitleEl);
       }
@@ -1420,7 +1421,7 @@ FOR THIS, WE NEED YOUR HELP.
       subtitleEl.textContent = ''; // Clear any previous content
       
       // Type the message character by character
-      const message = '6BDM:\nJULIAN ASSANGE AND THE PRICE OF TRUTH';
+      const message = '6BDM:\nJULIAN ASSANGE\nAND THE\nPRICE OF TRUTH';
       
       // Stop any existing typing audio
       if (typingAudio) {
@@ -1446,13 +1447,7 @@ FOR THIS, WE NEED YOUR HELP.
       const typingInterval = setInterval(() => {
         if (charIndex < message.length) {
           const currentText = message.substring(0, charIndex + 1);
-          // Format with smaller second line
-          const lines = currentText.split('\n');
-          if (lines.length > 1) {
-            subtitleEl.innerHTML = lines[0] + '<br><span style="font-size: 0.75em;">' + lines[1] + '</span>';
-      } else {
-            subtitleEl.textContent = currentText;
-          }
+          subtitleEl.textContent = currentText;
           charIndex++;
         } else {
           clearInterval(typingInterval);
