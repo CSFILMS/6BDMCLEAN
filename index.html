@@ -1056,6 +1056,18 @@ z-index: 2 !important;
     <source src="https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/FADELONG.mp4" type="video/mp4" />
   </video>
 
+  <!-- Trailer video for slide 7 with controls -->
+  <video
+    id="trailer-video"
+    class="trailer-video"
+    playsinline
+    controls
+    preload="metadata"
+    style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90vw; max-width: 1200px; height: auto; z-index: 100; max-height: 80vh;"
+  >
+    <source src="https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/TRAILER.mp4" type="video/mp4" />
+  </video>
+
   <div class="bg-overlay" id="bg-overlay" style="display: none;"></div>
 
   <div id="page">
@@ -1286,9 +1298,33 @@ FOR THIS, WE NEED YOUR HELP.
       }
     }
 
-    // Video3 functions removed - hologram files don't exist in this repository
-    function showVideo3Background() {
-      console.log('⚠️ Video3 disabled - hologram files not available');
+    // Trailer video functions for slide 7
+    function showTrailerVideo() {
+      console.log('🎬 Showing trailer video with controls...');
+      const video = document.getElementById('trailer-video');
+      
+      if (video) {
+        video.style.display = 'block';
+        video.currentTime = 0;
+        video.muted = false;
+        video.volume = 1.0;
+        
+        video.play().then(() => {
+          console.log('✅ Trailer video playing');
+        }).catch(err => {
+          console.log('⚠️ Trailer autoplay failed (user can click play):', err.message);
+        });
+      }
+    }
+    
+    function hideTrailerVideo() {
+      console.log('🛑 Hiding trailer video...');
+      const video = document.getElementById('trailer-video');
+      
+      if (video) {
+        video.pause();
+        video.style.display = 'none';
+      }
     }
     
     // Function to start typing subtitle when video ends
@@ -2536,6 +2572,11 @@ FOR THIS, WE NEED YOUR HELP.
            // Slide 2 - wait for slide animation to complete before unscrambling
            console.log(`🎯 SLIDE 2: Waiting for slide animation to complete before unscrambling`);
            el.textContent = '';
+           // Show text wrap on other slides
+           const textWrap = document.getElementById('text-wrap');
+           if (textWrap) {
+             textWrap.style.display = 'block';
+           }
            // Wait for slide animation to complete (750ms total: 250ms slide-out + 250ms delay + 250ms slide-in)
            setTimeout(() => {
              console.log(`🎯 SCRAMBLE: Starting delayed unscrambling for slide ${pageIndex + 1}:`, pages[pageIndex].substring(0, 100));
@@ -2545,6 +2586,11 @@ FOR THIS, WE NEED YOUR HELP.
              });
            }, 750);
          } else {
+           // Show text wrap on other slides
+           const textWrap = document.getElementById('text-wrap');
+           if (textWrap) {
+             textWrap.style.display = 'block';
+           }
            console.log(`🎯 SCRAMBLE: Displaying content for slide ${pageIndex + 1}:`, pages[pageIndex].substring(0, 100));
            scrambleFastChunks(el, pages[pageIndex], () => {
            // Text displayed
@@ -2606,7 +2652,15 @@ FOR THIS, WE NEED YOUR HELP.
          hideVideo2Background();
        }
        
-       // Video3 disabled - hologram files not available in this repository
+       // Show trailer on slide 7
+       console.log(`🔍 Debug: Current page ${pageIndex + 1}, checking for trailer on slide 7...`);
+       if (pageIndex + 1 === 7) {
+         console.log('🎬 SLIDE 7 - Showing trailer...');
+         showTrailerVideo();
+       } else {
+         console.log(`🎬 Not slide 7 (current: ${pageIndex + 1}), hiding trailer...`);
+         hideTrailerVideo();
+       }
        
        // Update nav message and slide counter
        const navMsg = document.getElementById('nav-msg');
