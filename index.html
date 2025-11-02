@@ -1420,8 +1420,13 @@ FOR THIS, WE NEED YOUR HELP.
       subtitleEl.style.display = 'block';
       subtitleEl.textContent = ''; // Clear any previous content
       
-      // Type the message character by character
-      const message = '6BDM:\nJULIAN ASSANGE\nAND THE\nPRICE OF TRUTH';
+      // Type the message character by character with different sizes
+      const lines = [
+        { text: '6BDM:', size: '1.15em' },          // Slightly bigger
+        { text: 'JULIAN ASSANGE', size: '1em' },    // Regular size
+        { text: 'AND', size: '0.75em' },            // Smaller
+        { text: 'THE PRICE OF TRUTH', size: '1em' } // Same as JULIAN ASSANGE
+      ];
       
       // Stop any existing typing audio
       if (typingAudio) {
@@ -1443,12 +1448,28 @@ FOR THIS, WE NEED YOUR HELP.
         console.error('❌ speduptyping.wav play failed:', err.message);
       });
       
+      let lineIndex = 0;
       let charIndex = 0;
+      
       const typingInterval = setInterval(() => {
-        if (charIndex < message.length) {
-          const currentText = message.substring(0, charIndex + 1);
-          subtitleEl.textContent = currentText;
-          charIndex++;
+        if (lineIndex < lines.length) {
+          const currentLine = lines[lineIndex];
+          if (charIndex < currentLine.text.length) {
+            // Build the complete HTML with all lines typed so far
+            let html = '';
+            for (let i = 0; i < lineIndex; i++) {
+              html += `<div style="font-size: ${lines[i].size};">${lines[i].text}</div>`;
+            }
+            // Add the current line being typed
+            const currentText = currentLine.text.substring(0, charIndex + 1);
+            html += `<div style="font-size: ${currentLine.size};">${currentText}</div>`;
+            subtitleEl.innerHTML = html;
+            charIndex++;
+          } else {
+            // Move to next line
+            lineIndex++;
+            charIndex = 0;
+          }
         } else {
           clearInterval(typingInterval);
           // Stop typing audio when typing is complete
