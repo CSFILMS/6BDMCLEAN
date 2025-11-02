@@ -1131,12 +1131,11 @@ z-index: 2 !important;
 </head>
 <body>
 
-  <!-- Video for slide 3: FADELONG_mobile.mp4 (simple V3 pattern) -->
+  <!-- Video for slide 3: FADELONG.mp4 with built-in audio (V3 pattern) -->
   <video
     id="bg-video2"
     class="bg-video"
     autoplay
-    muted
     playsinline
     loop
     preload="metadata"
@@ -1145,21 +1144,11 @@ z-index: 2 !important;
     tabindex="-1"
     disablepictureinpicture
     controlslist="nodownload noplaybackrate noptimizequality nodatachannel"
-    volume="0"
-    defaultMuted
+    volume="0.7"
     style="display: none;"
   >
-    <source src="https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/FADELONG_mobile.mp4" type="video/mp4" />
+    <source src="https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/FADELONG.mp4" type="video/mp4" />
   </video>
-
-  <!-- Audio for FADELONG video (slide 3) - separate audio track -->
-  <audio
-    id="fadelong-audio"
-    preload="metadata"
-    style="display: none;"
-  >
-    <source src="https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/FADELONG_audio.m4a" type="audio/mp4" />
-  </audio>
 
   <div class="bg-overlay" id="bg-overlay" style="display: none;"></div>
 
@@ -1333,37 +1322,21 @@ FOR THIS, WE NEED YOUR HELP.
     }
 
 
-    // Video2 background functions - for slide 3 (V3 simple pattern)
+    // Video2 background functions - V3 pattern with audio
     function showVideo2Background() {
-      console.log('🎬 Showing video2...');
+      console.log('🎬 Showing video2 with audio...');
       const video = document.getElementById('bg-video2');
       
       if (video) {
         console.log('✅ Video2 element found, showing...');
-        console.log('🎬 Video2 BEFORE - display:', window.getComputedStyle(video).display);
-        console.log('🎬 Video2 BEFORE - z-index:', window.getComputedStyle(video).zIndex);
-        console.log('🎬 Video2 BEFORE - visibility:', window.getComputedStyle(video).visibility);
-        console.log('🎬 Video2 BEFORE - opacity:', window.getComputedStyle(video).opacity);
         
         video.style.setProperty('display', 'block', 'important');
-        video.style.setProperty('visibility', 'visible', 'important');
-        video.style.setProperty('opacity', '1', 'important');
+        console.log('🎬 Video2 display set to block with !important');
+        console.log('🎬 Video2 computed style:', window.getComputedStyle(video).display);
         
-        console.log('🎬 Video2 AFTER - display:', window.getComputedStyle(video).display);
-        console.log('🎬 Video2 AFTER - z-index:', window.getComputedStyle(video).zIndex);
-        console.log('🎬 Video2 AFTER - position:', window.getComputedStyle(video).position);
-        console.log('🎬 Video2 src:', video.querySelector('source')?.src || 'no source');
-        console.log('🎬 Video2 IMMEDIATE dimensions:', video.videoWidth, 'x', video.videoHeight);
-        console.log('🎬 Video2 IMMEDIATE rect:', JSON.stringify(video.getBoundingClientRect()));
-        console.log('🎬 Video2 readyState:', video.readyState, '(0=empty, 1=metadata, 2=current, 3=future, 4=enough)');
-        console.log('🎬 Video2 networkState:', video.networkState, '(0=empty, 1=idle, 2=loading, 3=no source)');
-        console.log('🎬 Video2 paused:', video.paused);
-        console.log('🎬 Video2 currentTime:', video.currentTime);
-        
-        // Ensure video is completely muted
-        video.muted = true;
-        video.volume = 0;
-        video.defaultMuted = true;
+        // Enable audio playback
+        video.muted = false;
+        video.volume = 0.7;
         
         // Reset video to beginning for sync
         video.currentTime = 0;
@@ -1371,82 +1344,39 @@ FOR THIS, WE NEED YOUR HELP.
         // Set up video event listeners
         const onCanPlay = () => {
           console.log('✅ Video2 ready to play');
-          console.log('🎬 Video2 final dimensions:', video.videoWidth, 'x', video.videoHeight);
-          console.log('🎬 Video2 final rect:', JSON.stringify(video.getBoundingClientRect()));
           video.removeEventListener('canplay', onCanPlay);
           video.removeEventListener('error', onError);
         };
         
         const onError = (e) => {
           console.log('❌ Video2 failed to load:', e);
-          console.log('❌ Video2 error details:', video.error);
-          console.log('❌ Video2 error code:', video.error?.code);
-          console.log('❌ Video2 error message:', video.error?.message);
           video.removeEventListener('canplay', onCanPlay);
           video.removeEventListener('error', onError);
         };
         
-        const onLoadStart = () => {
-          console.log('📥 Video2 load started');
-        };
-        
-        const onLoadedMetadata = () => {
-          console.log('✅ Video2 metadata loaded - dimensions now:', video.videoWidth, 'x', video.videoHeight);
-        };
-        
         video.addEventListener('canplay', onCanPlay);
         video.addEventListener('error', onError);
-        video.addEventListener('loadstart', onLoadStart);
-        video.addEventListener('loadedmetadata', onLoadedMetadata);
         
-        // Force load the video
-        console.log('🔄 Calling video.load() to force loading...');
-        video.load();
-        
-        // Try to play after a brief delay
-        setTimeout(() => {
-          console.log('▶️ Attempting to play video...');
-          video.play().then(() => {
-            console.log('✅ Video2 playing from start (muted)');
-            console.log('🎬 Video2 playing check - paused:', video.paused, 'ended:', video.ended);
-          }).catch(err => {
-            console.log('❌ Video2 play failed:', err.message);
-            console.log('🔧 Video2 state when play failed - readyState:', video.readyState, 'networkState:', video.networkState);
-          });
-        }, 100);
+        video.play().then(() => {
+          console.log('✅ Video2 playing from start with audio');
+          console.log('🎬 Video2 dimensions:', video.videoWidth, 'x', video.videoHeight);
+          console.log('🎬 Video2 position:', video.getBoundingClientRect());
+          console.log('🔊 Video2 volume:', video.volume, 'muted:', video.muted);
+        }).catch(err => {
+          console.log('❌ Video2 play failed:', err.message);
+        });
       } else {
         console.error('❌ Video2 element not found!');
-      }
-      
-      // Play separate audio track
-      const audio = document.getElementById('fadelong-audio');
-      if (audio) {
-        audio.volume = 0.7;
-        audio.muted = false;
-        audio.currentTime = 0;
-        
-        console.log('🔊 Attempting to play FADELONG audio...');
-        audio.play().then(() => {
-          console.log('✅ FADELONG audio playing successfully');
-        }).catch(err => {
-          console.log('❌ FADELONG audio play failed:', err.message);
-        });
       }
     }
 
     function hideVideo2Background() {
-      console.log('🛑 Hiding video2 and stopping audio...');
+      console.log('🛑 Hiding video2...');
       const video = document.getElementById('bg-video2');
-      const audio = document.getElementById('fadelong-audio');
       
       if (video) {
         video.pause();
         video.style.setProperty('display', 'none', 'important');
-      }
-      
-      if (audio) {
-        audio.pause();
-        audio.currentTime = 0;
       }
     }
 
