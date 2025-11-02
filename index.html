@@ -17,10 +17,10 @@
      * Desktop improvements should be made outside these zones.
      */
     
-    /* Background video - clean, no effects, left-aligned, positioned higher */
+    /* Background video - clean, no effects, left-aligned */
     .bg-video {
       position: fixed;
-      top: 25%;
+      top: 40%;
       left: 0;
       transform: translateY(-50%);
       width: auto;
@@ -2627,6 +2627,15 @@ FOR THIS, WE NEED YOUR HELP.
             // Wrap years in spans for styling
             wrapYearsInSpans(el);
              // Collateral Murder slide animation removed
+         } else if (pageIndex === 2) {
+           // Slide 3 (video slide) - no text initially, just video
+           console.log(`🎬 Video slide ${pageIndex + 1}: Clearing text, showing video and "A FILM BY" only`);
+           el.textContent = '';
+           // Hide text wrap on video slide
+           const textWrap = document.getElementById('text-wrap');
+           if (textWrap) {
+             textWrap.style.display = 'none';
+           }
          } else if (pageIndex === 6) {
            // Slide 7 (trailer video slide) - no text, just video
            console.log(`🎬 Trailer slide ${pageIndex + 1}: Clearing text, showing video only`);
