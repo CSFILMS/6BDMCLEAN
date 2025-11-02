@@ -1152,7 +1152,14 @@ z-index: 2 !important;
     <source src="https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/FADELONG_mobile.mp4" type="video/mp4" />
   </video>
 
-  <!-- Video3 removed - hologram files don't exist in this repository -->
+  <!-- Audio for FADELONG video (slide 3) - separate audio track -->
+  <audio
+    id="fadelong-audio"
+    preload="metadata"
+    style="display: none;"
+  >
+    <source src="https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/FADELONG_audio.m4a" type="audio/mp4" />
+  </audio>
 
   <div class="bg-overlay" id="bg-overlay" style="display: none;"></div>
 
@@ -1410,15 +1417,36 @@ FOR THIS, WE NEED YOUR HELP.
       } else {
         console.error('❌ Video2 element not found!');
       }
+      
+      // Play separate audio track
+      const audio = document.getElementById('fadelong-audio');
+      if (audio) {
+        audio.volume = 0.7;
+        audio.muted = false;
+        audio.currentTime = 0;
+        
+        console.log('🔊 Attempting to play FADELONG audio...');
+        audio.play().then(() => {
+          console.log('✅ FADELONG audio playing successfully');
+        }).catch(err => {
+          console.log('❌ FADELONG audio play failed:', err.message);
+        });
+      }
     }
 
     function hideVideo2Background() {
-      console.log('🛑 Hiding video2...');
+      console.log('🛑 Hiding video2 and stopping audio...');
       const video = document.getElementById('bg-video2');
+      const audio = document.getElementById('fadelong-audio');
       
       if (video) {
         video.pause();
         video.style.setProperty('display', 'none', 'important');
+      }
+      
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
       }
     }
 
