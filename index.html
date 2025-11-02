@@ -1346,6 +1346,12 @@ FOR THIS, WE NEED YOUR HELP.
         console.log('🎬 Video2 AFTER - z-index:', window.getComputedStyle(video).zIndex);
         console.log('🎬 Video2 AFTER - position:', window.getComputedStyle(video).position);
         console.log('🎬 Video2 src:', video.querySelector('source')?.src || 'no source');
+        console.log('🎬 Video2 IMMEDIATE dimensions:', video.videoWidth, 'x', video.videoHeight);
+        console.log('🎬 Video2 IMMEDIATE rect:', JSON.stringify(video.getBoundingClientRect()));
+        console.log('🎬 Video2 readyState:', video.readyState, '(0=empty, 1=metadata, 2=current, 3=future, 4=enough)');
+        console.log('🎬 Video2 networkState:', video.networkState, '(0=empty, 1=idle, 2=loading, 3=no source)');
+        console.log('🎬 Video2 paused:', video.paused);
+        console.log('🎬 Video2 currentTime:', video.currentTime);
         
         // Ensure video is completely muted
         video.muted = true;
@@ -1359,7 +1365,7 @@ FOR THIS, WE NEED YOUR HELP.
         const onCanPlay = () => {
           console.log('✅ Video2 ready to play');
           console.log('🎬 Video2 final dimensions:', video.videoWidth, 'x', video.videoHeight);
-          console.log('🎬 Video2 final rect:', video.getBoundingClientRect());
+          console.log('🎬 Video2 final rect:', JSON.stringify(video.getBoundingClientRect()));
           video.removeEventListener('canplay', onCanPlay);
           video.removeEventListener('error', onError);
         };
@@ -1367,18 +1373,40 @@ FOR THIS, WE NEED YOUR HELP.
         const onError = (e) => {
           console.log('❌ Video2 failed to load:', e);
           console.log('❌ Video2 error details:', video.error);
+          console.log('❌ Video2 error code:', video.error?.code);
+          console.log('❌ Video2 error message:', video.error?.message);
           video.removeEventListener('canplay', onCanPlay);
           video.removeEventListener('error', onError);
         };
         
+        const onLoadStart = () => {
+          console.log('📥 Video2 load started');
+        };
+        
+        const onLoadedMetadata = () => {
+          console.log('✅ Video2 metadata loaded - dimensions now:', video.videoWidth, 'x', video.videoHeight);
+        };
+        
         video.addEventListener('canplay', onCanPlay);
         video.addEventListener('error', onError);
+        video.addEventListener('loadstart', onLoadStart);
+        video.addEventListener('loadedmetadata', onLoadedMetadata);
         
-        video.play().then(() => {
-          console.log('✅ Video2 playing from start (muted)');
-        }).catch(err => {
-          console.log('❌ Video2 play failed:', err.message);
-        });
+        // Force load the video
+        console.log('🔄 Calling video.load() to force loading...');
+        video.load();
+        
+        // Try to play after a brief delay
+        setTimeout(() => {
+          console.log('▶️ Attempting to play video...');
+          video.play().then(() => {
+            console.log('✅ Video2 playing from start (muted)');
+            console.log('🎬 Video2 playing check - paused:', video.paused, 'ended:', video.ended);
+          }).catch(err => {
+            console.log('❌ Video2 play failed:', err.message);
+            console.log('🔧 Video2 state when play failed - readyState:', video.readyState, 'networkState:', video.networkState);
+          });
+        }, 100);
       } else {
         console.error('❌ Video2 element not found!');
       }
