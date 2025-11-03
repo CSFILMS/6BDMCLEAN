@@ -20,7 +20,7 @@
     /* Background video - clean, no effects, left-aligned, above scanlines */
     .bg-video {
       position: fixed;
-      top: 40%;
+      top: 50%;
       left: 0;
       transform: translateY(-50%);
       width: auto;
@@ -854,7 +854,7 @@ z-index: 1;
       font-size: 0.9rem;
       min-height: 7vh;
       position: fixed;
-      bottom: 15vh;
+      bottom: 8vh;
       left: 50%;
       transform: translateX(-50%);
       width: auto;
@@ -882,7 +882,7 @@ z-index: 1;
     
     #slide-counter {
       position: fixed;
-      bottom: 15vh;
+      bottom: 8vh;
       left: 50%;
       transform: translateX(-50%);
       font-size: 0.65rem;
@@ -908,7 +908,7 @@ z-index: 1;
     /* Push slide counter down on pages 1 and 2 */
     #page[data-page="1"] ~ #slide-counter,
     #page[data-page="2"] ~ #slide-counter {
-      bottom: 12vh;
+      bottom: 5vh;
     }
     
    /* Side mode: text on left, image on right */
@@ -1406,7 +1406,7 @@ FOR THIS, WE NEED YOUR HELP.
           font-family: var(--font-family);
           font-size: ${isMobile ? '0.9rem' : '1.1rem'};
           text-align: center;
-          z-index: 100001;
+          z-index: 10;
           pointer-events: none;
           white-space: pre-wrap;
           text-shadow: 0 0 2px var(--accent), 0 0 8px var(--accent), 0 0 16px var(--accent);
