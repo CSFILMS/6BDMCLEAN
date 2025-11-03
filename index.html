@@ -1399,14 +1399,14 @@ FOR THIS, WE NEED YOUR HELP.
         const isMobile = window.innerWidth <= 768;
         subtitleEl.style.cssText = `
           position: fixed;
-          bottom: 30vh;
+          bottom: 15vh;
           left: 50%;
           transform: translateX(-50%);
           color: var(--fg);
           font-family: var(--font-family);
           font-size: ${isMobile ? '0.9rem' : '1.1rem'};
           text-align: center;
-          z-index: 10;
+          z-index: 100001;
           pointer-events: none;
           white-space: pre-wrap;
           text-shadow: 0 0 2px var(--accent), 0 0 8px var(--accent), 0 0 16px var(--accent);
