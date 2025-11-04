@@ -1,0 +1,5 @@
+[33mac2aea6[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m Fix audio: trailer uses built-in audio, only slide 3 uses separate audio track
+[33m0016916[m Fix slide 7 trailer: center video, restore play button on slide 3, fix audio path
+[33m1ab1c4f[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Add all project files for GitHub Pages
+[33m8e8e04b[m first commit
+[33m7fa4030[m Add TRAILER video to slide 7 with controls, remove text from slide 7, make slide 3 video/audio autoplay

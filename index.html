@@ -1701,6 +1701,8 @@ FOR THIS, WE NEED YOUR HELP.
     }
     
     function clearAllTimeouts() {
+      console.log('🧹 clearAllTimeouts called - cleaning up all animations and audio');
+      
       // Clear all tracked timeouts
       lineRevealTimeouts.forEach(timeout => clearTimeout(timeout));
       lineRevealTimeouts = [];
@@ -1711,6 +1713,24 @@ FOR THIS, WE NEED YOUR HELP.
       if (audioTimeout) {
         clearTimeout(audioTimeout);
         audioTimeout = null;
+      }
+      
+      // Stop typing audio if playing
+      if (typingAudio) {
+        console.log('🔇 STOPPING TYPING AUDIO - User navigated away from slide');
+        try {
+          typingAudio.pause();
+          typingAudio.currentTime = 0;
+          typingAudio.src = ''; // Clear the source
+          typingAudio.loop = false; // Disable looping
+          typingAudio.load(); // Reset the audio element
+          console.log('✅ Typing audio STOPPED and cleaned up successfully');
+        } catch (err) {
+          console.error('⚠️ Error stopping typing audio:', err);
+        }
+        typingAudio = null;
+      } else {
+        console.log('ℹ️ No typing audio to stop');
       }
       
       // Clear animation frames
@@ -1764,12 +1784,12 @@ FOR THIS, WE NEED YOUR HELP.
       imageContainer.id = 'cannes-photo-container';
       imageContainer.style.cssText = `
         position: fixed !important;
-        bottom: ${isMobile ? '25vh' : '20vh'} !important;
+        bottom: ${isMobile ? '35vh' : '30vh'} !important;
         left: 50% !important;
         transform: translateX(-50%) !important;
-        max-width: ${isMobile ? '60vw' : '40vw'} !important;
-        max-height: ${isMobile ? '28vh' : '20vh'} !important;
-        width: ${isMobile ? '60vw' : '40vw'} !important;
+        max-width: ${isMobile ? '70vw' : '50vw'} !important;
+        max-height: ${isMobile ? '38vh' : '30vh'} !important;
+        width: ${isMobile ? '70vw' : '50vw'} !important;
         height: auto !important;
         z-index: 1 !important;
         pointer-events: none !important;
@@ -2191,6 +2211,183 @@ FOR THIS, WE NEED YOUR HELP.
     }
 
     function scrambleFastChunks(element, text, onComplete) {
+      // Check if we're on slides 4 or 5 (pages with year bullet points)
+      console.log(`🔍 scrambleFastChunks called for slide ${currentPage + 1}, scramblingDisabled: ${scramblingDisabled}`);
+      if ((currentPage === 3 || currentPage === 4) && !scramblingDisabled) {
+        console.log(`🎬 Sequential reveal animation for slide ${currentPage + 1} - TYPING ANIMATION ACTIVE`);
+        
+        // Display the text normally first
+        element.textContent = text;
+        
+        // Find all year lines and wrap them in hidden spans
+        const lines = text.split('\n');
+        const yearLines = [];
+        
+        lines.forEach((line, index) => {
+          if (/^\d{4}(-\d{4})?:/.test(line.trim())) {
+            yearLines.push({
+              index: index,
+              content: line
+            });
+          }
+        });
+        
+        console.log(`📅 Found ${yearLines.length} year lines to reveal sequentially`);
+        
+        // Replace text content with HTML that wraps year lines in spans
+        let htmlContent = '';
+        lines.forEach((line, index) => {
+          const isYearLine = yearLines.some(yl => yl.index === index);
+          if (isYearLine) {
+            // Initially empty span that will be typed into
+            htmlContent += `<span class="year-line" data-full-text="${line.replace(/"/g, '&quot;')}"></span>\n`;
+          } else {
+            htmlContent += line + '\n';
+          }
+        });
+        
+        element.innerHTML = htmlContent.trimEnd();
+        
+        // Get references to all year line spans
+        const yearLineSpans = element.querySelectorAll('.year-line');
+        
+        // Show prompt and nav immediately
+        isAnimating = false;
+        promptElem.style.visibility = 'visible';
+        navMsg.style.visibility = 'visible';
+        
+        // Clear any existing line reveal timeouts
+        lineRevealTimeouts.forEach(timeout => clearTimeout(timeout));
+        lineRevealTimeouts = [];
+        
+        // Stop any existing typing audio before starting new one
+        if (typingAudio) {
+          console.log('🔇 Stopping previous typing audio');
+          try {
+            typingAudio.pause();
+            typingAudio.currentTime = 0;
+            typingAudio.src = '';
+            typingAudio.load();
+          } catch (err) {
+            console.error('⚠️ Error stopping previous audio:', err);
+          }
+          typingAudio = null;
+        }
+        
+        // Create and play typing audio
+        const slideTypingAudio = new Audio('VIDEOS/speduptyping.wav');
+        slideTypingAudio.loop = true;
+        slideTypingAudio.volume = 0.8; // Increased volume
+        slideTypingAudio.preload = 'auto';
+        slideTypingAudio.playbackRate = 1.5; // Speed up to 1.5x
+        slideTypingAudio.preservesPitch = true; // Preserve pitch when speeding up
+        slideTypingAudio.mozPreservesPitch = true; // Firefox compatibility
+        slideTypingAudio.webkitPreservesPitch = true; // Webkit compatibility
+        
+        // Store reference before playing
+        typingAudio = slideTypingAudio;
+        
+        // Log audio element details
+        console.log('🎵 Created typing audio:', {
+          src: slideTypingAudio.src,
+          readyState: slideTypingAudio.readyState,
+          volume: slideTypingAudio.volume,
+          playbackRate: slideTypingAudio.playbackRate,
+          preservesPitch: slideTypingAudio.preservesPitch
+        });
+        
+        // Function to stop the typing audio for this slide
+        const stopTypingAudio = () => {
+          console.log('🔇 Stopping typing audio (from stopTypingAudio function)');
+          try {
+            slideTypingAudio.pause();
+            slideTypingAudio.currentTime = 0;
+            slideTypingAudio.src = '';
+            slideTypingAudio.loop = false;
+            console.log('✅ Typing audio stopped successfully');
+          } catch (err) {
+            console.error('⚠️ Error stopping audio:', err);
+          }
+          if (typingAudio === slideTypingAudio) {
+            typingAudio = null;
+          }
+        };
+        
+        // Play audio immediately
+        console.log('🔊 Attempting to play typing audio immediately...');
+        slideTypingAudio.play()
+          .then(() => {
+            console.log('✅ Typing audio playing successfully!');
+          })
+          .catch(err => {
+            console.error('❌ Typing audio play failed:', err.name, err.message);
+            // Try loading first, then play
+            slideTypingAudio.load();
+            slideTypingAudio.addEventListener('canplaythrough', () => {
+              console.log('🔊 Audio loaded, trying to play again...');
+              slideTypingAudio.play()
+                .then(() => console.log('✅ Typing audio playing on retry!'))
+                .catch(err2 => console.error('❌ Retry failed:', err2));
+            }, { once: true });
+          });
+        
+        // Function to type out a single line character by character
+        const typeLine = (span, callback) => {
+          const fullText = span.getAttribute('data-full-text');
+          let charIndex = 0;
+          
+          const typeNextChar = () => {
+            if (charIndex < fullText.length) {
+              // Add next character
+              const currentText = fullText.substring(0, charIndex + 1);
+              // Apply year-text styling to year numbers in the current text
+              const styledText = currentText.replace(/(\d{4}(?:-\d{4})?):/g, '<span class="year-text">$1:</span>');
+              span.innerHTML = styledText;
+              charIndex++;
+              
+              // Type at 15ms per character for fast typing
+              const timeoutId = setTimeout(typeNextChar, 15);
+              lineRevealTimeouts.push(timeoutId);
+            } else {
+              // Typing complete for this line
+              callback && callback();
+            }
+          };
+          
+          typeNextChar();
+        };
+        
+        // Type year lines one by one with 2-second delays between lines
+        let revealIndex = 0;
+        const revealNextYear = () => {
+          if (revealIndex < yearLineSpans.length) {
+            console.log(`✨ Typing year line ${revealIndex + 1}/${yearLineSpans.length}`);
+            
+            typeLine(yearLineSpans[revealIndex], () => {
+              // Line typing complete
+              revealIndex++;
+              
+              if (revealIndex < yearLineSpans.length) {
+                // Wait half a second before typing next line
+                const timeoutId = setTimeout(revealNextYear, 500);
+                lineRevealTimeouts.push(timeoutId);
+              } else {
+                // All lines revealed
+                console.log('✅ All year lines typed - STOPPING AUDIO NOW');
+                // Stop typing audio using the local function
+                stopTypingAudio();
+                onComplete && onComplete();
+              }
+            });
+          }
+        };
+        
+        // Start typing after a short delay
+        const initialTimeoutId = setTimeout(revealNextYear, 500);
+        lineRevealTimeouts.push(initialTimeoutId);
+        return;
+      }
+      
       // Check if scrambling is disabled or if we're after slide 3
       if (scramblingDisabled || currentPage > 2) {
         console.log('🔒 Scrambling disabled - displaying text instantly (after slide 3)');
@@ -2582,6 +2779,7 @@ FOR THIS, WE NEED YOUR HELP.
   
   function continuePageSetup(pageIndex, pageEl, el, promptElem) {
         // Clear all timeouts and intervals
+        console.log(`🧹 Cleaning up for page transition to slide ${pageIndex + 1}`);
         clearAllTimeouts();
         
         
@@ -2700,6 +2898,9 @@ FOR THIS, WE NEED YOUR HELP.
       } else if (pageIndex === 4) { // Slide 5 - Arrest photo
         console.log(`🖼️ DEBUG: Adding Arrest photo for slide 5`);
         addArrestPhoto();
+      } else if (pageIndex === 5) { // Slide 6 - Cannes photo
+        console.log(`🖼️ DEBUG: Adding Cannes photo for slide 6`);
+        addCannesPhoto();
       } else {
         console.log(`🖼️ DEBUG: Removing all images for slide ${pageIndex + 1}`);
         // Remove any existing images for other slides
