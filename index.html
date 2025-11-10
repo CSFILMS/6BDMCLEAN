@@ -2769,8 +2769,8 @@ FOR THIS, WE NEED YOUR HELP.
           element.textContent += currentLine[currentLineCharIndex];
           currentLineCharIndex++;
           
-          // Continue typing after a short delay (fast typing)
-          const timeout = setTimeout(typeNextCharacter, 15); // 15ms per character for fast typing
+          // Continue typing after a short delay (slower typing for readability)
+          const timeout = setTimeout(typeNextCharacter, 30); // 30ms per character for slower typing
           characterRevealTimeouts.push(timeout);
         } else {
           // Finished current line, move to next
@@ -2787,7 +2787,7 @@ FOR THIS, WE NEED YOUR HELP.
             characterRevealTimeouts.push(timeout);
           } else {
             // No pause, continue immediately
-            const timeout = setTimeout(typeNextCharacter, 15);
+            const timeout = setTimeout(typeNextCharacter, 30);
             characterRevealTimeouts.push(timeout);
           }
         }
