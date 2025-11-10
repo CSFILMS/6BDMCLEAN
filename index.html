@@ -1803,6 +1803,14 @@ FOR THIS, WE NEED YOUR HELP.
       filmByTimeouts.forEach(timeout => clearTimeout(timeout));
       filmByTimeouts = [];
       
+      characterRevealTimeouts.forEach(timeout => clearTimeout(timeout));
+      characterRevealTimeouts = [];
+      
+      if (characterRevealInterval) {
+        clearInterval(characterRevealInterval);
+        characterRevealInterval = null;
+      }
+      
       if (audioTimeout) {
         clearTimeout(audioTimeout);
         audioTimeout = null;
@@ -2685,6 +2693,85 @@ FOR THIS, WE NEED YOUR HELP.
     
     
 
+    /* ================== YEAR-BASED CHARACTER REVEAL ================== */
+    let characterRevealInterval = null;
+    let characterRevealTimeouts = [];
+    
+    function revealByCharacterWithYearPauses(element, text, onComplete) {
+      // Clear any existing intervals and timeouts
+      if (characterRevealInterval) {
+        clearInterval(characterRevealInterval);
+        characterRevealInterval = null;
+      }
+      
+      characterRevealTimeouts.forEach(timeout => clearTimeout(timeout));
+      characterRevealTimeouts = [];
+      
+      // Start typing audio
+      const typingAudio = new Audio('VIDEOS/speduptyping.wav');
+      typingAudio.volume = 0.3;
+      typingAudio.loop = true;
+      typingAudio.muted = false;
+      
+      console.log('🔊 Starting character reveal with typing audio...');
+      typingAudio.play().then(() => {
+        console.log('✅ Character reveal typing audio playing');
+      }).catch(err => {
+        console.error('❌ Typing audio play failed:', err.message);
+      });
+      
+      element.textContent = '';
+      let charIndex = 0;
+      const lines = text.split('\n');
+      let currentLineIndex = 0;
+      let currentLineCharIndex = 0;
+      
+      function typeNextCharacter() {
+        if (currentLineIndex >= lines.length) {
+          // Done with all lines
+          typingAudio.pause();
+          typingAudio.currentTime = 0;
+          console.log('✅ Character reveal completed');
+          wrapYearsInSpans(element);
+          if (onComplete) onComplete();
+          return;
+        }
+        
+        const currentLine = lines[currentLineIndex];
+        
+        if (currentLineCharIndex < currentLine.length) {
+          // Type next character in current line
+          element.textContent += currentLine[currentLineCharIndex];
+          currentLineCharIndex++;
+          
+          // Continue typing after a short delay (fast typing)
+          const timeout = setTimeout(typeNextCharacter, 15); // 15ms per character for fast typing
+          characterRevealTimeouts.push(timeout);
+        } else {
+          // Finished current line, move to next
+          element.textContent += '\n';
+          currentLineIndex++;
+          currentLineCharIndex = 0;
+          
+          // Check if next line starts with a year pattern (e.g., "2006:", "2012-2019:")
+          const nextLine = lines[currentLineIndex];
+          if (nextLine && /^\d{4}(-\d{4})?:/.test(nextLine.trim())) {
+            // Pause for 800ms before the next year bullet point
+            console.log('⏸️ Pausing before next year bullet:', nextLine.substring(0, 20));
+            const timeout = setTimeout(typeNextCharacter, 800);
+            characterRevealTimeouts.push(timeout);
+          } else {
+            // No pause, continue immediately
+            const timeout = setTimeout(typeNextCharacter, 15);
+            characterRevealTimeouts.push(timeout);
+          }
+        }
+      }
+      
+      // Start typing
+      typeNextCharacter();
+    }
+
     /* ================== LINE BY LINE REVEAL ================== */
     function revealLineByLine(element, text, onComplete) {
       // Clear any existing intervals and timeouts
@@ -2952,6 +3039,22 @@ FOR THIS, WE NEED YOUR HELP.
              scrambleFastChunks(el, pages[pageIndex], () => {
                // Text displayed
                console.log(`✅ Slide 2 unscrambling completed`);
+             });
+           }, 750);
+         } else if (pageIndex === 3 || pageIndex === 4) {
+           // Slides 4 and 5 - character-by-character reveal with year pauses
+           console.log(`🎯 CHARACTER REVEAL: Starting for slide ${pageIndex + 1}`);
+           el.textContent = '';
+           // Show text wrap
+           const textWrap = document.getElementById('text-wrap');
+           if (textWrap) {
+             textWrap.style.display = 'block';
+           }
+           // Wait for slide animation to complete
+           setTimeout(() => {
+             console.log(`🎯 Starting character reveal for slide ${pageIndex + 1}:`, pages[pageIndex].substring(0, 100));
+             revealByCharacterWithYearPauses(el, pages[pageIndex], () => {
+               console.log(`✅ Slide ${pageIndex + 1} character reveal completed`);
              });
            }, 750);
          } else {
