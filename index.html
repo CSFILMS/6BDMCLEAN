@@ -2567,6 +2567,7 @@ FOR THIS, WE NEED YOUR HELP.
           if (unscrambleAudioStop2) {
             unscrambleAudioStop2.pause();
             unscrambleAudioStop2.currentTime = 0;
+            unscrambleAudioStop2.playbackRate = 1.0; // Reset playback rate
             console.log('🔇 Unscramble audio stopped');
           }
           
@@ -2642,16 +2643,17 @@ FOR THIS, WE NEED YOUR HELP.
       
       // Only play unscramble audio on slide 2 (pageIndex 1)
       if (currentPage === 1) {
-        // Play unscramble audio for slide 2 only (ultra-fast)
+        // Play unscramble audio for slide 2 with slower playback to match slower decoding
         const unscrambleAudioEl2 = document.getElementById('unscramble-audio');
         if (unscrambleAudioEl2) {
           unscrambleAudioEl2.volume = 0.3;
           unscrambleAudioEl2.loop = true;
           unscrambleAudioEl2.muted = false;
+          unscrambleAudioEl2.playbackRate = 0.5; // Slow down audio to 50% speed to match slower decoding
           
-          console.log('🔊 Playing unscramble audio (ultra-fast)...');
+          console.log('🔊 Playing unscramble audio (slower speed)...');
           unscrambleAudioEl2.play().then(() => {
-            console.log('✅ Unscramble audio playing');
+            console.log('✅ Unscramble audio playing at 0.5x speed');
           }).catch(err => {
             console.log('❌ Unscramble audio play failed:', err);
           });
@@ -2689,6 +2691,7 @@ FOR THIS, WE NEED YOUR HELP.
           if (unscrambleAudioStop2) {
             unscrambleAudioStop2.pause();
             unscrambleAudioStop2.currentTime = 0;
+            unscrambleAudioStop2.playbackRate = 1.0; // Reset playback rate
             console.log('🔇 Unscramble audio stopped');
           }
           
@@ -2930,6 +2933,7 @@ FOR THIS, WE NEED YOUR HELP.
           if (unscrambleAudioStop2) {
             unscrambleAudioStop2.pause();
             unscrambleAudioStop2.currentTime = 0;
+            unscrambleAudioStop2.playbackRate = 1.0; // Reset playback rate
             console.log('🔇 Unscramble audio stopped');
           }
         
