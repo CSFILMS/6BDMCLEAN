@@ -2508,7 +2508,7 @@ FOR THIS, WE NEED YOUR HELP.
         text = wrapTextForMobile(text);
       }
       
-      let index = 0, chunkSize = 15, scrambled = text.split(''), len = text.length;
+      let index = 0, chunkSize = 3, scrambled = text.split(''), len = text.length;
       for (let i=0;i<len;i++) scrambled[i] = /\s/.test(text[i]) ? text[i] : chars[Math.floor(Math.random()*chars.length)];
       isAnimating = true; promptElem.style.visibility='hidden'; navMsg.style.visibility='hidden';
 
@@ -2630,7 +2630,7 @@ FOR THIS, WE NEED YOUR HELP.
         text = wrapTextForMobile(text);
       }
       
-      let index = 0, chunkSize = 15, scrambled = text.split(''), len = text.length;
+      let index = 0, chunkSize = 3, scrambled = text.split(''), len = text.length;
       for (let i=0;i<len;i++) scrambled[i] = /\s/.test(text[i]) ? text[i] : chars[Math.floor(Math.random()*chars.length)];
       isAnimating = true; promptElem.style.visibility='hidden'; navMsg.style.visibility='hidden';
 
