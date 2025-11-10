@@ -3036,13 +3036,19 @@ FOR THIS, WE NEED YOUR HELP.
          
         // Collateral Murder slide detection removed
          
-          // Use faster scrambling for page 0
+          // Use decoding animation for page 0 (without audio)
           if (pageIndex === 0) {
-            // Instant display for page 0 to speed up initial load
-            el.textContent = isMobile ? wrapTextForMobile(pages[pageIndex]) : pages[pageIndex];
-            // Wrap years in spans for styling
-            wrapYearsInSpans(el);
-             // Collateral Murder slide animation removed
+            console.log(`🎯 SLIDE 1: Starting decoding animation without audio`);
+            el.textContent = '';
+            // Show text wrap
+            const textWrap = document.getElementById('text-wrap');
+            if (textWrap) {
+              textWrap.style.display = 'block';
+            }
+            // Start decoding immediately (no delay needed on first slide)
+            scrambleFastChunks(el, pages[pageIndex], () => {
+              console.log(`✅ Slide 1 decoding completed`);
+            });
          } else if (pageIndex === 2) {
            // Slide 3 (video slide) - no text initially, just video
            console.log(`🎬 Video slide ${pageIndex + 1}: Clearing text, showing video and "A FILM BY" only`);
