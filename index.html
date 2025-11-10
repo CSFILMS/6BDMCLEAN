@@ -1796,6 +1796,14 @@ FOR THIS, WE NEED YOUR HELP.
       // Kill all audio first
       killAllAudio();
       
+      // Stop character reveal typing audio
+      if (characterRevealTypingAudio) {
+        console.log('🛑 Stopping character reveal typing audio');
+        characterRevealTypingAudio.pause();
+        characterRevealTypingAudio.currentTime = 0;
+        characterRevealTypingAudio = null;
+      }
+      
       // Clear all tracked timeouts
       lineRevealTimeouts.forEach(timeout => clearTimeout(timeout));
       lineRevealTimeouts = [];
@@ -2696,6 +2704,7 @@ FOR THIS, WE NEED YOUR HELP.
     /* ================== YEAR-BASED CHARACTER REVEAL ================== */
     let characterRevealInterval = null;
     let characterRevealTimeouts = [];
+    let characterRevealTypingAudio = null; // Track typing audio for cleanup
     
     function revealByCharacterWithYearPauses(element, text, onComplete) {
       // Clear any existing intervals and timeouts
@@ -2707,14 +2716,21 @@ FOR THIS, WE NEED YOUR HELP.
       characterRevealTimeouts.forEach(timeout => clearTimeout(timeout));
       characterRevealTimeouts = [];
       
+      // Stop any existing typing audio
+      if (characterRevealTypingAudio) {
+        characterRevealTypingAudio.pause();
+        characterRevealTypingAudio.currentTime = 0;
+        characterRevealTypingAudio = null;
+      }
+      
       // Start typing audio
-      const typingAudio = new Audio('VIDEOS/speduptyping.wav');
-      typingAudio.volume = 0.3;
-      typingAudio.loop = true;
-      typingAudio.muted = false;
+      characterRevealTypingAudio = new Audio('VIDEOS/speduptyping.wav');
+      characterRevealTypingAudio.volume = 0.3;
+      characterRevealTypingAudio.loop = true;
+      characterRevealTypingAudio.muted = false;
       
       console.log('🔊 Starting character reveal with typing audio...');
-      typingAudio.play().then(() => {
+      characterRevealTypingAudio.play().then(() => {
         console.log('✅ Character reveal typing audio playing');
       }).catch(err => {
         console.error('❌ Typing audio play failed:', err.message);
@@ -2729,8 +2745,11 @@ FOR THIS, WE NEED YOUR HELP.
       function typeNextCharacter() {
         if (currentLineIndex >= lines.length) {
           // Done with all lines
-          typingAudio.pause();
-          typingAudio.currentTime = 0;
+          if (characterRevealTypingAudio) {
+            characterRevealTypingAudio.pause();
+            characterRevealTypingAudio.currentTime = 0;
+            characterRevealTypingAudio = null;
+          }
           console.log('✅ Character reveal completed');
           wrapYearsInSpans(element);
           if (onComplete) onComplete();
