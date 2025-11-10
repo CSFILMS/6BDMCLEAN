@@ -1061,7 +1061,7 @@ z-index: 2 !important;
 </head>
 <body>
 
-  <!-- Video for slide 3: FADELONG.mp4 with built-in audio (plays once, triggers 6BDM message on end) -->
+  <!-- Video for slide 3: MONDAY.mp4 with built-in audio (plays once, triggers 6BDM message on end) -->
   <video
     id="bg-video2"
     class="bg-video"
@@ -1076,7 +1076,7 @@ z-index: 2 !important;
     volume="0.7"
     style="display: none;"
   >
-    <source src="https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/FADELONG.mp4" type="video/mp4" />
+    <source src="VIDEOS/MONDAY.mp4" type="video/mp4" />
   </video>
 
   <!-- Trailer video for slide 7 with controls -->
@@ -1088,7 +1088,12 @@ z-index: 2 !important;
     preload="metadata"
     style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90vw; max-width: 1200px; height: auto; z-index: 100; max-height: 80vh;"
   >
-    <source src="https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/TRAILER.mp4" type="video/mp4" />
+    <!-- Desktop version -->
+    <source src="https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/FINALFINALGODLETITENDAA.mp4" type="video/mp4" media="(min-width: 769px)" />
+    <!-- Mobile version -->
+    <source src="https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/FINALFINALGODLETITENDAA_mobile.mp4" type="video/mp4" media="(max-width: 768px)" />
+    <!-- Fallback for browsers that don't support media queries in source -->
+    <source src="https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/FINALFINALGODLETITENDAA.mp4" type="video/mp4" />
   </video>
 
   <div class="bg-overlay" id="bg-overlay" style="display: none;"></div>
@@ -1366,16 +1371,55 @@ FOR THIS, WE NEED YOUR HELP.
       const video = document.getElementById('trailer-video');
       
       if (video) {
-        video.style.display = 'block';
-        video.currentTime = 0;
+        console.log('✅ Trailer video element found, showing...');
+        
+        // Detect mobile for optimal settings
+        const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        console.log(`📱 Device type: ${isMobile ? 'Mobile' : 'Desktop'}`);
+        
+        // Reload video source to ensure correct version loads based on media queries
+        video.load();
+        
+        video.style.setProperty('display', 'block', 'important');
+        console.log('🎬 Trailer display set to block with !important');
+        
+        // Disable looping - trailer should not loop
+        video.loop = false;
+        
+        // Enable audio playback
         video.muted = false;
         video.volume = 1.0;
         
+        // Reset video to beginning
+        video.currentTime = 0;
+        
+        // Set up video event listeners
+        const onCanPlay = () => {
+          console.log('✅ Trailer video ready to play');
+          video.removeEventListener('canplay', onCanPlay);
+          video.removeEventListener('error', onError);
+        };
+        
+        const onError = (e) => {
+          console.error('❌ Trailer video failed to load:', e);
+          video.removeEventListener('canplay', onCanPlay);
+          video.removeEventListener('error', onError);
+        };
+        
+        video.addEventListener('canplay', onCanPlay);
+        video.addEventListener('error', onError);
+        
+        // Try to play (may fail on some browsers without user interaction)
         video.play().then(() => {
-          console.log('✅ Trailer video playing');
+          console.log('✅ Trailer video playing with audio');
+          console.log('🎬 Trailer dimensions:', video.videoWidth, 'x', video.videoHeight);
+          console.log('🔊 Trailer volume:', video.volume, 'muted:', video.muted);
         }).catch(err => {
           console.log('⚠️ Trailer autoplay failed (user can click play):', err.message);
+          // User will need to click play button - this is expected behavior for some browsers
         });
+      } else {
+        console.error('❌ Trailer video element not found!');
       }
     }
     
@@ -1700,8 +1744,61 @@ FOR THIS, WE NEED YOUR HELP.
       }
     }
     
+    // AGGRESSIVE audio killer function
+    function killAllAudio() {
+      console.log('💀 KILL ALL AUDIO called');
+      
+      // Stop the global typingAudio reference
+      if (typingAudio) {
+        try {
+          typingAudio.loop = false; // DISABLE LOOP FIRST
+          typingAudio.pause();
+          typingAudio.currentTime = 0;
+          typingAudio.src = '';
+          typingAudio.load();
+          typingAudio.remove && typingAudio.remove();
+        } catch(e) {}
+        typingAudio = null;
+      }
+      
+      // Find and kill ALL audio elements in the entire document
+      const allAudios = document.querySelectorAll('audio');
+      console.log(`💀 Found ${allAudios.length} audio elements to kill`);
+      allAudios.forEach((audio, i) => {
+        try {
+          audio.loop = false; // DISABLE LOOP FIRST
+          audio.pause();
+          audio.currentTime = 0;
+          audio.src = '';
+          audio.load();
+          audio.remove && audio.remove();
+          console.log(`✅ Killed audio element ${i + 1}`);
+        } catch(e) {
+          console.error(`❌ Error killing audio ${i + 1}:`, e);
+        }
+      });
+      
+      // Double check - look for any audio that might still be playing
+      setTimeout(() => {
+        const stillPlaying = document.querySelectorAll('audio');
+        if (stillPlaying.length > 0) {
+          console.log(`⚠️ WARNING: ${stillPlaying.length} audio elements still exist after kill attempt`);
+          stillPlaying.forEach(a => {
+            try {
+              a.loop = false;
+              a.pause();
+              a.remove && a.remove();
+            } catch(e) {}
+          });
+        }
+      }, 100);
+    }
+    
     function clearAllTimeouts() {
       console.log('🧹 clearAllTimeouts called - cleaning up all animations and audio');
+      
+      // Kill all audio first
+      killAllAudio();
       
       // Clear all tracked timeouts
       lineRevealTimeouts.forEach(timeout => clearTimeout(timeout));
@@ -1713,24 +1810,6 @@ FOR THIS, WE NEED YOUR HELP.
       if (audioTimeout) {
         clearTimeout(audioTimeout);
         audioTimeout = null;
-      }
-      
-      // Stop typing audio if playing
-      if (typingAudio) {
-        console.log('🔇 STOPPING TYPING AUDIO - User navigated away from slide');
-        try {
-          typingAudio.pause();
-          typingAudio.currentTime = 0;
-          typingAudio.src = ''; // Clear the source
-          typingAudio.loop = false; // Disable looping
-          typingAudio.load(); // Reset the audio element
-          console.log('✅ Typing audio STOPPED and cleaned up successfully');
-        } catch (err) {
-          console.error('⚠️ Error stopping typing audio:', err);
-        }
-        typingAudio = null;
-      } else {
-        console.log('ℹ️ No typing audio to stop');
       }
       
       // Clear animation frames
@@ -2213,6 +2292,13 @@ FOR THIS, WE NEED YOUR HELP.
     function scrambleFastChunks(element, text, onComplete) {
       // Check if we're on slides 4 or 5 (pages with year bullet points)
       console.log(`🔍 scrambleFastChunks called for slide ${currentPage + 1}, scramblingDisabled: ${scramblingDisabled}`);
+      
+      // SAFETY CHECK: Make sure typing audio is stopped if we're NOT on slides 4 or 5
+      if (currentPage !== 3 && currentPage !== 4 && typingAudio) {
+        console.log('🚨 CRITICAL: Typing audio still playing on wrong slide! Killing all audio.');
+        killAllAudio();
+      }
+      
       if ((currentPage === 3 || currentPage === 4) && !scramblingDisabled) {
         console.log(`🎬 Sequential reveal animation for slide ${currentPage + 1} - TYPING ANIMATION ACTIVE`);
         
@@ -2261,26 +2347,16 @@ FOR THIS, WE NEED YOUR HELP.
         lineRevealTimeouts = [];
         
         // Stop any existing typing audio before starting new one
-        if (typingAudio) {
-          console.log('🔇 Stopping previous typing audio');
-          try {
-            typingAudio.pause();
-            typingAudio.currentTime = 0;
-            typingAudio.src = '';
-            typingAudio.load();
-          } catch (err) {
-            console.error('⚠️ Error stopping previous audio:', err);
-          }
-          typingAudio = null;
-        }
+        console.log('🔇 Stopping any previous typing audio before starting new');
+        killAllAudio();
         
         // Create and play typing audio
         const slideTypingAudio = new Audio('VIDEOS/speduptyping.wav');
         slideTypingAudio.loop = true;
         slideTypingAudio.volume = 0.8; // Increased volume
         slideTypingAudio.preload = 'auto';
-        slideTypingAudio.playbackRate = 1.5; // Speed up to 1.5x
-        slideTypingAudio.preservesPitch = true; // Preserve pitch when speeding up
+        slideTypingAudio.playbackRate = 1.0; // Normal speed
+        slideTypingAudio.preservesPitch = true; // Preserve pitch
         slideTypingAudio.mozPreservesPitch = true; // Firefox compatibility
         slideTypingAudio.webkitPreservesPitch = true; // Webkit compatibility
         
@@ -2376,6 +2452,8 @@ FOR THIS, WE NEED YOUR HELP.
                 console.log('✅ All year lines typed - STOPPING AUDIO NOW');
                 // Stop typing audio using the local function
                 stopTypingAudio();
+                // Also kill all audio as a failsafe
+                killAllAudio();
                 onComplete && onComplete();
               }
             });
@@ -2709,6 +2787,10 @@ FOR THIS, WE NEED YOUR HELP.
 
          /* ================== PAGE RENDER ================== */
   function startPage(pageIndex){
+        // KILL ALL AUDIO IMMEDIATELY at the start of any page transition
+        console.log('🚨 startPage called - killing all audio immediately');
+        killAllAudio();
+        
         if (pageIndex >= pages.length) pageIndex = 0;
         if (pageIndex < 0) pageIndex = pages.length - 1;
         
