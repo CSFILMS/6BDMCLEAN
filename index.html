@@ -9,13 +9,7 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <style>
-    /* 
-     * MOBILE STABILITY NOTICE:
-     * This video system has been optimized for mobile stability.
-     * Code marked with "MOBILE STABILITY ZONE - DO NOT MODIFY" 
-     * should NEVER be changed as it ensures consistent mobile behavior.
-     * Desktop improvements should be made outside these zones.
-     */
+
     
     /* Background video - clean, no effects, left-aligned, above scanlines */
     .bg-video {
@@ -80,7 +74,7 @@
     }
     html,body { height:100%; margin:0; background:#000; }
 
-    /* Font Definition - Crisp Only */
+   
     @font-face {
       font-family: 'Crisp';
       src: url('fonts/fonts/Crisp.ttf') format('truetype');
@@ -163,7 +157,7 @@ transparent 4px
       z-index: 99999;
     }
     
-    /* Disable scanlines on slide 7 (last slide) only */
+    /* Disable scanlines on slide 7 (trailer slide) only */
     body.no-scanlines::before,
     body.no-scanlines::after {
       display: none !important;
@@ -242,11 +236,11 @@ transparent 4px
         justify-content: center;
       }
       #nav-msg {
-        font-size: 0.7rem; /* Slightly larger */
+        font-size: 0.7rem; 
         line-height: 1.2;
         padding: 0.5rem;
       }
-      /* Slide counter mobile styles handled in main styles */
+      /* ((Slide counter mobile styles handled in main styles) */
       #prompt {
         font-size: 0.75rem; /* Slightly larger */
         line-height: 1.3;
@@ -1167,24 +1161,26 @@ PRESS [F] FOR FULL SCREEN
 
 
 
-2006: JULIAN ASSANGE BUILDS WIKILEAKS TO ENABLE WHISTLEBLOWERS TO INFORM THE PUBLIC.
+2006: "CYPHERPUNK" JULIAN ASSANGE BUILDS WIKILEAKS TO ENABLE WHISTLEBLOWERS TO INFORM THE PUBLIC.
 
-2010: WIKILEAKS RELEASES LARGEST TROVE OF U.S. MILITARY SECRETS IN HISTORY, EXPOSING U.S. WAR CRIMES.
+2010: WIKILEAKS RELEASES LARGEST TROVE OF US MILITARY SECRETS IN HISTORY, EXPOSING US WAR CRIMES.
 
-2012-2019: U.S. AUTHORITIES CHARGE ASSANGE WITH ESPIONAGE. HE TAKES ASYLUM IN ECUADORIAN EMBASSY, LONDON.
-
-
-
-
-2019: ASSANGE IS IMPRISONED IN THE UK FOR FIVE YEARS. AWAITS EXTRADITION TO THE U.S TO FACE A FURTHER 175.
-
-2024: U.S. SUDDENLY DROPS 17 OF ITS 18 COUNTS AGAINST ASSANGE, DISMISSES CASE. ASSANGE PLEADS GUILTY ONLY TO JOURNALISM AND RETURNS TO AUSTRALIA A FREE MAN.
+2012-2019: US AUTHORITIES CHARGE ASSANGE WITH ESPIONAGE. HE TAKES ASYLUM IN ECUADORIAN EMBASSY, UK.
 
 
 
 
+2019: ASSANGE IMPRISONED IN THE UK FOR 5 YEARS. AWAITS EXTRADITION TO THE US TO FACE A FURTHER 175.
 
-IN 2025, THE SIX BILLION DOLLAR MAN WON THE CANNES FILM FESTIVAL AND THE FIRST-EVER GOLDEN GLOBE FOR DOCUMENTARY. BUT NO LEGACY MEDIA WILL TOUCH IT.
+2024: US  DROPS 17 OF 18 COUNTS AGAINST ASSANGE, DISMISSES CASE. ASSANGE PLEADS GUILTY TO JOURNALISM AND RETURNS TO AUSTRALIA A FREE MAN.
+
+
+
+
+
+IN 2025, THE SIX BILLION DOLLAR MAN WINS CANNES FILM FESTIVAL AND FIRST-EVER GOLDEN GLOBE FOR DOCUMENTARY. 
+
+BUT NO LEGACY MEDIA WILL TOUCH IT.
  
 SO, LIKE WIKILEAKS, WE ARE TAKING THE FILM DIRECT TO THE PUBLIC. 
 
@@ -1913,6 +1909,115 @@ FOR THIS, WE NEED YOUR HELP.
       console.log('Cannes photo added to slide 5');
     }
     
+    function addArrestAndCannesPhotos() {
+      // Remove any existing images first
+      removeAllImages();
+      
+      // Check if mobile
+      const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      
+      // Create container for Arrest photo (upper left)
+      const arrestContainer = document.createElement('div');
+      arrestContainer.id = 'arrest-photo-container-slide6';
+      arrestContainer.style.cssText = `
+        position: fixed !important;
+        top: ${isMobile ? '8vh' : '10vh'} !important;
+        left: ${isMobile ? '5vw' : '8vw'} !important;
+        max-width: ${isMobile ? '35vw' : '25vw'} !important;
+        max-height: ${isMobile ? '20vh' : '25vh'} !important;
+        width: ${isMobile ? '35vw' : '25vw'} !important;
+        height: auto !important;
+        z-index: 1 !important;
+        pointer-events: none !important;
+        overflow: visible !important;
+        transition: opacity 0.15s ease-in-out !important;
+      `;
+      document.body.appendChild(arrestContainer);
+      
+      // Add Arrest photo
+      const arrestImg = document.createElement('img');
+      arrestImg.id = 'arrest-photo-slide6';
+      arrestImg.src = 'PHOTOS/photo_arrest.webp';
+      arrestImg.style.cssText = `
+        width: 100% !important;
+        height: 100% !important;
+        max-width: none !important;
+        max-height: none !important;
+        object-fit: contain !important;
+        filter: brightness(0.8) sepia(1) hue-rotate(60deg) saturate(4.0) !important;
+        display: block !important;
+        opacity: 0 !important;
+        transition: opacity 0.4s ease-in-out !important;
+      `;
+      arrestContainer.appendChild(arrestImg);
+      
+      // Create container for Cannes photo (center bottom)
+      const cannesContainer = document.createElement('div');
+      cannesContainer.id = 'cannes-photo-container';
+      cannesContainer.style.cssText = `
+        position: fixed !important;
+        bottom: ${isMobile ? '30vh' : '25vh'} !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        max-width: ${isMobile ? '85vw' : '70vw'} !important;
+        max-height: ${isMobile ? '50vh' : '45vh'} !important;
+        width: ${isMobile ? '85vw' : '70vw'} !important;
+        height: auto !important;
+        z-index: 1 !important;
+        pointer-events: none !important;
+        overflow: visible !important;
+        transition: opacity 0.15s ease-in-out !important;
+      `;
+      document.body.appendChild(cannesContainer);
+      
+      // Add Cannes photo
+      const cannesImg = document.createElement('img');
+      cannesImg.id = 'cannes-photo';
+      cannesImg.src = 'PHOTOS/photo_cannes.png.jpeg';
+      cannesImg.style.cssText = `
+        width: 100% !important;
+        height: 100% !important;
+        max-width: none !important;
+        max-height: none !important;
+        object-fit: contain !important;
+        filter: brightness(0.8) sepia(1) hue-rotate(60deg) saturate(4.0) !important;
+        display: block !important;
+        opacity: 0 !important;
+        transition: opacity 0.4s ease-in-out !important;
+      `;
+      cannesContainer.appendChild(cannesImg);
+      
+      // Quick fade-in effect for Arrest photo (50% opacity)
+      arrestContainer.style.opacity = '0';
+      setTimeout(() => {
+        arrestContainer.style.opacity = '1';
+        arrestImg.style.opacity = '0.5'; // 50% opacity
+        // Add brightness flash effect with intense glow
+        arrestImg.style.filter = 'brightness(1.2) sepia(1) hue-rotate(60deg) saturate(4.0)';
+        arrestImg.style.boxShadow = 'inset 0 0 50px rgba(0, 255, 0, 0.6), 0 0 30px rgba(0, 255, 0, 0.4)';
+        setTimeout(() => {
+          arrestImg.style.filter = 'brightness(0.8) sepia(1) hue-rotate(60deg) saturate(4.0)';
+          arrestImg.style.boxShadow = 'none';
+        }, 200);
+      }, 50);
+      
+      // Quick fade-in effect for Cannes photo (full opacity)
+      cannesContainer.style.opacity = '0';
+      setTimeout(() => {
+        cannesContainer.style.opacity = '1';
+        cannesImg.style.opacity = '1';
+        // Add brightness flash effect with intense glow
+        cannesImg.style.filter = 'brightness(1.2) sepia(1) hue-rotate(60deg) saturate(4.0)';
+        cannesImg.style.boxShadow = 'inset 0 0 50px rgba(0, 255, 0, 0.6), 0 0 30px rgba(0, 255, 0, 0.4)';
+        setTimeout(() => {
+          cannesImg.style.filter = 'brightness(0.8) sepia(1) hue-rotate(60deg) saturate(4.0)';
+          cannesImg.style.boxShadow = 'none';
+        }, 200);
+      }, 50);
+      
+      console.log('Arrest and Cannes photos added to slide 6');
+    }
+    
     function addArrestPhoto() {
       // Remove any existing images first
       removeAllImages();
@@ -2118,6 +2223,7 @@ FOR THIS, WE NEED YOUR HELP.
       const containers = [
         document.getElementById('cannes-photo-container'),
         document.getElementById('arrest-photo-container'),
+        document.getElementById('arrest-photo-container-slide6'),
         document.getElementById('correa-photo-container'),
         document.getElementById('collateral-photo-container')
       ];
@@ -2584,7 +2690,7 @@ FOR THIS, WE NEED YOUR HELP.
           return false; // Stop animation
         }
         return true; // Continue animation
-      }, 100);
+      }, 50);
     }
 
     // Ultra-fast scrambling specifically for 2006 text - much faster interval
@@ -2631,11 +2737,11 @@ FOR THIS, WE NEED YOUR HELP.
           unscrambleAudioEl2.volume = 0.3;
           unscrambleAudioEl2.loop = true;
           unscrambleAudioEl2.muted = false;
-          unscrambleAudioEl2.playbackRate = 0.5; // Slow down audio to 50% speed to match slower decoding
+          unscrambleAudioEl2.playbackRate = 1.0; // Normal speed audio to match faster decoding
           
-          console.log(' Playing unscramble audio (slower speed)...');
+          console.log(' Playing unscramble audio (normal speed)...');
           unscrambleAudioEl2.play().then(() => {
-            console.log(' Unscramble audio playing at 0.5x speed');
+            console.log(' Unscramble audio playing at 1.0x speed');
           }).catch(err => {
             console.log(' Unscramble audio play failed:', err);
           });
@@ -2686,7 +2792,7 @@ FOR THIS, WE NEED YOUR HELP.
           return false; // Stop animation
         }
         return true; // Continue animation
-      }, 100); // Much slower: 100ms interval for better readability
+      }, 50); // 50ms interval for 50% faster decoding
     }
 
     
@@ -3101,9 +3207,9 @@ FOR THIS, WE NEED YOUR HELP.
       } else if (pageIndex === 4) { // Slide 5 - Arrest photo
         console.log(` DEBUG: Adding Arrest photo for slide 5`);
         addArrestPhoto();
-      } else if (pageIndex === 5) { // Slide 6 - Cannes photo
-        console.log(` DEBUG: Adding Cannes photo for slide 6`);
-        addCannesPhoto();
+      } else if (pageIndex === 5) { // Slide 6 - Arrest and Cannes photos
+        console.log(` DEBUG: Adding Arrest and Cannes photos for slide 6`);
+        addArrestAndCannesPhotos();
       } else {
         console.log(` DEBUG: Removing all images for slide ${pageIndex + 1}`);
         // Remove any existing images for other slides
