@@ -1987,11 +1987,11 @@ FOR THIS, WE NEED YOUR HELP.
       `;
       cannesContainer.appendChild(cannesImg);
       
-      // Quick fade-in effect for Julian photo (same as Cannes)
+      // Quick fade-in effect for Julian photo (reduced opacity)
       arrestContainer.style.opacity = '0';
       setTimeout(() => {
         arrestContainer.style.opacity = '1';
-        arrestImg.style.opacity = '1'; // Full opacity
+        arrestImg.style.opacity = '0.4'; // Reduced opacity
         // Add brightness flash effect with intense glow
         arrestImg.style.filter = 'brightness(1.2) sepia(1) hue-rotate(60deg) saturate(4.0)';
         arrestImg.style.boxShadow = 'inset 0 0 50px rgba(0, 255, 0, 0.6), 0 0 30px rgba(0, 255, 0, 0.4)';
