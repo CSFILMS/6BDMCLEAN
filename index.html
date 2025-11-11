@@ -252,7 +252,6 @@ transparent 4px
         line-height: 1.3;
       }
       
-      /* Mobile video sizing removed - handled in main mobile styles */
       
       /* Force full width on mobile regardless of image mode */
       #text-wrap.side-mode,
@@ -400,7 +399,6 @@ transparent 4px
        image-rendering: auto;
      }
      
-   /* Special rule: dim only photo7 - REMOVED (was too dark) */
       
       /* Special rule: dim only photo23 */
       #page img[id="img-23"] {
@@ -869,7 +867,6 @@ z-index: 1;
       gap: 1.5rem;
     }
     
-    /* Desktop - reduced padding for closer arrows (padding removed to fix centering) */
     #nav span { cursor:pointer; -webkit-user-select: none; user-select: none; padding:0 0.5em; }
           #nav-msg { 
       flex-grow:0; 
@@ -962,7 +959,6 @@ z-index: 2 !important;
     }
     
     
-    /* Collateral Murder animation removed - no more scrolling */
     
     /* Ensure all unscramble elements have consistent padding */
     #unscramble {
@@ -1238,13 +1234,10 @@ FOR THIS, WE NEED YOUR HELP.
     
 
 
-    // Test audio function removed - defunct
-
-    // Video preloading removed - not needed with simple V3 pattern
 
 
 
-    // Video2 functions removed - defunct
+
 
     // Unlock audio context on user interaction
     function unlockAudioContext() {
@@ -1260,7 +1253,6 @@ FOR THIS, WE NEED YOUR HELP.
         // Initialize audio context first
         initAudioContext();
         
-        // OBIWAN audio removed - use Web Audio API only
             if (audioContext && audioContext.state === 'suspended') {
               audioContext.resume().then(() => {
                 audioContextUnlocked = true;
@@ -1581,7 +1573,6 @@ FOR THIS, WE NEED YOUR HELP.
     
 
 
-    // Audio functions for pages 8 and 12 removed - defunct
 
     /* ================== PREP ================== */
     const fullText = fullTextRaw.toUpperCase();
@@ -1628,18 +1619,12 @@ FOR THIS, WE NEED YOUR HELP.
     });
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,\'"?!-:;\n';
 
-    // Image mode constants and functions removed - no more image mode switching
-    
-    // Image mode functions removed - no more image mode switching
-    
-    // pageModes array removed - no more image mode switching
     
     
-    // Image mode loading removed
     
-    // Keyword scanning removed - no more image searches
     
-    // Test audio functions removed - defunct
+    
+    
     
     
 
@@ -1655,7 +1640,6 @@ FOR THIS, WE NEED YOUR HELP.
     let isAnimating = false;
     let currentInterval = null;
     let currentAnimationFrame = null;
-    // availableKeywords removed - no more keyword searches
     let audioTimeout = null; // Track audio timeout
     let lineRevealTimeouts = []; // Track line reveal timeouts
     let isInLineRevealMode = false;
@@ -2158,10 +2142,8 @@ FOR THIS, WE NEED YOUR HELP.
     }
     
     
-    // Image mode functions removed - no more text container adjustments
     
     
-    // Complex image search functions removed
 
     
       function truncateTextToFit(element, text) {
@@ -3032,9 +3014,7 @@ FOR THIS, WE NEED YOUR HELP.
          el.textContent='';
          isAnimating = false;
          
-         // Animation classes removed
          
-        // Collateral Murder slide detection removed
          
           // Use decoding animation for page 0 (without audio)
           if (pageIndex === 0) {
@@ -3109,7 +3089,6 @@ FOR THIS, WE NEED YOUR HELP.
            console.log(` SCRAMBLE: Displaying content for slide ${pageIndex + 1}:`, pages[pageIndex].substring(0, 100));
            scrambleFastChunks(el, pages[pageIndex], () => {
            // Text displayed
-           // Collateral Murder slide animation removed
          });
            }
        }
@@ -3132,7 +3111,6 @@ FOR THIS, WE NEED YOUR HELP.
       }
        
        
-      // Audio removed from last slide
        
        // Audio disabled - no sounds
        if (pageIndex + 1 === 7) {
@@ -3216,10 +3194,8 @@ FOR THIS, WE NEED YOUR HELP.
        }
        console.log(` Navigation updated for page ${pageIndex + 1}`);
        
-       // video2 handling removed - defunct
      }
 
-    // createPersistentText function removed - no more duplicate text
 
     /* ================== NAV ================== */
     let lastAdvance = 0;
@@ -3263,7 +3239,6 @@ document.addEventListener('click', (e)=>{
       // Don't navigate if already navigating
       if (isNavigating) return;
       
-      // Timeline reveal mode removed
       
       // If in line reveal mode, clicking anywhere advances to next line
       if (isInLineRevealMode) {
@@ -3322,7 +3297,6 @@ document.addEventListener('click', (e)=>{
       // Mute any keyboard sounds
       e.preventDefault();
       
-      // Timeline reveal mode removed
       
       // Check if we're in line reveal mode
       if (isInLineRevealMode && (e.code==='Space'||e.code==='ArrowRight')) {
@@ -3338,8 +3312,6 @@ document.addEventListener('click', (e)=>{
       else if (k==='x'||k==='X'){ toggleGreenOverlay('half'); }
       else if (k==='c'||k==='C'){ toggleGreenOverlay('off'); }
       else if (k==='f'||k==='F'){ toggleFullscreen(); }
-      // Audio test key removed - defunct
-      // video2 keyboard shortcuts removed - defunct
     });
     
     // Fullscreen functionality
@@ -3383,14 +3355,12 @@ if (e.key==='1'||e.key==='2'||e.key==='3'){ colorIndex=parseInt(e.key,10)-1; app
 
     /* ================== MOBILE TIMELINE HANDLER ================== */
     // Dedicated mobile handler for timeline reveal - works on all mobile devices
-    // Mobile timeline handler removed
 
     /* ================== INIT ================== */
     window.onload = () => {
       // Start presentation immediately when DOM is loaded
       startPage(0);
       
-      // Mobile timeline handler removed
       
       // Initialize audio context for mobile devices
       if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
