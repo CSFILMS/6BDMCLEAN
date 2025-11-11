@@ -1592,8 +1592,8 @@ FOR THIS, WE NEED YOUR HELP.
     // Ensure we have at least 7 pages for trailer slide
     // Check if "IN 2025" content exists and ensure it's a separate page
     const in2025Index = pages.findIndex(p => p.includes('IN 2025, THE SIX BILLION DOLLAR MAN'));
-    if (in2025Index === -1 || pages.length < 7) {
-      console.log(' IN 2025 content not found as separate page, ensuring slide 7 exists...');
+    if (in2025Index === -1) {
+      console.log(' IN 2025 content not found as separate page, checking if we need to split...');
       // Find the last page and split it if it contains IN 2025
       if (pages.length > 0) {
         const lastPage = pages[pages.length - 1];
@@ -1608,12 +1608,14 @@ FOR THIS, WE NEED YOUR HELP.
             pages.push(in2025Content);
             console.log(' Split last page to create slide 7');
           }
-        } else {
-          // If no IN 2025 found, add an empty slide 7 that will show the trailer
-          pages.push(''); // Empty page for trailer
-          console.log(' Added empty slide 7 for trailer');
         }
       }
+    }
+    
+    // Add empty slide for trailer if needed
+    if (pages.length < 7) {
+      pages.push(''); // Empty page for trailer
+      console.log(' Added empty slide 7 for trailer');
     }
     
     console.log(' Final total pages:', pages.length);
@@ -2003,7 +2005,7 @@ FOR THIS, WE NEED YOUR HELP.
       arrestContainer.style.opacity = '0';
       setTimeout(() => {
         arrestContainer.style.opacity = '1';
-        arrestImg.style.opacity = '0.4'; // Reduced opacity
+        arrestImg.style.opacity = '0.6'; // Reduced opacity
         // Add brightness flash effect with intense glow
         arrestImg.style.filter = 'brightness(1.2) sepia(1) hue-rotate(60deg) saturate(3.4)';
         arrestImg.style.boxShadow = 'inset 0 0 50px rgba(0, 255, 0, 0.6), 0 0 30px rgba(0, 255, 0, 0.4)';
@@ -2018,13 +2020,8 @@ FOR THIS, WE NEED YOUR HELP.
       setTimeout(() => {
         cannesContainer.style.opacity = '1';
         cannesImg.style.opacity = '1';
-        // Add brightness flash effect with intense glow
-        cannesImg.style.filter = 'brightness(1.2) sepia(1) hue-rotate(60deg) saturate(4.0)';
-        cannesImg.style.boxShadow = 'inset 0 0 50px rgba(0, 255, 0, 0.6), 0 0 30px rgba(0, 255, 0, 0.4)';
-        setTimeout(() => {
-          cannesImg.style.filter = 'brightness(0.8) sepia(1) hue-rotate(60deg) saturate(4.0)';
-          cannesImg.style.boxShadow = 'none';
-        }, 200);
+        // Set steady filter without flash
+        cannesImg.style.filter = 'brightness(0.8) sepia(1) hue-rotate(60deg) saturate(4.0)';
       }, 50);
       
       console.log('Julian and Cannes photos added to slide 6');
