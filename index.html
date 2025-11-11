@@ -2626,71 +2626,89 @@ FOR THIS, WE NEED YOUR HELP.
         console.log(' Skipping unscramble audio - not on slide 2');
       }
 
-      // Use requestAnimationFrame for better performance
-      const stopAnimation = createRAFAnimation(() => {
-        const display = scrambled.slice();
-        for (let i=0;i<index;i++){
-          let s=i*chunkSize, e=Math.min(s+chunkSize,len);
-          for (let j=s;j<e;j++) display[j]=text[j];
-        }
-        for (let k=index*chunkSize;k<len;k++) display[k] = /\s/.test(text[k]) ? text[k] : chars[Math.floor(Math.random()*chars.length)];
-        element.textContent = display.join('');
+      // Use requestAnimationFrame for better performance with progressive acceleration
+      let lastTime = 0;
+      let animationId = null;
+      
+      function animate(currentTime) {
+        // Calculate dynamic interval based on characters revealed
+        const charactersRevealed = index * chunkSize;
+        const speedBoosts = Math.floor(charactersRevealed / 10);
+        const dynamicInterval = 100 * Math.pow(0.8, speedBoosts); // Start at 100ms, speed up 20% every 10 chars
+        
+        if (currentTime - lastTime >= dynamicInterval) {
+          const display = scrambled.slice();
+          for (let i=0;i<index;i++){
+            let s=i*chunkSize, e=Math.min(s+chunkSize,len);
+            for (let j=s;j<e;j++) display[j]=text[j];
+          }
+          for (let k=index*chunkSize;k<len;k++) display[k] = /\s/.test(text[k]) ? text[k] : chars[Math.floor(Math.random()*chars.length)];
+          element.textContent = display.join('');
 
-        index++;
-        if ((index*chunkSize)>=len){
-          stopAnimation();
-          truncateTextToFit(element, text);
-          isAnimating=false;
+          lastTime = currentTime;
+          index++;
           
-          // Stop typing audio
-          if (typingAudio) {
-            console.log(' Stopping typing audio');
-            typingAudio.pause();
-            typingAudio.currentTime = 0;
-            typingAudio = null;
-          }
-          
-          // Stop unscramble audio
-          const unscrambleAudioStop2 = document.getElementById('unscramble-audio');
-          if (unscrambleAudioStop2) {
-            unscrambleAudioStop2.pause();
-            unscrambleAudioStop2.currentTime = 0;
-            unscrambleAudioStop2.playbackRate = 1.0; // Reset playback rate
-            console.log(' Unscramble audio stopped');
-          }
-          
-          // Wrap years in spans for styling
-          wrapYearsInSpans(element);
-          
-          // Navigation messages are now handled in startPage function
-          
-          // Check if this text contains "A FILM BY" and show video
-          if (text.includes('A FILM BY EUGENE JARECKI')) {
-            console.log('A FILM BY detected - showing video...');
+          if ((index*chunkSize)>=len){
+            cancelAnimationFrame(animationId);
+            currentAnimationFrame = null;
+            truncateTextToFit(element, text);
+            isAnimating=false;
             
-            // Show video
-            showVideo3Background();
+            // Stop typing audio
+            if (typingAudio) {
+              console.log(' Stopping typing audio');
+              typingAudio.pause();
+              typingAudio.currentTime = 0;
+              typingAudio = null;
+            }
             
-            // Hide the text element since video will show everything
-            element.textContent = '';
+            // Stop unscramble audio
+            const unscrambleAudioStop2 = document.getElementById('unscramble-audio');
+            if (unscrambleAudioStop2) {
+              unscrambleAudioStop2.pause();
+              unscrambleAudioStop2.currentTime = 0;
+              unscrambleAudioStop2.playbackRate = 1.0; // Reset playback rate
+              console.log(' Unscramble audio stopped');
+            }
             
+            // Wrap years in spans for styling
+            wrapYearsInSpans(element);
+            
+            // Navigation messages are now handled in startPage function
+            
+            // Check if this text contains "A FILM BY" and show video
+            if (text.includes('A FILM BY EUGENE JARECKI')) {
+              console.log('A FILM BY detected - showing video...');
+              
+              // Show video
+              showVideo3Background();
+              
+              // Hide the text element since video will show everything
+              element.textContent = '';
+              
+                    onComplete && onComplete();
+                } else {
                   onComplete && onComplete();
-              } else {
-                onComplete && onComplete();
-              }
-          
-          // Stop unscramble audio when animation completes
-          const unscrambleAudioStop = document.getElementById('unscramble-audio');
-          if (unscrambleAudioStop) {
-            unscrambleAudioStop.pause();
-            unscrambleAudioStop.currentTime = 0;
-            console.log(' Unscramble audio stopped');
+                }
+            
+            // Stop unscramble audio when animation completes
+            const unscrambleAudioStop = document.getElementById('unscramble-audio');
+            if (unscrambleAudioStop) {
+              unscrambleAudioStop.pause();
+              unscrambleAudioStop.currentTime = 0;
+              console.log(' Unscramble audio stopped');
+            }
+            
+            return;
           }
-          
-          return false; // Stop animation
         }
-        return true; // Continue animation
-      }, 50);
+        
+        animationId = requestAnimationFrame(animate);
+        currentAnimationFrame = animationId;
+      }
+      
+      animationId = requestAnimationFrame(animate);
+      currentAnimationFrame = animationId;
     }
 
     // Ultra-fast scrambling specifically for 2006 text - much faster interval
@@ -2731,13 +2749,13 @@ FOR THIS, WE NEED YOUR HELP.
       
       // Only play unscramble audio on slide 2 (pageIndex 1)
       if (currentPage === 1) {
-        // Play unscramble audio for slide 2 with slower playback to match slower decoding
+        // Play unscramble audio for slide 2 with progressive acceleration
         const unscrambleAudioEl2 = document.getElementById('unscramble-audio');
         if (unscrambleAudioEl2) {
           unscrambleAudioEl2.volume = 0.3;
           unscrambleAudioEl2.loop = true;
           unscrambleAudioEl2.muted = false;
-          unscrambleAudioEl2.playbackRate = 1.0; // Normal speed audio to match faster decoding
+          unscrambleAudioEl2.playbackRate = 1.0; // Normal speed audio
           
           console.log(' Playing unscramble audio (normal speed)...');
           unscrambleAudioEl2.play().then(() => {
@@ -2750,49 +2768,67 @@ FOR THIS, WE NEED YOUR HELP.
         console.log(' Skipping unscramble audio - not on slide 2');
       }
 
-      // Use requestAnimationFrame for better performance with ultra-fast timing
-      const stopAnimation = createRAFAnimation(() => {
-        const display = scrambled.slice();
-        for (let i=0;i<index;i++){
-          let s=i*chunkSize, e=Math.min(s+chunkSize,len);
-          for (let j=s;j<e;j++) display[j]=text[j];
-        }
-        for (let k=index*chunkSize;k<len;k++) display[k] = /\s/.test(text[k]) ? text[k] : chars[Math.floor(Math.random()*chars.length)];
-        element.textContent = display.join('');
+      // Use requestAnimationFrame for better performance with progressive acceleration
+      let lastTime = 0;
+      let animationId = null;
+      
+      function animate(currentTime) {
+        // Calculate dynamic interval based on characters revealed
+        const charactersRevealed = index * chunkSize;
+        const speedBoosts = Math.floor(charactersRevealed / 10);
+        const dynamicInterval = 100 * Math.pow(0.8, speedBoosts); // Start at 100ms, speed up 20% every 10 chars
+        
+        if (currentTime - lastTime >= dynamicInterval) {
+          const display = scrambled.slice();
+          for (let i=0;i<index;i++){
+            let s=i*chunkSize, e=Math.min(s+chunkSize,len);
+            for (let j=s;j<e;j++) display[j]=text[j];
+          }
+          for (let k=index*chunkSize;k<len;k++) display[k] = /\s/.test(text[k]) ? text[k] : chars[Math.floor(Math.random()*chars.length)];
+          element.textContent = display.join('');
 
-        index++;
-        if ((index*chunkSize)>=len){
-          stopAnimation();
-          truncateTextToFit(element, text);
-          isAnimating=false;
+          lastTime = currentTime;
+          index++;
           
-          // Stop typing audio
-          if (typingAudio) {
-            console.log(' Stopping typing audio');
-            typingAudio.pause();
-            typingAudio.currentTime = 0;
-            typingAudio = null;
+          if ((index*chunkSize)>=len){
+            cancelAnimationFrame(animationId);
+            currentAnimationFrame = null;
+            truncateTextToFit(element, text);
+            isAnimating=false;
+            
+            // Stop typing audio
+            if (typingAudio) {
+              console.log(' Stopping typing audio');
+              typingAudio.pause();
+              typingAudio.currentTime = 0;
+              typingAudio = null;
+            }
+            
+            // Stop unscramble audio
+            const unscrambleAudioStop2 = document.getElementById('unscramble-audio');
+            if (unscrambleAudioStop2) {
+              unscrambleAudioStop2.pause();
+              unscrambleAudioStop2.currentTime = 0;
+              unscrambleAudioStop2.playbackRate = 1.0; // Reset playback rate
+              console.log(' Unscramble audio stopped');
+            }
+            
+            // Wrap years in spans for styling
+            wrapYearsInSpans(element);
+            
+            // Navigation messages are now handled in startPage function
+            
+            onComplete && onComplete();
+            return;
           }
-          
-          // Stop unscramble audio
-          const unscrambleAudioStop2 = document.getElementById('unscramble-audio');
-          if (unscrambleAudioStop2) {
-            unscrambleAudioStop2.pause();
-            unscrambleAudioStop2.currentTime = 0;
-            unscrambleAudioStop2.playbackRate = 1.0; // Reset playback rate
-            console.log(' Unscramble audio stopped');
-          }
-          
-          // Wrap years in spans for styling
-          wrapYearsInSpans(element);
-          
-          // Navigation messages are now handled in startPage function
-          
-          onComplete && onComplete();
-          return false; // Stop animation
         }
-        return true; // Continue animation
-      }, 50); // 50ms interval for 50% faster decoding
+        
+        animationId = requestAnimationFrame(animate);
+        currentAnimationFrame = animationId;
+      }
+      
+      animationId = requestAnimationFrame(animate);
+      currentAnimationFrame = animationId;
     }
 
     
