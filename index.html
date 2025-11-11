@@ -1916,16 +1916,16 @@ FOR THIS, WE NEED YOUR HELP.
       // Check if mobile
       const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       
-      // Create container for Arrest photo (upper left)
+      // Create container for Julian photo (upper left)
       const arrestContainer = document.createElement('div');
       arrestContainer.id = 'arrest-photo-container-slide6';
       arrestContainer.style.cssText = `
         position: fixed !important;
-        top: ${isMobile ? '8vh' : '10vh'} !important;
-        left: ${isMobile ? '5vw' : '8vw'} !important;
-        max-width: ${isMobile ? '35vw' : '25vw'} !important;
-        max-height: ${isMobile ? '20vh' : '25vh'} !important;
-        width: ${isMobile ? '35vw' : '25vw'} !important;
+        top: ${isMobile ? '5vh' : '5vh'} !important;
+        left: ${isMobile ? '5vw' : '5vw'} !important;
+        max-width: ${isMobile ? '75vw' : '65vw'} !important;
+        max-height: ${isMobile ? '60vh' : '70vh'} !important;
+        width: ${isMobile ? '75vw' : '65vw'} !important;
         height: auto !important;
         z-index: 1 !important;
         pointer-events: none !important;
@@ -1934,17 +1934,17 @@ FOR THIS, WE NEED YOUR HELP.
       `;
       document.body.appendChild(arrestContainer);
       
-      // Add Arrest photo
+      // Add Julian photo
       const arrestImg = document.createElement('img');
       arrestImg.id = 'arrest-photo-slide6';
-      arrestImg.src = 'PHOTOS/photo_arrest.webp';
+      arrestImg.src = 'PHOTOS/photo_julian.png';
       arrestImg.style.cssText = `
         width: 100% !important;
         height: 100% !important;
         max-width: none !important;
         max-height: none !important;
         object-fit: contain !important;
-        filter: brightness(0.8) sepia(1) hue-rotate(60deg) saturate(4.0) !important;
+        filter: brightness(1.5) sepia(1) hue-rotate(60deg) saturate(4.0) !important;
         display: block !important;
         opacity: 0 !important;
         transition: opacity 0.4s ease-in-out !important;
@@ -1987,16 +1987,16 @@ FOR THIS, WE NEED YOUR HELP.
       `;
       cannesContainer.appendChild(cannesImg);
       
-      // Quick fade-in effect for Arrest photo (50% opacity)
+      // Quick fade-in effect for Julian photo
       arrestContainer.style.opacity = '0';
       setTimeout(() => {
         arrestContainer.style.opacity = '1';
-        arrestImg.style.opacity = '0.5'; // 50% opacity
+        arrestImg.style.opacity = '0.25'; // 25% opacity
         // Add brightness flash effect with intense glow
-        arrestImg.style.filter = 'brightness(1.2) sepia(1) hue-rotate(60deg) saturate(4.0)';
+        arrestImg.style.filter = 'brightness(1.8) sepia(1) hue-rotate(60deg) saturate(4.0)';
         arrestImg.style.boxShadow = 'inset 0 0 50px rgba(0, 255, 0, 0.6), 0 0 30px rgba(0, 255, 0, 0.4)';
         setTimeout(() => {
-          arrestImg.style.filter = 'brightness(0.8) sepia(1) hue-rotate(60deg) saturate(4.0)';
+          arrestImg.style.filter = 'brightness(1.5) sepia(1) hue-rotate(60deg) saturate(4.0)';
           arrestImg.style.boxShadow = 'none';
         }, 200);
       }, 50);
@@ -2015,7 +2015,7 @@ FOR THIS, WE NEED YOUR HELP.
         }, 200);
       }, 50);
       
-      console.log('Arrest and Cannes photos added to slide 6');
+      console.log('Julian and Cannes photos added to slide 6');
     }
     
     function addArrestPhoto() {
@@ -2896,8 +2896,8 @@ FOR THIS, WE NEED YOUR HELP.
           element.textContent += currentLine[currentLineCharIndex];
           currentLineCharIndex++;
           
-          // Continue typing after a short delay (slower typing for readability)
-          const timeout = setTimeout(typeNextCharacter, 30); // 30ms per character for slower typing
+          // Continue typing after a short delay (fast typing)
+          const timeout = setTimeout(typeNextCharacter, 10); // 10ms per character (100 chars/second)
           characterRevealTimeouts.push(timeout);
         } else {
           // Finished current line, move to next
@@ -2914,7 +2914,7 @@ FOR THIS, WE NEED YOUR HELP.
             characterRevealTimeouts.push(timeout);
           } else {
             // No pause, continue immediately
-            const timeout = setTimeout(typeNextCharacter, 30);
+            const timeout = setTimeout(typeNextCharacter, 10);
             characterRevealTimeouts.push(timeout);
           }
         }
@@ -3243,8 +3243,8 @@ FOR THIS, WE NEED YOUR HELP.
       } else if (pageIndex === 4) { // Slide 5 - Arrest photo
         console.log(` DEBUG: Adding Arrest photo for slide 5`);
         addArrestPhoto();
-      } else if (pageIndex === 5) { // Slide 6 - Arrest and Cannes photos
-        console.log(` DEBUG: Adding Arrest and Cannes photos for slide 6`);
+      } else if (pageIndex === 5) { // Slide 6 - Julian and Cannes photos
+        console.log(` DEBUG: Adding Julian and Cannes photos for slide 6`);
         addArrestAndCannesPhotos();
       } else {
         console.log(` DEBUG: Removing all images for slide ${pageIndex + 1}`);

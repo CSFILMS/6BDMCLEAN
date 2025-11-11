@@ -1,0 +1,3480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PRICEOFTRUTH</title>
+    <!-- Cache bust: fadelong-video-fix-v1 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <style>
+    /* 
+     * MOBILE STABILITY NOTICE:
+     * This video system has been optimized for mobile stability.
+     * Code marked with "MOBILE STABILITY ZONE - DO NOT MODIFY" 
+     * should NEVER be changed as it ensures consistent mobile behavior.
+     * Desktop improvements should be made outside these zones.
+     */
+    
+    /* Background video - clean, no effects, left-aligned, above scanlines */
+    .bg-video {
+      position: fixed;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      width: auto;
+      height: 100vh;
+      max-width: 100vw;
+      object-fit: contain;
+      object-position: left center;
+      z-index: 100000;
+      pointer-events: none;
+      display: none;
+    }
+    
+    /* Mobile video */
+    @media (max-width: 768px) {
+      .bg-video {
+        width: 100vw;
+        height: 100vh;
+        object-position: center center;
+      }
+    }
+    
+    /* "A FILM BY EUGENE JARECKI" text for slide 3 */
+    #film-by-text {
+      position: fixed;
+      top: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--fg);
+      font-family: var(--font-family);
+      font-size: 1.2rem;
+      text-align: center;
+      z-index: 10;
+      pointer-events: none;
+      text-shadow: 0 0 2px var(--accent), 0 0 8px var(--accent), 0 0 16px var(--accent);
+      filter: saturate(1.3);
+      display: none;
+    }
+    
+    @media (max-width: 768px) {
+      #film-by-text {
+        font-size: 1rem;
+        top: 1.5rem;
+      }
+    }
+    
+    /* Video overlay (disabled for small centered video) */
+    .bg-overlay {
+      display: none;
+    }
+    /* Your actual content goes above (z-index > 0) */
+    .content {
+      position: relative;
+      z-index: 1;
+      color: #e8e8e8;
+      font: 16px/1.5 system-ui, sans-serif;
+      padding: 6vmin;
+    }
+    html,body { height:100%; margin:0; background:#000; }
+
+    /* Font Definition - Crisp Only */
+    @font-face {
+      font-family: 'Crisp';
+      src: url('fonts/fonts/Crisp.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+    
+    :root { 
+      --fg:#00DD00; 
+      --bg:#000; 
+      --accent:#00DD00; 
+      --soft:#66FF66;
+      --font-family: 'Crisp', 'Courier New', monospace;
+    }
+    html, body { height:100%; }
+    
+    /* FORCE NO SCROLLING */
+    html {
+      overflow: hidden;
+      height: 100%;
+      width: 100%;
+    }
+    
+    body {
+      overflow: hidden;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background:var(--bg); 
+      color:var(--fg); 
+      font-family:var(--font-family);
+      padding: 0;
+      perspective: 1000px; 
+      margin: 0;
+      line-height:1.6; 
+      -webkit-user-select: none;
+      user-select: none;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+    
+    /* CRT scanline effect */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: repeating-linear-gradient(
+0deg,
+transparent 0px,
+transparent 2px,
+rgba(0, 255, 0, 0.03) 2px,
+rgba(0, 255, 0, 0.03) 4px
+      );
+      pointer-events: none;
+      z-index: 99998;
+    }
+    
+    /* Black scanlines on top */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: repeating-linear-gradient(
+0deg,
+rgba(0, 0, 0, 0.26) 0px,
+rgba(0, 0, 0, 0.26) 2px,
+transparent 2px,
+transparent 4px
+      );
+      pointer-events: none;
+      z-index: 99999;
+    }
+    
+    /* Disable scanlines on slide 7 (last slide) only */
+    body.no-scanlines::before,
+    body.no-scanlines::after {
+      display: none !important;
+    }
+    
+    @media (max-width: 768px) {
+      body {
+        padding: 0 !important;
+        margin: 0 !important;
+        font-size: 0.85rem;
+        padding-left: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        left: 0 !important;
+        right: 0 !important;
+        overflow: hidden !important;
+        -webkit-text-size-adjust: 100%; /* Prevent iOS text scaling */
+        text-size-adjust: 100%; /* Standard property for Chrome/Edge */
+        -webkit-tap-highlight-color: transparent; /* Remove tap highlights */
+      }
+      #page {
+        padding: 1vh 3vw; /* Slightly more padding for better readability */
+        height: 75vh; /* Better height for mobile */
+        min-height: 30em;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        position: relative !important; /* Override desktop positioning */
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
+      }
+      #text-wrap {
+        width: 100% !important; /* Force full width on mobile */
+        max-width: 100% !important;
+        margin-top: 0; /* Remove negative margin that was causing issues */
+        height: calc(100% - 2rem); /* Better height calculation */
+        padding: 1.5rem 2vw !important; /* Better padding for mobile */
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
+        position: relative !important; /* Override desktop fixed positioning */
+        top: auto !important; /* Override desktop centering */
+        left: auto !important; /* Override desktop centering */
+        transform: none !important; /* Override desktop centering */
+        z-index: 9999999 !important;
+      }
+      
+      #unscramble {
+        font-size: 1.0rem; /* Larger text on mobile */
+        line-height: 1.4; /* Better line spacing */
+        width: 100% !important; /* Force full width */
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        white-space: pre-wrap !important;
+        overflow-x: hidden !important;
+        word-break: break-word !important; /* Force word breaking on mobile */
+        -ms-hyphens: auto; /* IE hyphenation */
+        -webkit-hyphens: auto; /* Safari hyphenation */
+        hyphens: auto !important; /* Enable hyphenation on mobile */
+      }
+      #nav {
+        font-size: 1rem; /* Larger for better touch targets */
+        margin: 0.5vh 0;
+        padding: 0.5rem 0; /* Better touch area */
+      }
+      #nav span {
+        padding: 0.5rem 1rem; /* Larger touch targets */
+        min-height: 44px; /* iOS recommended touch target size */
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #nav-msg {
+        font-size: 0.7rem; /* Slightly larger */
+        line-height: 1.2;
+        padding: 0.5rem;
+      }
+      /* Slide counter mobile styles handled in main styles */
+      #prompt {
+        font-size: 0.75rem; /* Slightly larger */
+        line-height: 1.3;
+      }
+      
+      /* Mobile video sizing removed - handled in main mobile styles */
+      
+      /* Force full width on mobile regardless of image mode */
+      #text-wrap.side-mode,
+      #text-wrap.small-side-mode {
+        width: 100% !important;
+        max-width: 100% !important;
+        position: relative !important;
+        z-index: 2 !important;
+        padding: 1rem 0.5vw !important; /* Minimal padding for wider text */
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
+      }
+      
+      #text-wrap.side-mode #unscramble,
+      #text-wrap.small-side-mode #unscramble {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        white-space: pre-wrap !important;
+        overflow-x: hidden !important;
+        word-break: break-word !important; /* Force word breaking on mobile */
+        hyphens: auto !important; /* Enable hyphenation on mobile */
+      }
+      
+      /* Additional mobile constraints to prevent overflow */
+      *:not(.bg-video) {
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+      }
+      
+      /* Allow video to scale beyond viewport */
+      .bg-video {
+        max-width: none !important;
+      }
+      
+      /* Ensure no element can cause horizontal overflow */
+      html {
+        overflow: hidden !important;
+      }
+      
+      #page, #text-wrap, #unscramble {
+        overflow-x: hidden !important;
+        max-width: 100vw !important;
+      }
+      
+      /* First slide mobile - bigger text */
+      #page[data-page="1"] #unscramble {
+        font-size: 1.1em !important;
+        line-height: 1.3 !important;
+      }
+      
+      /* Slides 4, 5, 6, 7 mobile - slightly bigger text */
+      #page[data-page="4"] #unscramble,
+      #page[data-page="5"] #unscramble,
+      #page[data-page="6"] #unscramble,
+      #page[data-page="7"] #unscramble {
+        font-size: 1.0em !important;
+        line-height: 1.3 !important;
+        overflow: hidden !important;
+        height: 100% !important;
+      }
+      
+      /* Slides 4, 5, 6, 7 mobile - reduce top padding and prevent scrolling */
+      #page[data-page="4"] #text-wrap,
+      #page[data-page="5"] #text-wrap,
+      #page[data-page="6"] #text-wrap,
+      #page[data-page="7"] #text-wrap {
+        padding-top: 0.5vw !important;
+        padding-bottom: 10vh !important;
+        overflow: hidden !important;
+        height: 100vh !important;
+      }
+      
+      /* Slides 4, 5, 6, 7 mobile - ensure page container has no scroll */
+      #page[data-page="4"],
+      #page[data-page="5"],
+      #page[data-page="6"],
+      #page[data-page="7"] {
+        overflow: hidden !important;
+      }
+      
+      
+      /* Better mobile navigation */
+      #nav {
+        position: fixed;
+        bottom: 15vh;
+        left: 50%;
+        transform: translateX(-50%);
+        width: auto;
+        z-index: 99997;
+        padding: 1rem 1.5rem;
+        min-height: 60px;
+      }
+      
+      /* Mobile slide counter positioning */
+      #slide-counter {
+        position: fixed;
+        bottom: 7rem;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+        z-index: 100000;
+      }
+      
+      /* Mobile nav message improvements */
+      #nav-msg {
+        padding: 0.75rem;
+        margin: 0 1rem;
+        text-align: center;
+      }
+    }
+    
+    @media screen and (min-resolution: 1dppx) {
+            body {
+        font-size: 1.0rem;
+      }
+    }
+    #page {
+      position: relative;
+      width: 70vh; /* Smaller video box */
+      height: 60vh; /* Smaller video box */
+      min-height: 20em; 
+      margin: 0 auto; /* Center horizontally */
+      padding: 2rem;
+      border-radius: 10px;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      overflow: visible;
+      box-sizing: border-box;
+      z-index: 10;
+    }
+    
+ /* Simple image display */
+     #page img {
+       display: none;
+       filter: grayscale(1) brightness(0.8) contrast(1.2) sepia(1) hue-rotate(60deg) saturate(4);
+       /* Grayscale + green tint: black stays black, white becomes green */
+       /* Ensure all image formats including GIFs display properly */
+       image-rendering: auto;
+     }
+     
+   /* Special rule: dim only photo7 - REMOVED (was too dark) */
+      
+      /* Special rule: dim only photo23 */
+      #page img[id="img-23"] {
+filter: grayscale(1) brightness(0.5) contrast(1.2) sepia(1) hue-rotate(60deg) saturate(4);
+      }
+      
+      /* Special rule: make page 10 images darker */
+      #page img[id^="img-10"] {
+filter: grayscale(1) brightness(0.5) contrast(1.2) sepia(1) hue-rotate(60deg) saturate(4);
+      }
+    
+    #page img.show-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      display: block;
+    }
+    
+ #page img.show-below {
+       display: block;
+       margin-top: 1rem;
+       max-height: 40%;
+       max-width: 100%;
+       object-fit: contain;
+       position: relative;
+       top: -12rem;
+       z-index: -1;
+     }
+    
+     #page img.show-side {
+display: block;
+position: absolute;
+right: 0;
+top: 0;
+width: 50%;
+height: 100%;
+object-fit: cover;
+z-index: 1;
+      }
+      
+     #page img.show-small-side {
+ display: block;
+ position: absolute;
+ right: 0;
+ top: 0;
+ width: 25%;
+ height: 60%;
+ object-fit: cover;
+ z-index: 1;
+       }
+    
+    /* Text container width is now controlled by JavaScript */
+    
+    /* Hide the default cursor */
+    body {
+      cursor: none;
+    }
+    
+    /* Custom cursor element */
+    #custom-cursor {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: var(--accent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 10000;
+      mix-blend-mode: difference;
+      display: none;
+    }
+    
+    /* Hide cursor on mobile */
+    @media (max-width: 768px) {
+      #custom-cursor {
+        display: none !important;
+      }
+    }
+
+    /* Year styling - match regular text (years inherit parent styling - no special formatting) */
+    
+    /* Ensure text content appears above video and photos */
+    @media (min-width: 769px) {
+      #text-wrap, #unscramble, #page {
+        position: relative;
+        z-index: 9999999 !important;
+      }
+    }
+    
+    /* First slide text - bigger */
+    #page[data-page="1"] #unscramble {
+      font-size: 1.2em !important;
+      line-height: 1.4 !important;
+    }
+    
+    /* Slide 2 text 10% bigger */
+    #page[data-page="2"] #unscramble {
+      font-size: 1.1em !important;
+    }
+    
+    /* Slide 3 text slightly smaller and centered */
+    #page[data-page="3"] #unscramble {
+      font-size: 0.95em !important;
+      text-align: center !important;
+    }
+    
+    /* Slides 4, 5, 6, 7 - slightly bigger text */
+    #page[data-page="4"] #unscramble,
+    #page[data-page="5"] #unscramble,
+    #page[data-page="6"] #unscramble,
+    #page[data-page="7"] #unscramble {
+      font-size: 1.05em !important;
+      overflow: hidden !important;
+      height: 100% !important;
+    }
+    
+    /* Slides 4, 5, 6, 7 - fix text positioning for image slides */
+    #page[data-page="4"] #text-wrap,
+    #page[data-page="5"] #text-wrap,
+    #page[data-page="6"] #text-wrap,
+    #page[data-page="7"] #text-wrap {
+      padding-top: 0.5rem !important; /* Less padding to move text down */
+      padding-bottom: 4rem !important;
+      overflow: hidden !important;
+      height: 100vh !important;
+    }
+    
+    /* All pages - ensure no scroll */
+    #page {
+      overflow: hidden !important;
+      position: relative;
+    }
+    
+    /* Slides 4, 5, 6, 7 - ensure page container has no scroll */
+    #page[data-page="4"],
+    #page[data-page="5"],
+    #page[data-page="6"],
+    #page[data-page="7"] {
+      overflow: hidden !important;
+    }
+    
+    
+    
+    /* Video loading status */
+    #video-loading {
+      position: fixed;
+      top: calc(100vh - 8rem);
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10001;
+      text-align: center;
+      pointer-events: none;
+    }
+    
+    .loading-text {
+      font-family: var(--font-family);
+      font-size: 1.2rem;
+      color: var(--soft);
+      text-shadow: 0 0 2px var(--soft), 0 0 12px var(--soft);
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    
+    .loading-bar {
+      width: 300px;
+      height: 4px;
+      background: rgba(102, 255, 102, 0.2);
+      border: 1px solid var(--soft);
+      border-radius: 2px;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .loading-progress {
+      height: 100%;
+      background: var(--soft);
+      box-shadow: 0 0 4px var(--soft);
+      width: 0%;
+      transition: width 0.3s ease;
+      animation: loadingPulse 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes loadingPulse {
+      0%, 100% { 
+        opacity: 0.6;
+        box-shadow: 0 0 4px var(--soft);
+      }
+      50% { 
+        opacity: 1;
+        box-shadow: 0 0 8px var(--soft), 0 0 16px var(--soft);
+      }
+    }
+    
+    /* Desktop-specific styling to match old version exactly */
+    @media (min-width: 769px) {
+      body {
+        padding: 5vw;
+        padding-left: 20vw;
+        max-width: 80vw;
+        margin: 2vh auto;
+        min-height: 100vh;
+      }
+      
+      #page {
+        position: relative;
+        height: 60vh;
+        min-height: 20em;
+        padding: 2rem;
+        border-radius: 10px;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        overflow: visible;
+      }
+      
+      #text-wrap {
+        min-width: 0;
+        margin-top: -1.4rem;
+        width: 100%;
+        height: calc(100% - 2rem);
+        box-sizing: border-box;
+        overflow: hidden;
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        padding: 0;
+        z-index: auto;
+      }
+      
+      #unscramble {
+        white-space: pre-wrap;
+        font-size: 1.8rem;
+        line-height: 1.5;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        height: 100%;
+        overflow: hidden;
+        width: 100%;
+        box-sizing: border-box;
+        max-width: 100%;
+        text-indent: 0;
+        word-break: normal;
+        hyphens: none;
+      }
+      
+      #nav {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+        font-size: 1.8rem;
+        min-height: 5vh;
+        position: fixed;
+        bottom: 15vh;
+        left: calc(20vw + 40vw / 2);
+        transform: translateX(-50%);
+        width: auto;
+        z-index: 2147483648;
+        padding: 0.75rem 1rem;
+        gap: 4vw;
+        text-align: center;
+      }
+      
+      #nav-msg {
+        flex-grow: 1;
+        text-align: center;
+        font-size: 0.9rem;
+        min-height: 1.5rem;
+        visibility: hidden;
+      }
+      
+      /* Desktop image display classes - matching old version */
+      #page img {
+        display: none;
+        filter: brightness(0.7) sepia(1) hue-rotate(60deg) saturate(1.5);
+        image-rendering: auto;
+      }
+      
+      #page img.show-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: -1;
+        display: block;
+      }
+      
+      #page img.show-below {
+        display: block;
+        margin-top: 1rem;
+        max-height: 40%;
+        max-width: 100%;
+        object-fit: contain;
+        position: relative;
+        top: -12rem;
+        z-index: -1;
+      }
+      
+      #page img.show-side {
+        display: block;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 50%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 1;
+      }
+      
+      #page img.show-small-side {
+        display: block;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 25%;
+        height: 60%;
+        object-fit: cover;
+        z-index: 1;
+      }
+      
+      /* Side mode: text on left, image on right */
+      #text-wrap.side-mode {
+        width: 50% !important;
+        max-width: 50% !important;
+        position: relative !important;
+        z-index: 2 !important;
+      }
+      
+      /* Small side mode: text on left, smaller image on right */
+      #text-wrap.small-side-mode {
+        width: 75% !important;
+        max-width: 75% !important;
+        position: relative !important;
+        z-index: 2 !important;
+      }
+      
+      #text-wrap.side-mode #unscramble {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow: hidden !important;
+        white-space: pre-wrap !important;
+        word-wrap: normal !important;
+        overflow-wrap: normal !important;
+        hyphens: none !important;
+        text-indent: 0 !important;
+      }
+      
+      #text-wrap.small-side-mode #unscramble {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow: hidden !important;
+        white-space: pre-wrap !important;
+        word-wrap: normal !important;
+        overflow-wrap: normal !important;
+        hyphens: none !important;
+        text-indent: 0 !important;
+        font-size: 1.0rem !important;
+        line-height: 1.3 !important;
+      }
+    }
+    
+    /* Mobile loading status */
+    @media (max-width: 768px) {
+      .loading-text {
+        font-size: 1rem;
+      }
+      .loading-bar {
+        width: 250px;
+        height: 3px;
+      }
+    }
+    
+ #text-wrap { 
+       position: fixed;
+       top: 40%; /* Higher up */
+       left: 42%; /* Further left - moved from 50% to 42% */
+       transform: translate(-50%, -50%);
+       width: 70vh; /* Match smaller page width */
+       height: 60vh; /* Match smaller page height */
+       box-sizing: border-box;
+       overflow: hidden !important;
+       padding: 2rem 2rem 2rem 1rem; /* Less left padding to show more text */
+       z-index: 2;
+       -webkit-backface-visibility: hidden;
+       backface-visibility: hidden;
+       transform: translate(-50%, -50%) translateZ(0);
+       -webkit-transform: translate(-50%, -50%) translateZ(0);
+     }
+     
+    /* Mobile-specific text-wrap overrides */
+    @media (max-width: 768px) {
+      #text-wrap {
+        margin-top: 0; /* Remove negative margin on mobile */
+        height: calc(100% - 2rem); /* Better height calculation for mobile */
+        padding: 1.5rem 0.5vw !important; /* Minimal side padding for wider text */
+        height: 70vh; /* Increased height for mobile */
+        min-height: 25em;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+      }
+    }
+                    #unscramble { 
+      white-space: pre-wrap; 
+      font-size: 1.15rem;
+      line-height: 1.5;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      height: 100%;
+      overflow: hidden !important;
+      overflow-x: hidden !important;
+      overflow-y: hidden !important;
+      width: 100%;
+      box-sizing: border-box;
+      max-width: 100%;
+      /* Preserve original formatting - no text wrapping modifications */
+      text-indent: 0;
+      word-break: normal;
+      hyphens: none;
+    }
+    
+     
+     /* Handle indented line wrapping - preserve indentation for continuation lines */
+     #unscramble .indented-line {
+       display: block;
+       text-indent: 2em; /* Standard indentation */
+     }
+     
+     #unscramble .continuation {
+       display: block;
+       text-indent: 2em; /* Same indentation as parent */
+     }
+    #prompt { 
+      margin-top:1rem; 
+      visibility:hidden; 
+      white-space:pre-wrap; 
+      line-height:1.3; 
+      font-size: 0.9rem;
+    }
+
+    #nav { 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0; 
+      font-size: 0.9rem;
+      min-height: 7vh;
+      position: fixed;
+      bottom: 8vh;
+      left: 50%;
+      transform: translateX(-50%);
+      width: auto;
+      z-index: 2147483648;
+      padding: 0.75rem 0;
+      gap: 1.5rem;
+    }
+    
+    /* Desktop - reduced padding for closer arrows (padding removed to fix centering) */
+    #nav span { cursor:pointer; -webkit-user-select: none; user-select: none; padding:0 0.5em; }
+          #nav-msg { 
+      flex-grow:0; 
+      text-align: center; 
+      font-size:0.7rem;
+      min-height: 2.5rem;
+      visibility: hidden;
+      max-width: 140px;
+      line-height: 1.3;
+      white-space: normal;
+      display: inline-block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    #slide-counter {
+      position: fixed;
+      bottom: 8vh;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.65rem;
+      opacity: 1;
+      color: var(--accent);
+      text-shadow: 0 0 2px var(--accent), 0 0 5px var(--accent);
+      font-family: var(--font-family);
+      pointer-events: none;
+      z-index: 2147483649;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      white-space: nowrap;
+      visibility: visible;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 7vh;
+    }
+    
+    /* Push slide counter down on pages 1 and 2 */
+    #page[data-page="1"] ~ #slide-counter,
+    #page[data-page="2"] ~ #slide-counter {
+      bottom: 5vh;
+    }
+    
+   /* Side mode: text on left, image on right */
+      #text-wrap.side-mode {
+width: 50% !important;
+max-width: 50% !important;
+position: relative !important;
+z-index: 2 !important;
+      }
+      
+     /* Small side mode: text on left, smaller image on right */
+       #text-wrap.small-side-mode {
+ width: 75% !important;
+ max-width: 75% !important;
+ position: relative !important;
+ z-index: 2 !important;
+       }
+    
+  #text-wrap.side-mode #unscramble {
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow: hidden !important;
+      white-space: pre-wrap !important;
+      word-wrap: normal !important;
+      overflow-wrap: normal !important;
+      hyphens: none !important;
+      text-indent: 0 !important;
+      padding-left: 0.5rem !important;
+      padding-right: 0.5rem !important;
+    }
+    
+    #text-wrap.small-side-mode #unscramble {
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow: hidden !important;
+      white-space: pre-wrap !important;
+      word-wrap: normal !important;
+      overflow-wrap: normal !important;
+      hyphens: none !important;
+      text-indent: 0 !important;
+      font-size: 1.0rem !important;
+      line-height: 1.3 !important;
+      padding-left: 0.5rem !important;
+      padding-right: 0.5rem !important;
+    }
+    
+    
+    /* Collateral Murder animation removed - no more scrolling */
+    
+    /* Ensure all unscramble elements have consistent padding */
+    #unscramble {
+      padding-left: 0.5rem !important;
+      padding-right: 0.5rem !important;
+      padding-top: 0 !important; /* No top padding - container handles it */
+    }
+    
+    /* Add top padding for slides 2 and 3 */
+    #page[data-page="2"] #unscramble,
+    #page[data-page="3"] #unscramble {
+      padding-top: 1rem !important;
+    }
+    
+    /* Slides 4, 5, 6, 7 - NO extra top padding on unscramble (container handles it) */
+    #page[data-page="4"] #unscramble,
+    #page[data-page="5"] #unscramble,
+    #page[data-page="6"] #unscramble,
+    #page[data-page="7"] #unscramble {
+      padding-top: 0 !important;
+    }
+    
+    /* Scanline movement animation */
+    @keyframes scanlineMove {
+      0% {
+        transform: translateY(-100vh);
+      }
+      100% {
+        transform: translateY(100vh);
+      }
+    }
+    
+    /* Mobile styles for last slide image */
+    @media (max-width: 768px) {
+      #last-slide-image-container {
+        max-width: 85vw !important;
+        max-height: 75vh !important;
+        width: 85vw !important;
+        height: 75vh !important;
+        min-width: 80vw !important;
+        min-height: 70vh !important;
+        transform: translate(-50%, -60%) !important;
+      }
+      #last-slide-image {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain !important;
+      }
+    }
+    
+    /* Common utility classes for better CSS organization */
+    .full-screen-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      z-index: 1000;
+      pointer-events: none;
+    }
+    
+    .centered-content {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 2rem;
+    }
+    
+    .accent-text {
+      color: var(--accent);
+      font-family: var(--font-family);
+      text-shadow: 0 0 10px var(--accent);
+    }
+    
+    /* Persistent text that stays on screen */
+    #persistent-text {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      z-index: 1000;
+      pointer-events: none;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 2rem;
+    }
+    
+    #persistent-text .text-content {
+      color: var(--accent);
+      font-family: var(--font-family);
+      text-shadow: 0 0 10px var(--accent);
+      font-size: 2rem;
+      text-align: center;
+      font-weight: bold;
+    }
+    
+     
+
+  </style>
+</head>
+<body>
+
+  <!-- Video for slide 3: THISMUSTBEITMONDAY.mp4 with built-in audio (plays once, triggers 6BDM message on end) -->
+  <video
+    id="bg-video2"
+    class="bg-video"
+    autoplay
+    playsinline
+    preload="metadata"
+    poster="./assets/bg-poster.jpg"
+    aria-hidden="true"
+    tabindex="-1"
+    disablepictureinpicture
+    controlslist="nodownload noplaybackrate noptimizequality nodatachannel"
+    volume="0.7"
+    style="display: none;"
+  >
+    <source src="https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/THISMUSTBEITMONDAY.mp4" type="video/mp4" />
+  </video>
+
+  <!-- Trailer video for slide 7 with controls -->
+  <video
+    id="trailer-video"
+    class="trailer-video"
+    playsinline
+    controls
+    preload="metadata"
+    style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90vw; max-width: 1200px; height: auto; z-index: 100; max-height: 80vh;"
+  >
+    <!-- TRAILERSLOWFADE.mp4 for the final slide -->
+    <source src="https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/TRAILERSLOWFADE.mp4" type="video/mp4" />
+  </video>
+
+  <div class="bg-overlay" id="bg-overlay" style="display: none;"></div>
+
+  <!-- "A FILM BY EUGENE JARECKI" text for slide 3 -->
+  <div id="film-by-text">A FILM BY EUGENE JARECKI</div>
+
+  <div id="page">
+    <div id="text-wrap">
+      <div id="unscramble"></div>
+      <div id="prompt"></div>
+    </div>
+    
+    <!-- Images will be added here dynamically -->
+  </div>
+
+  <div id="nav">
+    <span id="nav-prev">&lt;</span>
+    <span id="nav-msg"></span>
+    <span id="nav-next">&gt;</span>
+  </div>
+
+  <div id="slide-counter">SLIDE 1 / 1</div>
+
+  
+  <!-- Custom cursor -->
+  <div id="custom-cursor"></div>
+
+  <script>
+    /* ================== CONTENT ================== */
+    const fullTextRaw = `
+RECIPIENT: DORSEY.6BDM180925
+
+EYES ONLY / NO FWD / 
+NO DSTRO
+
+SOURCE: CSF
+FILE ID: 369-108-11
+
+
+
+
+
+
+
+THE SIX BILLION DOLLAR
+MAN
+
+
+PRESS [F] FOR FULL SCREEN
+
+
+
+
+
+ 
+ 
+ 
+ 
+              
+ 
+      
+ 
+         
+ 
+ 
+ 
+     
+
+
+6BDM: JULIAN ASSANGE AND THE PRICE OF TRUTH
+
+
+
+
+2006: JULIAN ASSANGE BUILDS WIKILEAKS TO ENABLE WHISTLEBLOWERS TO INFORM THE PUBLIC.
+
+2010: WIKILEAKS RELEASES LARGEST TROVE OF U.S. MILITARY SECRETS IN HISTORY, EXPOSING U.S. WAR CRIMES.
+
+2012-2019: U.S. AUTHORITIES CHARGE ASSANGE WITH ESPIONAGE. HE TAKES ASYLUM IN ECUADORIAN EMBASSY, LONDON.
+
+
+
+
+2019: ASSANGE IS IMPRISONED IN THE UK FOR FIVE YEARS. AWAITS EXTRADITION TO THE U.S TO FACE A FURTHER 175.
+
+2024: U.S. SUDDENLY DROPS 17 OF ITS 18 COUNTS AGAINST ASSANGE, DISMISSES CASE. ASSANGE PLEADS GUILTY ONLY TO JOURNALISM AND RETURNS TO AUSTRALIA A FREE MAN.
+
+
+
+
+
+IN 2025, THE SIX BILLION DOLLAR MAN WON THE CANNES FILM FESTIVAL AND THE FIRST-EVER GOLDEN GLOBE FOR DOCUMENTARY. BUT NO LEGACY MEDIA WILL TOUCH IT.
+ 
+SO, LIKE WIKILEAKS, WE ARE TAKING THE FILM DIRECT TO THE PUBLIC. 
+
+FOR THIS, WE NEED YOUR HELP. 
+
+
+
+
+
+
+
+`;
+
+    /* ================== AUDIO SYSTEM ================== */
+    let audioContext = null;
+    let audioEnabled = true; // Enable audio by default
+    let debugMode = true;
+    let currentAudio = null; // Track currently playing audio
+    let audioVolume = 0.67; // Default volume level
+    let typingAudio = null; // Track typing audio for video end subtitle
+    
+    // Function to stop any currently playing audio
+    function stopCurrentAudio() {
+      if (currentAudio) {
+        console.log('🛑 Stopping current audio...');
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+        currentAudio.src = ''; // Clear the source
+        currentAudio.load(); // Reset the audio element
+        currentAudio = null;
+      }
+      
+      
+      // Also stop any other audio elements that might be playing
+      const allAudioElements = document.querySelectorAll('audio');
+      allAudioElements.forEach(audio => {
+        if (!audio.paused) {
+          audio.pause();
+          audio.currentTime = 0;
+        }
+      });
+    }
+    
+    
+    
+    
+    
+
+
+    // Test audio function removed - defunct
+
+    // Video preloading removed - not needed with simple V3 pattern
+
+
+
+    // Video2 functions removed - defunct
+
+    // Unlock audio context on user interaction
+    function unlockAudioContext() {
+      if (!audioContextUnlocked) {
+        console.log('🔓 Unlocking audio context...');
+        
+        // Enable audio if not already enabled
+        if (!audioEnabled) {
+          audioEnabled = true;
+          console.log('🔊 Audio enabled on first interaction');
+        }
+        
+        // Initialize audio context first
+        initAudioContext();
+        
+        // OBIWAN audio removed - use Web Audio API only
+            if (audioContext && audioContext.state === 'suspended') {
+              audioContext.resume().then(() => {
+                audioContextUnlocked = true;
+                console.log('✅ Audio context unlocked via resume');
+              }).catch(resumeErr => {
+                console.log('❌ Audio context resume failed:', resumeErr.message);
+              });
+        }
+      }
+    }
+
+
+    // Video2 background functions - V3 pattern with audio
+    function showVideo2Background() {
+      console.log('🎬 Showing video2 with audio...');
+      const video = document.getElementById('bg-video2');
+      const filmByText = document.getElementById('film-by-text');
+      
+      // Show "A FILM BY EUGENE JARECKI" text
+      if (filmByText) {
+        filmByText.style.display = 'block';
+      }
+      
+      if (video) {
+        console.log('✅ Video2 element found, showing...');
+        
+        video.style.setProperty('display', 'block', 'important');
+        console.log('🎬 Video2 display set to block with !important');
+        console.log('🎬 Video2 computed style:', window.getComputedStyle(video).display);
+        
+        // Disable looping - video should play once
+        video.loop = false;
+        
+        // Enable audio playback
+        video.muted = false;
+        video.volume = 0.7;
+        
+        // Reset video to beginning for sync
+        video.currentTime = 0;
+        
+        // Set up video event listeners
+        const onCanPlay = () => {
+          console.log('✅ Video2 ready to play');
+          video.removeEventListener('canplay', onCanPlay);
+          video.removeEventListener('error', onError);
+        };
+        
+        const onError = (e) => {
+          console.log('❌ Video2 failed to load:', e);
+          video.removeEventListener('canplay', onCanPlay);
+          video.removeEventListener('error', onError);
+        };
+        
+        const onEnded = () => {
+          console.log('🏁 Video2 ended - triggering 6BDM message...');
+          startVideoEndSubtitle();
+        };
+        
+        video.addEventListener('canplay', onCanPlay);
+        video.addEventListener('error', onError);
+        video.addEventListener('ended', onEnded);
+        
+        video.play().then(() => {
+          console.log('✅ Video2 playing from start with audio');
+          console.log('🎬 Video2 dimensions:', video.videoWidth, 'x', video.videoHeight);
+          console.log('🎬 Video2 position:', video.getBoundingClientRect());
+          console.log('🔊 Video2 volume:', video.volume, 'muted:', video.muted);
+          console.log('🔄 Video2 loop:', video.loop);
+        }).catch(err => {
+          console.log('❌ Video2 play failed:', err.message);
+        });
+      } else {
+        console.error('❌ Video2 element not found!');
+      }
+    }
+
+    function hideVideo2Background() {
+      console.log('🛑 Hiding video2...');
+      const video = document.getElementById('bg-video2');
+      const filmByText = document.getElementById('film-by-text');
+      const subtitleEl = document.getElementById('video-end-subtitle');
+      
+      // Hide "A FILM BY EUGENE JARECKI" text
+      if (filmByText) {
+        filmByText.style.display = 'none';
+      }
+      
+      // Hide 6BDM subtitle
+      if (subtitleEl) {
+        subtitleEl.style.display = 'none';
+        subtitleEl.textContent = ''; // Clear content
+      }
+      
+      if (video) {
+        video.pause();
+        video.style.setProperty('display', 'none', 'important');
+      }
+      
+      // Stop typing audio if it's playing
+      if (typingAudio) {
+        typingAudio.pause();
+        typingAudio.currentTime = 0;
+        typingAudio = null;
+      }
+    }
+
+    // Trailer video functions for slide 7
+    function showTrailerVideo() {
+      console.log('🎬 Showing trailer video with controls...');
+      const video = document.getElementById('trailer-video');
+      
+      if (video) {
+        console.log('✅ Trailer video element found, showing...');
+        
+        // Detect mobile for optimal settings
+        const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        console.log(`📱 Device type: ${isMobile ? 'Mobile' : 'Desktop'}`);
+        
+        // Reload video source to ensure correct version loads based on media queries
+        video.load();
+        
+        video.style.setProperty('display', 'block', 'important');
+        console.log('🎬 Trailer display set to block with !important');
+        
+        // Disable looping - trailer should not loop
+        video.loop = false;
+        
+        // Enable audio playback
+        video.muted = false;
+        video.volume = 1.0;
+        
+        // Reset video to beginning
+        video.currentTime = 0;
+        
+        // Set up video event listeners
+        const onCanPlay = () => {
+          console.log('✅ Trailer video ready to play');
+          video.removeEventListener('canplay', onCanPlay);
+          video.removeEventListener('error', onError);
+        };
+        
+        const onError = (e) => {
+          console.error('❌ Trailer video failed to load:', e);
+          video.removeEventListener('canplay', onCanPlay);
+          video.removeEventListener('error', onError);
+        };
+        
+        video.addEventListener('canplay', onCanPlay);
+        video.addEventListener('error', onError);
+        
+        // Try to play (may fail on some browsers without user interaction)
+        video.play().then(() => {
+          console.log('✅ Trailer video playing with audio');
+          console.log('🎬 Trailer dimensions:', video.videoWidth, 'x', video.videoHeight);
+          console.log('🔊 Trailer volume:', video.volume, 'muted:', video.muted);
+        }).catch(err => {
+          console.log('⚠️ Trailer autoplay failed (user can click play):', err.message);
+          // User will need to click play button - this is expected behavior for some browsers
+        });
+      } else {
+        console.error('❌ Trailer video element not found!');
+      }
+    }
+    
+    function hideTrailerVideo() {
+      console.log('🛑 Hiding trailer video...');
+      const video = document.getElementById('trailer-video');
+      
+      if (video) {
+        video.pause();
+        video.style.display = 'none';
+      }
+    }
+    
+    // Function to start typing subtitle when video ends
+    function startVideoEndSubtitle() {
+      // Create or get the subtitle element
+      let subtitleEl = document.getElementById('video-end-subtitle');
+      if (!subtitleEl) {
+        subtitleEl = document.createElement('div');
+        subtitleEl.id = 'video-end-subtitle';
+        const isMobile = window.innerWidth <= 768;
+        subtitleEl.style.cssText = `
+          position: fixed;
+          bottom: calc(15vh + 20px);
+          left: 50%;
+          transform: translateX(-50%);
+          color: var(--fg);
+          font-family: var(--font-family);
+          font-size: ${isMobile ? '0.9rem' : '1.1rem'};
+          text-align: center;
+          z-index: 200000;
+          pointer-events: none;
+          white-space: pre-wrap;
+          text-shadow: 0 0 2px var(--accent), 0 0 8px var(--accent), 0 0 16px var(--accent);
+          filter: saturate(1.3);
+          line-height: 1.4;
+        `;
+        document.body.appendChild(subtitleEl);
+      }
+      
+      // Show the subtitle element
+      subtitleEl.style.display = 'block';
+      subtitleEl.textContent = ''; // Clear any previous content
+      
+      // Type the message character by character with different sizes
+      const lines = [
+        { text: '6BDM:', size: '1.15em' },          // Slightly bigger
+        { text: 'JULIAN ASSANGE', size: '1em' },    // Regular size
+        { text: 'AND', size: '0.75em' },            // Smaller
+        { text: 'THE PRICE OF TRUTH', size: '1em' } // Same as JULIAN ASSANGE
+      ];
+      
+      // Stop any existing typing audio
+      if (typingAudio) {
+        typingAudio.pause();
+        typingAudio = null;
+      }
+      
+      // Create a new audio instance for typing sound
+      typingAudio = new Audio('VIDEOS/speduptyping.wav');
+      typingAudio.volume = 0.3; // Match unscramble audio volume
+      typingAudio.loop = true; // Loop during typing
+      typingAudio.muted = false; // Ensure not muted
+      
+      // Play typing audio
+      console.log('🔊 Playing speduptyping.wav for 6BDM message... Volume:', typingAudio.volume, 'Muted:', typingAudio.muted);
+      typingAudio.play().then(() => {
+        console.log('✅ speduptyping.wav playing successfully - Volume:', typingAudio.volume, 'Paused:', typingAudio.paused);
+      }).catch(err => {
+        console.error('❌ speduptyping.wav play failed:', err.message);
+      });
+      
+      let lineIndex = 0;
+      let charIndex = 0;
+      
+      const typingInterval = setInterval(() => {
+        if (lineIndex < lines.length) {
+          const currentLine = lines[lineIndex];
+          if (charIndex < currentLine.text.length) {
+            // Build the complete HTML with all lines typed so far
+            let html = '';
+            for (let i = 0; i < lineIndex; i++) {
+              html += `<div style="font-size: ${lines[i].size};">${lines[i].text}</div>`;
+            }
+            // Add the current line being typed
+            const currentText = currentLine.text.substring(0, charIndex + 1);
+            html += `<div style="font-size: ${currentLine.size};">${currentText}</div>`;
+            subtitleEl.innerHTML = html;
+            charIndex++;
+          } else {
+            // Move to next line
+            lineIndex++;
+            charIndex = 0;
+          }
+        } else {
+          clearInterval(typingInterval);
+          // Stop typing audio when typing is complete
+          typingAudio.pause();
+          typingAudio.currentTime = 0;
+          console.log('🛑 Typing audio stopped - typing complete');
+        }
+      }, 50); // 50ms per character
+    }
+
+    function hideVideo3Background() {
+      console.log('⚠️ Video3 disabled - hologram files not available');
+    }
+    
+    // Enhanced audio context initialization with debugging
+    function initAudioContext() {
+      if (debugMode) console.log('🔊 Initializing audio context...');
+      
+      if (!audioContext) {
+        try {
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+          console.log('✅ Audio context created successfully:', audioContext.state);
+          
+          // Resume audio context if suspended (required by Chrome)
+          if (audioContext.state === 'suspended') {
+            audioContext.resume().then(() => {
+              console.log('✅ Audio context resumed from suspended state');
+            }).catch(err => {
+              console.error('❌ Failed to resume audio context:', err);
+            });
+          }
+        } catch (e) {
+          console.error('❌ Audio context creation failed:', e);
+          audioEnabled = false;
+          showAudioError('Audio not supported in this browser');
+        }
+      }
+      return audioContext !== null;
+    }
+    
+    // Show audio error in the UI
+    function showAudioError(message) {
+      const navMsg = document.getElementById('nav-msg');
+      if (navMsg) {
+        const originalText = navMsg.textContent;
+        const originalVisibility = navMsg.style.visibility;
+        
+        navMsg.textContent = `AUDIO ERROR: ${message}`;
+        navMsg.style.visibility = 'visible';
+        navMsg.style.color = '#FF6666';
+        
+        setTimeout(() => {
+          navMsg.textContent = originalText;
+          navMsg.style.visibility = originalVisibility;
+          navMsg.style.color = '';
+        }, 3000);
+      }
+    }
+    
+    
+    
+    
+    
+
+
+    // Audio functions for pages 8 and 12 removed - defunct
+
+    /* ================== PREP ================== */
+    const fullText = fullTextRaw.toUpperCase();
+    let pages = fullText.split(/\n{4,}/).filter(page => page.trim().length > 0);
+    console.log('📄 Page 2 content:', pages[1] ? pages[1].substring(0, 100) : 'UNDEFINED');
+    console.log('📄 Total pages created:', pages.length);
+    console.log('📄 Pages:', pages.map((p, i) => `Page ${i + 1}: ${p.substring(0, 50)}...`));
+    
+    // Ensure we have at least 7 pages for trailer slide
+    // Check if "IN 2025" content exists and ensure it's a separate page
+    const in2025Index = pages.findIndex(p => p.includes('IN 2025, THE SIX BILLION DOLLAR MAN'));
+    if (in2025Index === -1 || pages.length < 7) {
+      console.log('⚠️ IN 2025 content not found as separate page, ensuring slide 7 exists...');
+      // Find the last page and split it if it contains IN 2025
+      if (pages.length > 0) {
+        const lastPage = pages[pages.length - 1];
+        if (lastPage.includes('IN 2025')) {
+          // Split at IN 2025 if it's part of another page
+          const in2025Split = lastPage.split(/\n{2,}/);
+          const beforeIn2025 = in2025Split[0].trim();
+          const in2025Content = in2025Split.slice(1).join('\n\n').trim();
+          
+          if (beforeIn2025 && in2025Content) {
+            pages[pages.length - 1] = beforeIn2025;
+            pages.push(in2025Content);
+            console.log('✅ Split last page to create slide 7');
+          }
+        } else {
+          // If no IN 2025 found, add an empty slide 7 that will show the trailer
+          pages.push(''); // Empty page for trailer
+          console.log('✅ Added empty slide 7 for trailer');
+        }
+      }
+    }
+    
+    console.log('📄 Final total pages:', pages.length);
+    
+    // Debug: Show detailed content for each page
+    pages.forEach((page, index) => {
+      console.log(`📄 DETAILED Page ${index + 1} (${page.length} chars):`, page.substring(0, 200));
+      if (page.includes('IN 2025, THE SIX BILLION DOLLAR MAN')) {
+        console.log(`🎯 FOUND "IN 2025" content on page ${index + 1}`);
+      }
+    });
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,\'"?!-—:;\n';
+
+    // Image mode constants and functions removed - no more image mode switching
+    
+    // Image mode functions removed - no more image mode switching
+    
+    // pageModes array removed - no more image mode switching
+    
+    
+    // Image mode loading removed
+    
+    // Keyword scanning removed - no more image searches
+    
+    // Test audio functions removed - defunct
+    
+    
+
+    // DOM
+    const pageEl = document.getElementById('page');
+    const textWrap = document.getElementById('text-wrap');
+    const el = document.getElementById('unscramble');
+    const promptElem = document.getElementById('prompt');
+    const navMsg = document.getElementById('nav-msg');
+    const slideCounterEl = document.getElementById('slide-counter');
+
+    let currentPage = 0;
+    let isAnimating = false;
+    let currentInterval = null;
+    let currentAnimationFrame = null;
+    // availableKeywords removed - no more keyword searches
+    let audioTimeout = null; // Track audio timeout
+    let lineRevealTimeouts = []; // Track line reveal timeouts
+    let isInLineRevealMode = false;
+    let lineRevealState = { lines: [], currentIndex: 0, element: null, onComplete: null };
+    let lastTouchTime = 0; // Track last touch time to prevent double-firing
+    let filmByTimeouts = []; // Track 6BDM animation timeouts
+    let currentTypingInterval = null; // Track the current subtitle typing interval
+    let shouldContinueTyping = true; // Flag to control if typing should continue
+    let audioContextUnlocked = false; // Track if audio context is unlocked
+    let scramblingDisabled = false; // Track if scrambling should be disabled
+    let videoStartTime = null; // Track when video started playing
+    
+    
+    // Memory management
+    let activeEventListeners = new Map(); // Track active event listeners
+    let createdElements = new Set(); // Track created DOM elements
+    
+    // Memory management functions
+    function addEventTracker(element, event, handler) {
+      const key = `${element.id || element.tagName}-${event}`;
+      if (!activeEventListeners.has(key)) {
+        activeEventListeners.set(key, []);
+      }
+      activeEventListeners.get(key).push({ element, event, handler });
+      element.addEventListener(event, handler);
+    }
+    
+    function removeEventTracker(element, event, handler) {
+      const key = `${element.id || element.tagName}-${event}`;
+      if (activeEventListeners.has(key)) {
+        const listeners = activeEventListeners.get(key);
+        const index = listeners.findIndex(l => l.element === element && l.handler === handler);
+        if (index > -1) {
+          listeners.splice(index, 1);
+          element.removeEventListener(event, handler);
+          if (listeners.length === 0) {
+            activeEventListeners.delete(key);
+          }
+        }
+      }
+    }
+    
+    function cleanupElement(element) {
+      if (!element) return;
+      
+      // Remove all tracked event listeners
+      const elementId = element.id || element.tagName;
+      for (const [key, listeners] of activeEventListeners.entries()) {
+        if (key.startsWith(elementId)) {
+          listeners.forEach(({ element: el, event, handler }) => {
+            if (el === element) {
+              el.removeEventListener(event, handler);
+            }
+          });
+          activeEventListeners.delete(key);
+        }
+      }
+      
+      // Remove from created elements set
+      createdElements.delete(element);
+      
+      // Remove from DOM
+      if (element.parentNode) {
+        element.parentNode.removeChild(element);
+      }
+    }
+    
+    function cleanupUnusedElements() {
+      // Clean up images that are not for current or next page
+      const currentPageNumber = currentPage + 1;
+      const nextPageNumber = currentPage + 2;
+      
+      document.querySelectorAll('#page img').forEach(img => {
+        const imgId = img.id;
+        if (imgId) {
+          const pageNumber = parseInt(imgId.replace('img-', ''));
+          if (pageNumber < currentPageNumber - 1 || pageNumber > nextPageNumber) {
+            console.log(`🧹 Cleaning up unused image for page ${pageNumber}`);
+            cleanupElement(img);
+          }
+        }
+      });
+      
+      // Clean up old persistent text elements
+      const oldPersistentText = document.getElementById('persistent-text');
+      if (oldPersistentText && currentPage !== 4) { // Only keep on page 5 (index 4)
+        cleanupElement(oldPersistentText);
+      }
+    }
+    
+    // AGGRESSIVE audio killer function
+    function killAllAudio() {
+      console.log('💀 KILL ALL AUDIO called');
+      
+      // Stop the global typingAudio reference
+      if (typingAudio) {
+        try {
+          typingAudio.loop = false; // DISABLE LOOP FIRST
+          typingAudio.pause();
+          typingAudio.currentTime = 0;
+          typingAudio.src = '';
+          typingAudio.load();
+          typingAudio.remove && typingAudio.remove();
+        } catch(e) {}
+        typingAudio = null;
+      }
+      
+      // Find and kill ALL audio elements in the entire document
+      const allAudios = document.querySelectorAll('audio');
+      console.log(`💀 Found ${allAudios.length} audio elements to kill`);
+      allAudios.forEach((audio, i) => {
+        try {
+          audio.loop = false; // DISABLE LOOP FIRST
+          audio.pause();
+          audio.currentTime = 0;
+          audio.src = '';
+          audio.load();
+          audio.remove && audio.remove();
+          console.log(`✅ Killed audio element ${i + 1}`);
+        } catch(e) {
+          console.error(`❌ Error killing audio ${i + 1}:`, e);
+        }
+      });
+      
+      // Double check - look for any audio that might still be playing
+      setTimeout(() => {
+        const stillPlaying = document.querySelectorAll('audio');
+        if (stillPlaying.length > 0) {
+          console.log(`⚠️ WARNING: ${stillPlaying.length} audio elements still exist after kill attempt`);
+          stillPlaying.forEach(a => {
+            try {
+              a.loop = false;
+              a.pause();
+              a.remove && a.remove();
+            } catch(e) {}
+          });
+        }
+      }, 100);
+    }
+    
+    function clearAllTimeouts() {
+      console.log('🧹 clearAllTimeouts called - cleaning up all animations and audio');
+      
+      // Kill all audio first
+      killAllAudio();
+      
+      // Stop character reveal typing audio
+      if (characterRevealTypingAudio) {
+        console.log('🛑 Stopping character reveal typing audio');
+        characterRevealTypingAudio.pause();
+        characterRevealTypingAudio.currentTime = 0;
+        characterRevealTypingAudio = null;
+      }
+      
+      // Clear all tracked timeouts
+      lineRevealTimeouts.forEach(timeout => clearTimeout(timeout));
+      lineRevealTimeouts = [];
+      
+      filmByTimeouts.forEach(timeout => clearTimeout(timeout));
+      filmByTimeouts = [];
+      
+      characterRevealTimeouts.forEach(timeout => clearTimeout(timeout));
+      characterRevealTimeouts = [];
+      
+      if (characterRevealInterval) {
+        clearInterval(characterRevealInterval);
+        characterRevealInterval = null;
+      }
+      
+      if (audioTimeout) {
+        clearTimeout(audioTimeout);
+        audioTimeout = null;
+      }
+      
+      // Clear animation frames
+      if (currentAnimationFrame) {
+        cancelAnimationFrame(currentAnimationFrame);
+        currentAnimationFrame = null;
+      }
+    }
+    
+    // Optimized animation functions using requestAnimationFrame
+    function createRAFAnimation(callback, interval = 100) {
+      let lastTime = 0;
+      let animationId = null;
+      
+      function animate(currentTime) {
+        if (currentTime - lastTime >= interval) {
+          const shouldContinue = callback(currentTime - lastTime);
+          lastTime = currentTime;
+          
+          if (shouldContinue === false) {
+            currentAnimationFrame = null;
+            return;
+          }
+        }
+        
+        animationId = requestAnimationFrame(animate);
+        currentAnimationFrame = animationId;
+      }
+      
+      animationId = requestAnimationFrame(animate);
+      currentAnimationFrame = animationId;
+      
+      return () => {
+        if (animationId) {
+          cancelAnimationFrame(animationId);
+          currentAnimationFrame = null;
+        }
+      };
+    }
+
+    // Simple image functions for slides 5 and 6 only
+    function addCannesPhoto() {
+      // Remove any existing images first
+      removeAllImages();
+      
+      // Check if mobile
+      const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      
+      // Create container for Cannes photo
+      const imageContainer = document.createElement('div');
+      imageContainer.id = 'cannes-photo-container';
+      imageContainer.style.cssText = `
+        position: fixed !important;
+        bottom: ${isMobile ? '30vh' : '25vh'} !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        max-width: ${isMobile ? '85vw' : '70vw'} !important;
+        max-height: ${isMobile ? '50vh' : '45vh'} !important;
+        width: ${isMobile ? '85vw' : '70vw'} !important;
+        height: auto !important;
+        z-index: 1 !important;
+        pointer-events: none !important;
+        overflow: visible !important;
+        transition: opacity 0.15s ease-in-out !important;
+      `;
+      document.body.appendChild(imageContainer);
+      
+      // Add Cannes photo
+      const img = document.createElement('img');
+      img.id = 'cannes-photo';
+      img.src = 'PHOTOS/photo_cannes.png.jpeg';
+      img.style.cssText = `
+        width: 100% !important;
+        height: 100% !important;
+        max-width: none !important;
+        max-height: none !important;
+        object-fit: contain !important;
+        filter: brightness(0.8) sepia(1) hue-rotate(60deg) saturate(4.0) !important;
+        display: block !important;
+        opacity: 0 !important;
+        transition: opacity 0.4s ease-in-out !important;
+      `;
+      imageContainer.appendChild(img);
+      
+      // Quick fade-in effect
+      imageContainer.style.opacity = '0';
+      setTimeout(() => {
+        imageContainer.style.opacity = '1';
+        img.style.opacity = '1';
+        // Add brightness flash effect with intense glow
+        img.style.filter = 'brightness(1.2) sepia(1) hue-rotate(60deg) saturate(4.0)';
+        img.style.boxShadow = 'inset 0 0 50px rgba(0, 255, 0, 0.6), 0 0 30px rgba(0, 255, 0, 0.4)';
+        setTimeout(() => {
+          img.style.filter = 'brightness(0.8) sepia(1) hue-rotate(60deg) saturate(4.0)';
+          img.style.boxShadow = 'none';
+        }, 200);
+      }, 50);
+      
+      console.log('Cannes photo added to slide 5');
+    }
+    
+    function addArrestPhoto() {
+      // Remove any existing images first
+      removeAllImages();
+      
+      // Check if mobile
+      const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      
+      // Create container for Arrest photo
+      const imageContainer = document.createElement('div');
+      imageContainer.id = 'arrest-photo-container';
+      imageContainer.style.cssText = `
+        position: fixed !important;
+        bottom: ${isMobile ? '25vh' : '20vh'} !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        max-width: ${isMobile ? '60vw' : '40vw'} !important;
+        max-height: ${isMobile ? '28vh' : '20vh'} !important;
+        width: ${isMobile ? '60vw' : '40vw'} !important;
+        height: auto !important;
+        z-index: 1 !important;
+        pointer-events: none !important;
+        overflow: visible !important;
+        transition: opacity 0.15s ease-in-out !important;
+      `;
+      document.body.appendChild(imageContainer);
+      
+      // Add Arrest photo
+      const img = document.createElement('img');
+      img.id = 'arrest-photo';
+      img.src = 'PHOTOS/photo_arrest.webp';
+      img.style.cssText = `
+        width: 100% !important;
+        height: 100% !important;
+        max-width: none !important;
+        max-height: none !important;
+        object-fit: contain !important;
+        filter: brightness(0.8) sepia(1) hue-rotate(60deg) saturate(4.0) !important;
+        display: block !important;
+        opacity: 0 !important;
+        transition: opacity 0.4s ease-in-out !important;
+      `;
+      imageContainer.appendChild(img);
+      
+      // Quick fade-in effect
+      imageContainer.style.opacity = '0';
+      setTimeout(() => {
+        imageContainer.style.opacity = '1';
+        img.style.opacity = '0.4';
+      }, 50);
+      
+      console.log('Arrest photo added to slide 5');
+    }
+    
+    function addCollateralPhoto() {
+      // Remove any existing images first
+      removeAllImages();
+      
+      // Check if mobile
+      const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      
+      // Create container for Collateral photo
+      const imageContainer = document.createElement('div');
+      imageContainer.id = 'collateral-photo-container';
+      imageContainer.style.cssText = `
+        position: fixed !important;
+        bottom: ${isMobile ? '22vh' : '18vh'} !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        max-width: ${isMobile ? '75vw' : '50vw'} !important;
+        max-height: ${isMobile ? '35vh' : '25vh'} !important;
+        width: ${isMobile ? '75vw' : '50vw'} !important;
+        height: auto !important;
+        z-index: 1 !important;
+        pointer-events: none !important;
+        overflow: visible !important;
+        transition: opacity 0.15s ease-in-out !important;
+      `;
+      
+      // Add desktop-only styling with higher specificity
+      const style = document.createElement('style');
+      style.textContent = `
+        @media (min-width: 769px) {
+          #collateral-photo-container {
+            z-index: 0 !important;
+          }
+          #collateral-photo {
+            display: block !important;
+            opacity: 0.35 !important;
+            filter: brightness(0.8) sepia(1) hue-rotate(60deg) saturate(4.0) !important;
+          }
+        }
+        @media (max-width: 768px) {
+          #collateral-photo-container {
+            z-index: 1 !important;
+          }
+          #collateral-photo {
+            display: block !important;
+            opacity: 0.35 !important;
+            filter: brightness(0.8) sepia(1) hue-rotate(60deg) saturate(4.0) !important;
+          }
+        }
+        /* Override any conflicting CSS rules */
+        #collateral-photo-container #collateral-photo {
+          display: block !important;
+          position: relative !important;
+        }
+      `;
+      document.head.appendChild(style);
+      document.getElementById('page').appendChild(imageContainer);
+      
+      // Add Collateral photo
+      const img = document.createElement('img');
+      img.id = 'collateral-photo';
+      img.src = 'PHOTOS/photo_collateral_crop.jpg';
+      img.style.cssText = `
+        width: 100% !important;
+        height: 100% !important;
+        max-width: none !important;
+        max-height: none !important;
+        object-fit: contain !important;
+        filter: brightness(0.5) sepia(1) hue-rotate(60deg) saturate(4.0) !important;
+        display: block !important;
+        opacity: 0 !important;
+        transition: opacity 0.4s ease-in-out !important;
+      `;
+      imageContainer.appendChild(img);
+      
+      // Quick fade-in effect
+      imageContainer.style.opacity = '0';
+      setTimeout(() => {
+        imageContainer.style.opacity = '1';
+        img.style.opacity = '1';
+        // Add brightness flash effect with intense glow
+        img.style.filter = 'brightness(0.7) sepia(1) hue-rotate(60deg) saturate(4.0)';
+        img.style.boxShadow = 'inset 0 0 50px rgba(0, 255, 0, 0.6), 0 0 30px rgba(0, 255, 0, 0.4)';
+        setTimeout(() => {
+          img.style.filter = 'brightness(0.5) sepia(1) hue-rotate(60deg) saturate(4.0)';
+          img.style.boxShadow = 'none';
+        }, 200);
+      }, 50);
+      
+      console.log('Collateral photo added - should be behind text and dimmed on desktop');
+      console.log('Desktop z-index: collateral=0, text=1');
+      console.log('Mobile z-index: collateral=1, text=1');
+    }
+    
+    function addCorreaPhoto() {
+      // Remove any existing images first
+      removeAllImages();
+      
+      // Check if mobile
+      const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      
+      // Create container for Correa photo
+      const imageContainer = document.createElement('div');
+      imageContainer.id = 'correa-photo-container';
+      imageContainer.style.cssText = `
+        position: fixed !important;
+        bottom: ${isMobile ? '25vh' : '20vh'} !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        max-width: ${isMobile ? '60vw' : '40vw'} !important;
+        max-height: ${isMobile ? '28vh' : '20vh'} !important;
+        width: ${isMobile ? '60vw' : '40vw'} !important;
+        height: auto !important;
+        z-index: 1 !important;
+        pointer-events: none !important;
+        overflow: visible !important;
+        transition: opacity 0.15s ease-in-out !important;
+      `;
+      document.body.appendChild(imageContainer);
+      
+      // Add Correa photo
+      const img = document.createElement('img');
+      img.id = 'correa-photo';
+      img.src = 'PHOTOS/photo_correa.jpg';
+      img.style.cssText = `
+        width: 100% !important;
+        height: 100% !important;
+        max-width: none !important;
+        max-height: none !important;
+        object-fit: contain !important;
+        filter: brightness(0.8) sepia(1) hue-rotate(60deg) saturate(4.0) !important;
+        display: block !important;
+        opacity: 0 !important;
+        transition: opacity 0.4s ease-in-out !important;
+      `;
+      imageContainer.appendChild(img);
+      
+      // Quick fade-in effect
+      imageContainer.style.opacity = '0';
+      setTimeout(() => {
+        imageContainer.style.opacity = '1';
+        img.style.opacity = '0.6';
+      }, 50);
+      
+      console.log('Correa photo added to slide 4');
+    }
+    
+    
+    function removeAllImages() {
+      // Quick fade out all image containers
+      const containers = [
+        document.getElementById('cannes-photo-container'),
+        document.getElementById('arrest-photo-container'),
+        document.getElementById('correa-photo-container'),
+        document.getElementById('collateral-photo-container')
+      ];
+      
+      containers.forEach(container => {
+        if (container) {
+          container.style.opacity = '0';
+          setTimeout(() => container.remove(), 150);
+        }
+      });
+      
+      // Remove 6BDM subtitle element
+      const bdmSubtitle = document.getElementById('bdm-subtitle');
+      if (bdmSubtitle) {
+        bdmSubtitle.remove();
+      }
+      
+      // Remove any other images
+      document.querySelectorAll('#page img').forEach(img => {
+        img.remove();
+      });
+    }
+    
+    
+    // Image mode functions removed - no more text container adjustments
+    
+    
+    // Complex image search functions removed
+
+    
+      function truncateTextToFit(element, text) {
+      // Simply set the content without dynamic page splitting
+      element.textContent = text;
+      }
+
+    /* ================== SCRAMBLE ================== */
+    
+    // Function to type subtitle text character by character (typewriter effect)
+    function decodeSubtitle(element, baseText, subtitleText, onComplete) {
+      // Check if we should even start typing (page might have changed)
+      if (!shouldContinueTyping) {
+        console.log('🛑 Typing cancelled - page navigation detected');
+        return;
+      }
+      
+      // Clear any existing typing animation first
+      if (currentTypingInterval) {
+        clearInterval(currentTypingInterval);
+        currentTypingInterval = null;
+        console.log('🧹 Cleared previous typing animation');
+      }
+      
+      let charIndex = 0;
+      const len = subtitleText.length;
+      
+      console.log('Starting subtitle typewriter animation...');
+      
+      currentTypingInterval = setInterval(() => {
+        // Check if we should continue typing
+        if (!shouldContinueTyping) {
+          console.log('🛑 Typing cancelled mid-animation');
+          clearInterval(currentTypingInterval);
+          currentTypingInterval = null;
+          return;
+        }
+        
+        // Show characters up to current index
+        const currentText = subtitleText.substring(0, charIndex + 1);
+        
+        // Check if this is the 6BDM text and format it with different sizes
+        if (subtitleText.includes('6BDM:') && subtitleText.includes('JULIAN ASSANGE')) {
+          const parts = currentText.split('\n');
+          if (parts.length > 1) {
+            element.innerHTML = parts[0] + '<br><span style="font-size: 0.75em;">' + parts[1] + '</span>';
+          } else {
+            element.textContent = currentText;
+          }
+        } else {
+        element.textContent = baseText + currentText;
+        }
+        
+        
+        charIndex++;
+        if (charIndex >= len) {
+          clearInterval(currentTypingInterval);
+          currentTypingInterval = null;
+          // Final clean text with formatting
+          if (subtitleText.includes('6BDM:') && subtitleText.includes('JULIAN ASSANGE')) {
+            const parts = subtitleText.split('\n');
+            element.innerHTML = parts[0] + '<br><span style="font-size: 0.75em;">' + parts[1] + '</span>';
+          } else {
+            element.textContent = baseText + subtitleText;
+          }
+          console.log('Subtitle typewriter complete');
+          if (shouldContinueTyping) { // Only call onComplete if we weren't cancelled
+          onComplete && onComplete();
+          }
+        }
+      }, 50); // 50ms per character for smooth typewriter effect
+    }
+    
+    
+    // Mobile text wrapping function - breaks long lines intelligently while preserving formatting
+    function wrapTextForMobile(text) {
+      const isMobile = window.innerWidth <= 768;
+      if (!isMobile) return text;
+      
+      const lines = text.split('\n');
+      const wrappedLines = [];
+      const maxLineLength = 40; // Shorter for better mobile readability
+      
+      for (const line of lines) {
+        if (line.length <= maxLineLength) {
+          // Short lines stay as-is
+          wrappedLines.push(line);
+        } else {
+          // Long lines need wrapping
+          const indent = line.match(/^(\s*)/)?.[1] || '';
+          const hasBullet = line.match(/^(\s*>\s*)/)?.[1] || '';
+          const content = line.replace(/^(\s*>\s*)/, '');
+          
+          if (content.length <= maxLineLength) {
+            wrappedLines.push(line);
+          } else {
+            // Break at natural points (spaces, punctuation)
+            const words = content.split(' ');
+            let currentLine = indent + hasBullet;
+            let isFirstLine = true;
+            
+            for (const word of words) {
+              const testLine = currentLine + (currentLine.endsWith(indent + hasBullet) ? '' : ' ') + word;
+              
+              if (testLine.length > maxLineLength) {
+                if (currentLine.trim() !== (indent + hasBullet).trim()) {
+                  wrappedLines.push(currentLine);
+                  // For continuation lines, only add spaces, not the bullet
+                  currentLine = indent + '  ' + word;
+                  isFirstLine = false;
+                } else {
+                  currentLine += word;
+                }
+              } else {
+                currentLine += (currentLine.endsWith(indent + hasBullet) ? '' : ' ') + word;
+              }
+            }
+            
+            if (currentLine.trim() !== (indent + hasBullet).trim()) {
+              wrappedLines.push(currentLine);
+            }
+          }
+        }
+      }
+      
+      return wrappedLines.join('\n');
+    }
+
+    // Function to wrap years in spans for styling
+    function wrapYearsInSpans(element) {
+      if (!element) return;
+      
+      // Get the text content
+      let text = element.textContent;
+      
+      // Regular expression to match years in format YYYY: or YYYY-YYYY:
+      const yearRegex = /(\d{4}(?:-\d{4})?):/g;
+      
+      // Replace years with wrapped spans
+      const wrappedText = text.replace(yearRegex, '<span class="year-text">$1:</span>');
+      
+      // Set the innerHTML with the wrapped text
+      element.innerHTML = wrappedText;
+    }
+
+    function scrambleFastChunks(element, text, onComplete) {
+      // Check if we're on slides 4 or 5 (pages with year bullet points)
+      console.log(`🔍 scrambleFastChunks called for slide ${currentPage + 1}, scramblingDisabled: ${scramblingDisabled}`);
+      
+      // SAFETY CHECK: Make sure typing audio is stopped if we're NOT on slides 4 or 5
+      if (currentPage !== 3 && currentPage !== 4 && typingAudio) {
+        console.log('🚨 CRITICAL: Typing audio still playing on wrong slide! Killing all audio.');
+        killAllAudio();
+      }
+      
+      if ((currentPage === 3 || currentPage === 4) && !scramblingDisabled) {
+        console.log(`🎬 Sequential reveal animation for slide ${currentPage + 1} - TYPING ANIMATION ACTIVE`);
+        
+        // Display the text normally first
+        element.textContent = text;
+        
+        // Find all year lines and wrap them in hidden spans
+        const lines = text.split('\n');
+        const yearLines = [];
+        
+        lines.forEach((line, index) => {
+          if (/^\d{4}(-\d{4})?:/.test(line.trim())) {
+            yearLines.push({
+              index: index,
+              content: line
+            });
+          }
+        });
+        
+        console.log(`📅 Found ${yearLines.length} year lines to reveal sequentially`);
+        
+        // Replace text content with HTML that wraps year lines in spans
+        let htmlContent = '';
+        lines.forEach((line, index) => {
+          const isYearLine = yearLines.some(yl => yl.index === index);
+          if (isYearLine) {
+            // Initially empty span that will be typed into
+            htmlContent += `<span class="year-line" data-full-text="${line.replace(/"/g, '&quot;')}"></span>\n`;
+          } else {
+            htmlContent += line + '\n';
+          }
+        });
+        
+        element.innerHTML = htmlContent.trimEnd();
+        
+        // Get references to all year line spans
+        const yearLineSpans = element.querySelectorAll('.year-line');
+        
+        // Show prompt and nav immediately
+        isAnimating = false;
+        promptElem.style.visibility = 'visible';
+        navMsg.style.visibility = 'visible';
+        
+        // Clear any existing line reveal timeouts
+        lineRevealTimeouts.forEach(timeout => clearTimeout(timeout));
+        lineRevealTimeouts = [];
+        
+        // Stop any existing typing audio before starting new one
+        console.log('🔇 Stopping any previous typing audio before starting new');
+        killAllAudio();
+        
+        // Create and play typing audio
+        const slideTypingAudio = new Audio('VIDEOS/speduptyping.wav');
+        slideTypingAudio.loop = true;
+        slideTypingAudio.volume = 0.8; // Increased volume
+        slideTypingAudio.preload = 'auto';
+        slideTypingAudio.playbackRate = 1.0; // Normal speed
+        slideTypingAudio.preservesPitch = true; // Preserve pitch
+        slideTypingAudio.mozPreservesPitch = true; // Firefox compatibility
+        slideTypingAudio.webkitPreservesPitch = true; // Webkit compatibility
+        
+        // Store reference before playing
+        typingAudio = slideTypingAudio;
+        
+        // Log audio element details
+        console.log('🎵 Created typing audio:', {
+          src: slideTypingAudio.src,
+          readyState: slideTypingAudio.readyState,
+          volume: slideTypingAudio.volume,
+          playbackRate: slideTypingAudio.playbackRate,
+          preservesPitch: slideTypingAudio.preservesPitch
+        });
+        
+        // Function to stop the typing audio for this slide
+        const stopTypingAudio = () => {
+          console.log('🔇 Stopping typing audio (from stopTypingAudio function)');
+          try {
+            slideTypingAudio.pause();
+            slideTypingAudio.currentTime = 0;
+            slideTypingAudio.src = '';
+            slideTypingAudio.loop = false;
+            console.log('✅ Typing audio stopped successfully');
+          } catch (err) {
+            console.error('⚠️ Error stopping audio:', err);
+          }
+          if (typingAudio === slideTypingAudio) {
+            typingAudio = null;
+          }
+        };
+        
+        // Play audio immediately
+        console.log('🔊 Attempting to play typing audio immediately...');
+        slideTypingAudio.play()
+          .then(() => {
+            console.log('✅ Typing audio playing successfully!');
+          })
+          .catch(err => {
+            console.error('❌ Typing audio play failed:', err.name, err.message);
+            // Try loading first, then play
+            slideTypingAudio.load();
+            slideTypingAudio.addEventListener('canplaythrough', () => {
+              console.log('🔊 Audio loaded, trying to play again...');
+              slideTypingAudio.play()
+                .then(() => console.log('✅ Typing audio playing on retry!'))
+                .catch(err2 => console.error('❌ Retry failed:', err2));
+            }, { once: true });
+          });
+        
+        // Function to type out a single line character by character
+        const typeLine = (span, callback) => {
+          const fullText = span.getAttribute('data-full-text');
+          let charIndex = 0;
+          
+          const typeNextChar = () => {
+            if (charIndex < fullText.length) {
+              // Add next character
+              const currentText = fullText.substring(0, charIndex + 1);
+              // Apply year-text styling to year numbers in the current text
+              const styledText = currentText.replace(/(\d{4}(?:-\d{4})?):/g, '<span class="year-text">$1:</span>');
+              span.innerHTML = styledText;
+              charIndex++;
+              
+              // Type at 15ms per character for fast typing
+              const timeoutId = setTimeout(typeNextChar, 15);
+              lineRevealTimeouts.push(timeoutId);
+            } else {
+              // Typing complete for this line
+              callback && callback();
+            }
+          };
+          
+          typeNextChar();
+        };
+        
+        // Type year lines one by one with 2-second delays between lines
+        let revealIndex = 0;
+        const revealNextYear = () => {
+          if (revealIndex < yearLineSpans.length) {
+            console.log(`✨ Typing year line ${revealIndex + 1}/${yearLineSpans.length}`);
+            
+            typeLine(yearLineSpans[revealIndex], () => {
+              // Line typing complete
+              revealIndex++;
+              
+              if (revealIndex < yearLineSpans.length) {
+                // Wait half a second before typing next line
+                const timeoutId = setTimeout(revealNextYear, 500);
+                lineRevealTimeouts.push(timeoutId);
+              } else {
+                // All lines revealed
+                console.log('✅ All year lines typed - STOPPING AUDIO NOW');
+                // Stop typing audio using the local function
+                stopTypingAudio();
+                // Also kill all audio as a failsafe
+                killAllAudio();
+                onComplete && onComplete();
+              }
+            });
+          }
+        };
+        
+        // Start typing after a short delay
+        const initialTimeoutId = setTimeout(revealNextYear, 500);
+        lineRevealTimeouts.push(initialTimeoutId);
+        return;
+      }
+      
+      // Check if scrambling is disabled or if we're after slide 3
+      if (scramblingDisabled || currentPage > 2) {
+        console.log('🔒 Scrambling disabled - displaying text instantly (after slide 3)');
+        element.textContent = text;
+        wrapYearsInSpans(element);
+        onComplete && onComplete();
+        return;
+      }
+      
+      if (currentInterval) {
+        clearInterval(currentInterval);
+        currentInterval = null;
+      }
+      
+      if (currentAnimationFrame) {
+        cancelAnimationFrame(currentAnimationFrame);
+        currentAnimationFrame = null;
+      }
+      
+      // Apply mobile text wrapping before processing (skip slides 5-6)
+      if (currentPage !== 4 && currentPage !== 5) {
+        text = wrapTextForMobile(text);
+      }
+      
+      let index = 0, chunkSize = 3, scrambled = text.split(''), len = text.length;
+      for (let i=0;i<len;i++) scrambled[i] = /\s/.test(text[i]) ? text[i] : chars[Math.floor(Math.random()*chars.length)];
+      isAnimating = true; promptElem.style.visibility='hidden'; navMsg.style.visibility='hidden';
+
+      // Stop any existing typing audio
+      if (typingAudio) {
+        typingAudio.pause();
+        typingAudio = null;
+      }
+      
+      // Only play unscramble audio on slide 2 (pageIndex 1)
+      if (currentPage === 1) {
+        // Play unscramble audio for slide 2 only
+        const unscrambleAudioEl = document.getElementById('unscramble-audio');
+        if (unscrambleAudioEl) {
+          unscrambleAudioEl.volume = 0.3;
+          unscrambleAudioEl.loop = true;
+          unscrambleAudioEl.muted = false;
+          
+          console.log('🔊 Playing unscramble audio...');
+          unscrambleAudioEl.play().then(() => {
+            console.log('✅ Unscramble audio playing');
+          }).catch(err => {
+            console.log('❌ Unscramble audio play failed:', err);
+          });
+        }
+      } else {
+        console.log('🔇 Skipping unscramble audio - not on slide 2');
+      }
+
+      // Use requestAnimationFrame for better performance
+      const stopAnimation = createRAFAnimation(() => {
+        const display = scrambled.slice();
+        for (let i=0;i<index;i++){
+          let s=i*chunkSize, e=Math.min(s+chunkSize,len);
+          for (let j=s;j<e;j++) display[j]=text[j];
+        }
+        for (let k=index*chunkSize;k<len;k++) display[k] = /\s/.test(text[k]) ? text[k] : chars[Math.floor(Math.random()*chars.length)];
+        element.textContent = display.join('');
+
+        index++;
+        if ((index*chunkSize)>=len){
+          stopAnimation();
+          truncateTextToFit(element, text);
+          isAnimating=false;
+          
+          // Stop typing audio
+          if (typingAudio) {
+            console.log('🛑 Stopping typing audio');
+            typingAudio.pause();
+            typingAudio.currentTime = 0;
+            typingAudio = null;
+          }
+          
+          // Stop unscramble audio
+          const unscrambleAudioStop2 = document.getElementById('unscramble-audio');
+          if (unscrambleAudioStop2) {
+            unscrambleAudioStop2.pause();
+            unscrambleAudioStop2.currentTime = 0;
+            unscrambleAudioStop2.playbackRate = 1.0; // Reset playback rate
+            console.log('🔇 Unscramble audio stopped');
+          }
+          
+          // Wrap years in spans for styling
+          wrapYearsInSpans(element);
+          
+          // Navigation messages are now handled in startPage function
+          
+          // Check if this text contains "A FILM BY" and show video
+          if (text.includes('A FILM BY EUGENE JARECKI')) {
+            console.log('A FILM BY detected - showing video...');
+            
+            // Show video
+            showVideo3Background();
+            
+            // Hide the text element since video will show everything
+            element.textContent = '';
+            
+                  onComplete && onComplete();
+              } else {
+                onComplete && onComplete();
+              }
+          
+          // Stop unscramble audio when animation completes
+          const unscrambleAudioStop = document.getElementById('unscramble-audio');
+          if (unscrambleAudioStop) {
+            unscrambleAudioStop.pause();
+            unscrambleAudioStop.currentTime = 0;
+            console.log('🔇 Unscramble audio stopped');
+          }
+          
+          return false; // Stop animation
+        }
+        return true; // Continue animation
+      }, 100);
+    }
+
+    // Ultra-fast scrambling specifically for 2006 text - much faster interval
+    function scrambleUltraFastChunks(element, text, onComplete) {
+      // Check if scrambling is disabled or if we're after slide 3
+      if (scramblingDisabled || currentPage > 2) {
+        console.log('🔒 Scrambling disabled - displaying text instantly (after slide 3)');
+        element.textContent = text;
+        wrapYearsInSpans(element);
+        onComplete && onComplete();
+        return;
+      }
+      
+      if (currentInterval) {
+        clearInterval(currentInterval);
+        currentInterval = null;
+      }
+      
+      if (currentAnimationFrame) {
+        cancelAnimationFrame(currentAnimationFrame);
+        currentAnimationFrame = null;
+      }
+      
+      // Apply mobile text wrapping before processing (skip slides 5-6)
+      if (currentPage !== 4 && currentPage !== 5) {
+        text = wrapTextForMobile(text);
+      }
+      
+      let index = 0, chunkSize = 3, scrambled = text.split(''), len = text.length;
+      for (let i=0;i<len;i++) scrambled[i] = /\s/.test(text[i]) ? text[i] : chars[Math.floor(Math.random()*chars.length)];
+      isAnimating = true; promptElem.style.visibility='hidden'; navMsg.style.visibility='hidden';
+
+      // Stop any existing typing audio
+      if (typingAudio) {
+        typingAudio.pause();
+        typingAudio = null;
+      }
+      
+      // Only play unscramble audio on slide 2 (pageIndex 1)
+      if (currentPage === 1) {
+        // Play unscramble audio for slide 2 with slower playback to match slower decoding
+        const unscrambleAudioEl2 = document.getElementById('unscramble-audio');
+        if (unscrambleAudioEl2) {
+          unscrambleAudioEl2.volume = 0.3;
+          unscrambleAudioEl2.loop = true;
+          unscrambleAudioEl2.muted = false;
+          unscrambleAudioEl2.playbackRate = 0.5; // Slow down audio to 50% speed to match slower decoding
+          
+          console.log('🔊 Playing unscramble audio (slower speed)...');
+          unscrambleAudioEl2.play().then(() => {
+            console.log('✅ Unscramble audio playing at 0.5x speed');
+          }).catch(err => {
+            console.log('❌ Unscramble audio play failed:', err);
+          });
+        }
+      } else {
+        console.log('🔇 Skipping unscramble audio - not on slide 2');
+      }
+
+      // Use requestAnimationFrame for better performance with ultra-fast timing
+      const stopAnimation = createRAFAnimation(() => {
+        const display = scrambled.slice();
+        for (let i=0;i<index;i++){
+          let s=i*chunkSize, e=Math.min(s+chunkSize,len);
+          for (let j=s;j<e;j++) display[j]=text[j];
+        }
+        for (let k=index*chunkSize;k<len;k++) display[k] = /\s/.test(text[k]) ? text[k] : chars[Math.floor(Math.random()*chars.length)];
+        element.textContent = display.join('');
+
+        index++;
+        if ((index*chunkSize)>=len){
+          stopAnimation();
+          truncateTextToFit(element, text);
+          isAnimating=false;
+          
+          // Stop typing audio
+          if (typingAudio) {
+            console.log('🛑 Stopping typing audio');
+            typingAudio.pause();
+            typingAudio.currentTime = 0;
+            typingAudio = null;
+          }
+          
+          // Stop unscramble audio
+          const unscrambleAudioStop2 = document.getElementById('unscramble-audio');
+          if (unscrambleAudioStop2) {
+            unscrambleAudioStop2.pause();
+            unscrambleAudioStop2.currentTime = 0;
+            unscrambleAudioStop2.playbackRate = 1.0; // Reset playback rate
+            console.log('🔇 Unscramble audio stopped');
+          }
+          
+          // Wrap years in spans for styling
+          wrapYearsInSpans(element);
+          
+          // Navigation messages are now handled in startPage function
+          
+          onComplete && onComplete();
+          return false; // Stop animation
+        }
+        return true; // Continue animation
+      }, 100); // Much slower: 100ms interval for better readability
+    }
+
+    
+    
+
+    /* ================== YEAR-BASED CHARACTER REVEAL ================== */
+    let characterRevealInterval = null;
+    let characterRevealTimeouts = [];
+    let characterRevealTypingAudio = null; // Track typing audio for cleanup
+    
+    function revealByCharacterWithYearPauses(element, text, onComplete) {
+      // Clear any existing intervals and timeouts
+      if (characterRevealInterval) {
+        clearInterval(characterRevealInterval);
+        characterRevealInterval = null;
+      }
+      
+      characterRevealTimeouts.forEach(timeout => clearTimeout(timeout));
+      characterRevealTimeouts = [];
+      
+      // Stop any existing typing audio
+      if (characterRevealTypingAudio) {
+        characterRevealTypingAudio.pause();
+        characterRevealTypingAudio.currentTime = 0;
+        characterRevealTypingAudio = null;
+      }
+      
+      // Start typing audio
+      characterRevealTypingAudio = new Audio('VIDEOS/speduptyping.wav');
+      characterRevealTypingAudio.volume = 0.3;
+      characterRevealTypingAudio.loop = true;
+      characterRevealTypingAudio.muted = false;
+      
+      console.log('🔊 Starting character reveal with typing audio...');
+      characterRevealTypingAudio.play().then(() => {
+        console.log('✅ Character reveal typing audio playing');
+      }).catch(err => {
+        console.error('❌ Typing audio play failed:', err.message);
+      });
+      
+      element.textContent = '';
+      let charIndex = 0;
+      const lines = text.split('\n');
+      let currentLineIndex = 0;
+      let currentLineCharIndex = 0;
+      
+      function typeNextCharacter() {
+        if (currentLineIndex >= lines.length) {
+          // Done with all lines
+          if (characterRevealTypingAudio) {
+            characterRevealTypingAudio.pause();
+            characterRevealTypingAudio.currentTime = 0;
+            characterRevealTypingAudio = null;
+          }
+          console.log('✅ Character reveal completed');
+          wrapYearsInSpans(element);
+          if (onComplete) onComplete();
+          return;
+        }
+        
+        const currentLine = lines[currentLineIndex];
+        
+        if (currentLineCharIndex < currentLine.length) {
+          // Type next character in current line
+          element.textContent += currentLine[currentLineCharIndex];
+          currentLineCharIndex++;
+          
+          // Continue typing after a short delay (slower typing for readability)
+          const timeout = setTimeout(typeNextCharacter, 30); // 30ms per character for slower typing
+          characterRevealTimeouts.push(timeout);
+        } else {
+          // Finished current line, move to next
+          element.textContent += '\n';
+          currentLineIndex++;
+          currentLineCharIndex = 0;
+          
+          // Check if next line starts with a year pattern (e.g., "2006:", "2012-2019:")
+          const nextLine = lines[currentLineIndex];
+          if (nextLine && /^\d{4}(-\d{4})?:/.test(nextLine.trim())) {
+            // Pause for 800ms before the next year bullet point
+            console.log('⏸️ Pausing before next year bullet:', nextLine.substring(0, 20));
+            const timeout = setTimeout(typeNextCharacter, 800);
+            characterRevealTimeouts.push(timeout);
+          } else {
+            // No pause, continue immediately
+            const timeout = setTimeout(typeNextCharacter, 30);
+            characterRevealTimeouts.push(timeout);
+          }
+        }
+      }
+      
+      // Start typing
+      typeNextCharacter();
+    }
+
+    /* ================== LINE BY LINE REVEAL ================== */
+    function revealLineByLine(element, text, onComplete) {
+      // Clear any existing intervals and timeouts
+      if (currentInterval) {
+        clearInterval(currentInterval);
+        currentInterval = null;
+      }
+      
+      // Clear any existing line reveal timeouts
+      lineRevealTimeouts.forEach(timeout => clearTimeout(timeout));
+      lineRevealTimeouts = [];
+      
+      isAnimating = true;
+      isInLineRevealMode = true;
+      promptElem.style.visibility = 'hidden';
+      
+      const lines = text.split('\n').filter(line => line.trim() !== ''); // Remove empty lines
+      element.textContent = '';
+      
+      // Set up line reveal state
+      lineRevealState = {
+        lines: lines,
+        currentIndex: 0,
+        element: element,
+        onComplete: onComplete
+      };
+      
+      console.log('Starting manual line-by-line reveal for 2006-2024 content...');
+      console.log(`Total lines to reveal: ${lines.length}`);
+      
+      // Show the first line immediately
+      showNextLineManual();
+    }
+    
+    function showNextLineManual() {
+      if (lineRevealState.currentIndex < lineRevealState.lines.length) {
+        const currentLine = lineRevealState.lines[lineRevealState.currentIndex];
+        const lineNumber = lineRevealState.currentIndex + 1;
+        
+        // Determine if this line should be decoded (only first line - first item only)
+        const shouldDecode = lineRevealState.currentIndex === 0;
+        
+        if (shouldDecode) {
+          console.log(`Decoding line ${lineNumber}: "${currentLine}"`);
+          
+          // Get current content before this line
+          let previousContent = '';
+          if (lineRevealState.currentIndex > 0) {
+            previousContent = lineRevealState.element.textContent + '\n\n';
+          }
+          
+          // Display line instantly
+          lineRevealState.element.textContent = previousContent + currentLine;
+          setTimeout(() => {
+            lineRevealState.currentIndex++;
+            
+            // Check if we're done
+            if (lineRevealState.currentIndex >= lineRevealState.lines.length) {
+              console.log('All lines revealed, finishing...');
+              isAnimating = false;
+              isInLineRevealMode = false;
+              lineRevealState.onComplete && lineRevealState.onComplete();
+            } else {
+              // Show navigation message for manual progression (even after decoded lines)
+              navMsg.innerHTML = 'PRESS SPACEBAR<br>TO ENTER';
+              navMsg.style.fontSize = '0.9rem';
+              navMsg.style.textAlign = 'center';
+              navMsg.style.visibility = 'visible';
+            }
+          }, 50);
+        } else {
+          // Show instantly for later lines (no decoding)
+          if (lineRevealState.currentIndex > 0) {
+            lineRevealState.element.textContent += '\n\n';
+          }
+          lineRevealState.element.textContent += currentLine;
+          
+          console.log(`Instantly revealed line ${lineNumber}: "${currentLine}"`);
+          lineRevealState.currentIndex++;
+          
+          // Show navigation message for manual progression
+          navMsg.innerHTML = 'press spacebar<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to enter';
+          navMsg.style.fontSize = '0.9rem';
+          navMsg.style.visibility = 'visible';
+          
+          if (lineRevealState.currentIndex >= lineRevealState.lines.length) {
+            // All lines revealed
+            console.log('All lines revealed, finishing...');
+            isAnimating = false;
+            isInLineRevealMode = false;
+            lineRevealState.onComplete && lineRevealState.onComplete();
+          }
+        }
+      }
+    }
+
+         /* ================== PAGE RENDER ================== */
+  function startPage(pageIndex){
+        // KILL ALL AUDIO IMMEDIATELY at the start of any page transition
+        console.log('🚨 startPage called - killing all audio immediately');
+        killAllAudio();
+        
+        if (pageIndex >= pages.length) pageIndex = 0;
+        if (pageIndex < 0) pageIndex = pages.length - 1;
+        
+        const pageEl = document.getElementById('page');
+        const el = document.getElementById('unscramble');
+        const promptElem = document.getElementById('prompt');
+        
+        // Only animate if not first load
+        if (currentPage !== null && currentPage !== pageIndex) {
+          // Determine direction (forward or backward)
+          const goingForward = pageIndex > currentPage;
+          
+          // Remove all animation classes
+          pageEl.classList.remove('slide-in-right', 'slide-in-left', 'slide-out-left', 'slide-out-right');
+          
+          // Trigger slide-out animation based on direction
+          if (goingForward) {
+            pageEl.classList.add('slide-out-left');
+          } else {
+            pageEl.classList.add('slide-out-right');
+          }
+          
+          // Wait for slide-out to complete, then update content and slide in
+          setTimeout(() => {
+        currentPage = pageIndex;
+            
+            // Stop unscramble audio
+          const unscrambleAudioStop2 = document.getElementById('unscramble-audio');
+          if (unscrambleAudioStop2) {
+            unscrambleAudioStop2.pause();
+            unscrambleAudioStop2.currentTime = 0;
+            unscrambleAudioStop2.playbackRate = 1.0; // Reset playback rate
+            console.log('🔇 Unscramble audio stopped');
+          }
+        
+        console.log(`🔍 Starting page ${pageIndex + 1}, content:`, pages[pageIndex] ? pages[pageIndex].substring(0, 100) : 'UNDEFINED');
+        console.log(`🔍 DEBUG: Page ${pageIndex + 1} full content length:`, pages[pageIndex] ? pages[pageIndex].length : 0);
+        console.log(`🔍 DEBUG: Total pages available:`, pages.length);
+        
+            // Update content (rest of function)
+            continuePageSetup(pageIndex, pageEl, el, promptElem);
+            
+            // Trigger slide-in animation based on direction
+            pageEl.classList.remove('slide-out-left', 'slide-out-right');
+            if (goingForward) {
+              pageEl.classList.add('slide-in-right');
+            } else {
+              pageEl.classList.add('slide-in-left');
+            }
+            
+            // Remove animation class after completion
+            setTimeout(() => {
+              pageEl.classList.remove('slide-in-right', 'slide-in-left');
+            }, 250);
+          }, 250);
+          
+          return; // Exit early, will continue after animation
+        }
+        
+        // First load - no animation
+        currentPage = pageIndex;
+        
+        console.log(`🔍 Starting page ${pageIndex + 1}, content:`, pages[pageIndex] ? pages[pageIndex].substring(0, 100) : 'UNDEFINED');
+        console.log(`🔍 DEBUG: Page ${pageIndex + 1} full content length:`, pages[pageIndex] ? pages[pageIndex].length : 0);
+        console.log(`🔍 DEBUG: Total pages available:`, pages.length);
+        
+        continuePageSetup(pageIndex, pageEl, el, promptElem);
+  }
+  
+  function continuePageSetup(pageIndex, pageEl, el, promptElem) {
+        // Clear all timeouts and intervals
+        console.log(`🧹 Cleaning up for page transition to slide ${pageIndex + 1}`);
+        clearAllTimeouts();
+        
+        
+        // Clear any ongoing typing animation
+        if (currentTypingInterval) {
+          clearInterval(currentTypingInterval);
+          currentTypingInterval = null;
+        }
+        
+        // Stop any typing animations that might be about to start
+        shouldContinueTyping = false;
+        
+        // Clear any running scrambling animation
+        if (currentInterval) {
+          clearInterval(currentInterval);
+          currentInterval = null;
+        }
+        
+        // Clean up unused DOM elements and event listeners
+        cleanupUnusedElements();
+        
+        // Reset animation state
+        isAnimating = false;
+        
+        // Reset line reveal mode
+        isInLineRevealMode = false;
+        
+        
+        // Set data-page attribute for CSS targeting
+        pageEl.setAttribute('data-page', pageIndex + 1);
+        
+        // Disable scanlines on slide 7 (last slide) only
+        if (pageIndex === 6) { // Slide 7 (index 6)
+          document.body.classList.add('no-scanlines');
+          console.log('🎬 Slide 7: Scanlines disabled');
+        } else {
+          document.body.classList.remove('no-scanlines');
+        }
+        
+       
+      // Use simple, consistent font sizing - smaller on mobile
+        const isMobile = window.innerWidth <= 768;
+        
+        // Set consistent text size for all slides
+        el.style.fontSize = isMobile ? '0.8rem' : '1.2rem';
+        
+        el.style.paddingBottom = ''; // Reset any padding
+       
+       // Show text for all pages
+       if (pageIndex < pages.length) {
+         const textWrap = document.getElementById('text-wrap');
+         if (textWrap) {
+           textWrap.style.display = 'block';
+         }
+         
+         el.textContent='';
+         isAnimating = false;
+         
+         // Animation classes removed
+         
+        // Collateral Murder slide detection removed
+         
+          // Use decoding animation for page 0 (without audio)
+          if (pageIndex === 0) {
+            console.log(`🎯 SLIDE 1: Starting decoding animation without audio`);
+            el.textContent = '';
+            // Show text wrap
+            const textWrap = document.getElementById('text-wrap');
+            if (textWrap) {
+              textWrap.style.display = 'block';
+            }
+            // Start decoding immediately (no delay needed on first slide)
+            scrambleFastChunks(el, pages[pageIndex], () => {
+              console.log(`✅ Slide 1 decoding completed`);
+            });
+         } else if (pageIndex === 2) {
+           // Slide 3 (video slide) - no text initially, just video
+           console.log(`🎬 Video slide ${pageIndex + 1}: Clearing text, showing video and "A FILM BY" only`);
+           el.textContent = '';
+           // Hide text wrap on video slide
+           const textWrap = document.getElementById('text-wrap');
+           if (textWrap) {
+             textWrap.style.display = 'none';
+           }
+         } else if (pageIndex === 6) {
+           // Slide 7 (trailer video slide) - no text, just video
+           console.log(`🎬 Trailer slide ${pageIndex + 1}: Clearing text, showing video only`);
+           el.textContent = '';
+           // Hide text wrap on trailer slide
+           const textWrap = document.getElementById('text-wrap');
+           if (textWrap) {
+             textWrap.style.display = 'none';
+           }
+         } else if (pageIndex === 1) {
+           // Slide 2 - wait for slide animation to complete before unscrambling
+           console.log(`🎯 SLIDE 2: Waiting for slide animation to complete before unscrambling`);
+           el.textContent = '';
+           // Show text wrap on other slides
+           const textWrap = document.getElementById('text-wrap');
+           if (textWrap) {
+             textWrap.style.display = 'block';
+           }
+           // Wait for slide animation to complete (750ms total: 250ms slide-out + 250ms delay + 250ms slide-in)
+           setTimeout(() => {
+             console.log(`🎯 SCRAMBLE: Starting delayed unscrambling for slide ${pageIndex + 1}:`, pages[pageIndex].substring(0, 100));
+             scrambleFastChunks(el, pages[pageIndex], () => {
+               // Text displayed
+               console.log(`✅ Slide 2 unscrambling completed`);
+             });
+           }, 750);
+         } else if (pageIndex === 3 || pageIndex === 4) {
+           // Slides 4 and 5 - character-by-character reveal with year pauses
+           console.log(`🎯 CHARACTER REVEAL: Starting for slide ${pageIndex + 1}`);
+           el.textContent = '';
+           // Show text wrap
+           const textWrap = document.getElementById('text-wrap');
+           if (textWrap) {
+             textWrap.style.display = 'block';
+           }
+           // Wait for slide animation to complete
+           setTimeout(() => {
+             console.log(`🎯 Starting character reveal for slide ${pageIndex + 1}:`, pages[pageIndex].substring(0, 100));
+             revealByCharacterWithYearPauses(el, pages[pageIndex], () => {
+               console.log(`✅ Slide ${pageIndex + 1} character reveal completed`);
+             });
+           }, 750);
+         } else {
+           // Show text wrap on other slides
+           const textWrap = document.getElementById('text-wrap');
+           if (textWrap) {
+             textWrap.style.display = 'block';
+           }
+           console.log(`🎯 SCRAMBLE: Displaying content for slide ${pageIndex + 1}:`, pages[pageIndex].substring(0, 100));
+           scrambleFastChunks(el, pages[pageIndex], () => {
+           // Text displayed
+           // Collateral Murder slide animation removed
+         });
+           }
+       }
+       
+      // Handle specific images for different slides
+      console.log(`🖼️ DEBUG: Checking images for pageIndex ${pageIndex} (slide ${pageIndex + 1})`);
+      if (pageIndex === 3) { // Slide 4 - Correa photo
+        console.log(`🖼️ DEBUG: Adding Correa photo for slide 4`);
+        addCorreaPhoto();
+      } else if (pageIndex === 4) { // Slide 5 - Arrest photo
+        console.log(`🖼️ DEBUG: Adding Arrest photo for slide 5`);
+        addArrestPhoto();
+      } else if (pageIndex === 5) { // Slide 6 - Cannes photo
+        console.log(`🖼️ DEBUG: Adding Cannes photo for slide 6`);
+        addCannesPhoto();
+      } else {
+        console.log(`🖼️ DEBUG: Removing all images for slide ${pageIndex + 1}`);
+        // Remove any existing images for other slides
+        removeAllImages();
+      }
+       
+       
+      // Audio removed from last slide
+       
+       // Audio disabled - no sounds
+       if (pageIndex + 1 === 7) {
+         console.log('🔇 Audio disabled for page 7');
+       }
+       
+       // Audio disabled - no sounds
+       if (pageIndex + 1 === 10) {
+         console.log('🔇 Audio disabled for page 10');
+       }
+       
+       // Audio disabled - no sounds
+       if (pageIndex + 1 === 9) {
+         console.log('🔇 Audio disabled for page 9');
+       }
+       
+       // Audio disabled - no sounds
+       if (pageIndex + 1 === 13) {
+         console.log('🔇 Audio disabled for page 13');
+       }
+       
+      // Audio disabled - no sounds
+      if (pageIndex + 1 === 15) {
+        console.log('🔇 Audio disabled for page 15');
+      }
+       
+       // Show video2 on slide 3
+       console.log(`🔍 Debug: Current page ${pageIndex + 1}, checking for video2 on slide 3...`);
+       if (pageIndex + 1 === 3) {
+         console.log('🎬 SLIDE 3 - Showing video2...');
+         showVideo2Background();
+       } else {
+         console.log(`🎬 Not slide 3 (current: ${pageIndex + 1}), hiding video2...`);
+         // Hide video2 on other pages
+         hideVideo2Background();
+       }
+       
+       // Show trailer on slide 7
+       console.log(`🔍 Debug: Current page ${pageIndex + 1}, checking for trailer on slide 7...`);
+       if (pageIndex + 1 === 7) {
+         console.log('🎬 SLIDE 7 - Showing trailer...');
+         showTrailerVideo();
+       } else {
+         console.log(`🎬 Not slide 7 (current: ${pageIndex + 1}), hiding trailer...`);
+         hideTrailerVideo();
+       }
+       
+       // Update nav message and slide counter
+       const navMsg = document.getElementById('nav-msg');
+       const slideCounter = document.getElementById('slide-counter');
+       
+       if (pageIndex <= 1) {
+         // Slides 1-2: Show PRESS SPACEBAR in nav-msg, hide slide counter
+         if (navMsg) {
+           navMsg.innerHTML = 'PRESS SPACEBAR<br>TO CONTINUE';
+           navMsg.style.fontSize = '0.7rem';
+           navMsg.style.textAlign = 'center';
+           navMsg.style.visibility = 'visible';
+           navMsg.style.minWidth = '120px';
+           navMsg.style.maxWidth = '140px';
+           navMsg.style.lineHeight = '1.3';
+           navMsg.style.whiteSpace = 'normal';
+         }
+         if (slideCounter) {
+           slideCounter.style.visibility = 'hidden';
+         }
+       } else {
+         // Slide 3 onwards: Show slide counter in nav-msg area, hide bottom counter
+         if (navMsg) {
+           navMsg.textContent = `SLIDE ${pageIndex + 1} / ${pages.length}`;
+           navMsg.style.fontSize = '0.7rem';
+           navMsg.style.textAlign = 'center';
+           navMsg.style.visibility = 'visible';
+           navMsg.style.minWidth = '100px';
+           navMsg.style.maxWidth = '140px';
+           navMsg.style.whiteSpace = 'nowrap';
+         }
+         if (slideCounter) {
+           slideCounter.style.visibility = 'hidden';
+         }
+       }
+       console.log(`📊 Navigation updated for page ${pageIndex + 1}`);
+       
+       // video2 handling removed - defunct
+     }
+
+    // createPersistentText function removed - no more duplicate text
+
+    /* ================== NAV ================== */
+    let lastAdvance = 0;
+    let isNavigating = false;
+    function throttle(){ const now=Date.now(); if (now-lastAdvance<600) return false; lastAdvance=now; return true; }
+    function safeAdvance(){ 
+      if (!throttle() || isNavigating) return; 
+      
+      unlockAudioContext(); 
+      isNavigating = true;
+      startPage(currentPage+1); 
+      setTimeout(() => { isNavigating = false; }, 600);
+    }
+    function goBack(){ 
+      if (!throttle() || isNavigating) return; 
+      unlockAudioContext(); 
+      isNavigating = true;
+      startPage(currentPage-1);
+      setTimeout(() => { isNavigating = false; }, 600);
+    }
+
+    // Use only click events to avoid double-firing
+    document.getElementById('nav-prev').addEventListener('click', goBack);
+    document.getElementById('nav-next').addEventListener('click', safeAdvance);
+document.addEventListener('click', (e)=>{ 
+      if (e.target.id==='nav-prev'||e.target.id==='nav-next') return; 
+      
+      // Ignore clicks on video player and controls (for trailer on slide 7 only)
+      // Only ignore video container clicks if we're on slide 7 (trailer with controls)
+      if (currentPage === 6) { // Slide 7 - trailer with video controls
+        if (e.target.tagName === 'VIDEO' || 
+            e.target.closest('video') ||
+            e.target.closest('#video-container') ||
+            e.target.closest('.video-container') ||
+            e.target.classList.contains('video-controls') ||
+            e.target.closest('.video-controls')) {
+          return; // Let video controls handle the click on slide 7 only
+        }
+      }
+      
+      // Don't navigate if already navigating
+      if (isNavigating) return;
+      
+      // Timeline reveal mode removed
+      
+      // If in line reveal mode, clicking anywhere advances to next line
+      if (isInLineRevealMode) {
+        e.preventDefault(); // Prevent any default click behavior
+        showNextLineManual();
+        return;
+      }
+      
+      // Normal mode: Left half of screen goes back, right half goes forward
+      if (e.clientX < window.innerWidth / 2) {
+        goBack();
+      } else {
+        safeAdvance();
+      }
+    });
+
+    // Font system - Crisp only
+    let currentFontIndex = 0; // Start with Crisp (index 0) as default
+    let currentFontSize = 1.0; // Size multiplier (1.0 = 100% of base size)
+    const fonts = [
+      { family: 'Crisp, "Courier New", monospace', size: '1.2rem' }
+    ];
+    
+    function cycleFontForward() {
+      // Only one font available, no cycling needed
+      applyCurrentFont();
+    }
+    
+    function cycleFontBackward() {
+      // Only one font available, no cycling needed
+      applyCurrentFont();
+    }
+    
+             function applyCurrentFont() {
+      const selectedFont = fonts[currentFontIndex];
+      console.log('Applying font:', selectedFont);
+      
+      // Update the CSS custom property
+      document.documentElement.style.setProperty('--font-family', selectedFont.family);
+      
+      // Apply font family to all text elements
+      const allTextElements = document.querySelectorAll('#unscramble, #prompt, #nav-msg, #nav-prev, #nav-next, #slide-counter');
+      allTextElements.forEach(el => {
+        if (el) {
+          el.style.fontFamily = selectedFont.family;
+        }
+      });
+      
+      // Also apply to body to ensure all elements inherit the font
+      document.body.style.fontFamily = selectedFont.family;
+      
+      console.log(`Font changed to: ${selectedFont.family}`);
+    }
+
+    window.addEventListener('keydown', (e) => {
+      // Mute any keyboard sounds
+      e.preventDefault();
+      
+      // Timeline reveal mode removed
+      
+      // Check if we're in line reveal mode
+      if (isInLineRevealMode && (e.code==='Space'||e.code==='ArrowRight')) {
+        showNextLineManual();
+        return;
+      }
+      
+      if (e.code==='Space'||e.code==='ArrowRight'){ unlockAudioContext(); startPage(currentPage+1); }
+      else if (e.code==='ArrowLeft'){ unlockAudioContext(); startPage(currentPage-1); }
+
+      const k = e.key;
+      if (k==='z'||k==='Z'){ toggleGreenOverlay('full'); }
+      else if (k==='x'||k==='X'){ toggleGreenOverlay('half'); }
+      else if (k==='c'||k==='C'){ toggleGreenOverlay('off'); }
+      else if (k==='f'||k==='F'){ toggleFullscreen(); }
+      // Audio test key removed - defunct
+      // video2 keyboard shortcuts removed - defunct
+    });
+    
+    // Fullscreen functionality
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+document.documentElement.requestFullscreen().catch(err => {
+  console.log(`Error attempting to enable fullscreen: ${err.message}`);
+});
+      } else {
+document.exitFullscreen();
+      }
+    }
+
+    /* ================== COLOR/GLOW ================== */
+    (function(){
+      const navPrev = document.getElementById('nav-prev');
+      const navNext = document.getElementById('nav-next');
+      const terminals = [document.getElementById('unscramble'), document.getElementById('prompt'), document.getElementById('nav-msg'), navPrev, navNext, document.getElementById('slide-counter')];
+      let colorIndex=1; // Default to bright green (option 2)
+      const colors=['#CCCCCC','#00DD00','#66FF66'];
+      function apply(){
+terminals.forEach(el=>{ if(!el) return;
+  el.style.color = colors[colorIndex];
+  el.style.textShadow = `0 0 2px ${colors[colorIndex]}, 0 0 8px ${colors[colorIndex]}, 0 0 16px ${colors[colorIndex]}`; // Enhanced glow with 3 layers
+  el.style.filter = 'saturate(1.3)'; // Increase saturation
+  el.style.webkitFilter = 'saturate(1.3)';
+});
+
+// Update cursor color to match
+const customCursor = document.getElementById('custom-cursor');
+if (customCursor) {
+  customCursor.style.background = colors[colorIndex];
+  customCursor.style.boxShadow = `0 0 2px ${colors[colorIndex]}, 0 0 8px ${colors[colorIndex]}, 0 0 16px ${colors[colorIndex]}`;
+}
+      }
+      document.addEventListener('keydown', (e)=>{
+if (e.key==='1'||e.key==='2'||e.key==='3'){ colorIndex=parseInt(e.key,10)-1; apply(); }
+      });
+      apply();
+    })();
+
+    /* ================== MOBILE TIMELINE HANDLER ================== */
+    // Dedicated mobile handler for timeline reveal - works on all mobile devices
+    // Mobile timeline handler removed
+
+    /* ================== INIT ================== */
+    window.onload = () => {
+      // Start presentation immediately when DOM is loaded
+      startPage(0);
+      
+      // Mobile timeline handler removed
+      
+      // Initialize audio context for mobile devices
+      if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        console.log('📱 Mobile device detected - preparing audio context');
+        // Pre-initialize audio context on mobile
+        initAudioContext();
+      }
+      
+      // Mute all audio by default
+      document.addEventListener('keydown', (e) => {
+        e.preventDefault();
+      });
+      
+      // Mute all audio elements by default
+      document.querySelectorAll('audio, video').forEach(media => {
+        media.muted = true;
+        media.volume = 0;
+      });
+      
+      // Video will only show on page 15 via the page navigation logic
+      // Hide any images that fail to load
+      document.querySelectorAll('#page img').forEach(img => {
+img.addEventListener('error', () => {
+  img.style.display = 'none';
+});
+      });
+      
+      // Custom cursor functionality
+      const customCursor = document.getElementById('custom-cursor');
+      
+      document.addEventListener('mousemove', (e) => {
+customCursor.style.display = 'block';
+customCursor.style.left = e.clientX - 10 + 'px';
+customCursor.style.top = e.clientY - 10 + 'px';
+      });
+      
+      document.addEventListener('mouseleave', () => {
+customCursor.style.display = 'none';
+      });
+      
+      // Apply the default font (Crisp) on page load
+      applyCurrentFont();
+    };
+    
+    // Mobile text wrapping function
+    function wrapTextForMobile(text) {
+      // For now, just return the text as-is since we don't need special mobile wrapping
+      return text;
+    }
+    
+    // Global green overlay toggle function
+    let currentOverlayMode = 'full'; // Track current overlay mode - default to full green
+    
+    function toggleGreenOverlay(mode) {
+      currentOverlayMode = mode; // Store the current mode
+      const images = document.querySelectorAll('#page img');
+      images.forEach(img => {
+applyOverlayToImage(img, mode);
+      });
+      
+    }
+    
+       // Apply overlay to a specific image
+      function applyOverlayToImage(img, mode) {
+// Check if this is photo23 (which should stay dimmed) or page 10 images (which should be darker)
+const isDimmedPhoto = img.id === 'img-23';
+const isDarkerPhoto = img.id.startsWith('img-10');
+const baseBrightness = isDarkerPhoto ? 0.5 : (isDimmedPhoto ? 0.5 : 0.8);
+
+if (mode === 'full') {
+  img.style.filter = `grayscale(1) brightness(${baseBrightness}) contrast(1.2) sepia(1) hue-rotate(60deg) saturate(4)`;
+} else if (mode === 'half') {
+  img.style.filter = `brightness(${baseBrightness}) grayscale(1)`;
+} else if (mode === 'off') {
+  img.style.filter = `brightness(${baseBrightness})`;
+}
+      }
+    
+     
+     
+  </script>
+  
+  
+  
+</body>
+</html>
+  
