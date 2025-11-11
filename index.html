@@ -1469,17 +1469,17 @@ FOR THIS, WE NEED YOUR HELP.
       }
       
       // Create a new audio instance for typing sound
-      typingAudio = new Audio('VIDEOS/speduptyping.wav');
+      typingAudio = new Audio('VIDEOS/LONGTYPINGSOUND.wav');
       typingAudio.volume = 0.3; // Match unscramble audio volume
       typingAudio.loop = true; // Loop during typing
       typingAudio.muted = false; // Ensure not muted
       
       // Play typing audio
-      console.log(' Playing speduptyping.wav for 6BDM message... Volume:', typingAudio.volume, 'Muted:', typingAudio.muted);
+      console.log(' Playing LONGTYPINGSOUND.wav for 6BDM message... Volume:', typingAudio.volume, 'Muted:', typingAudio.muted);
       typingAudio.play().then(() => {
-        console.log(' speduptyping.wav playing successfully - Volume:', typingAudio.volume, 'Paused:', typingAudio.paused);
+        console.log(' LONGTYPINGSOUND.wav playing successfully - Volume:', typingAudio.volume, 'Paused:', typingAudio.paused);
       }).catch(err => {
-        console.error(' speduptyping.wav play failed:', err.message);
+        console.error(' LONGTYPINGSOUND.wav play failed:', err.message);
       });
       
       let lineIndex = 0;
@@ -2857,7 +2857,7 @@ FOR THIS, WE NEED YOUR HELP.
       }
       
       // Start typing audio
-      characterRevealTypingAudio = new Audio('VIDEOS/speduptyping.wav');
+      characterRevealTypingAudio = new Audio('VIDEOS/LONGTYPINGSOUND.wav');
       characterRevealTypingAudio.volume = 0.3;
       characterRevealTypingAudio.loop = true;
       characterRevealTypingAudio.muted = false;
