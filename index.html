@@ -1057,7 +1057,7 @@ z-index: 2 !important;
 </head>
 <body>
 
-  <!-- Video for slide 3: THISMUSTBEITMONDAY.mp4 with built-in audio (plays once, triggers 6BDM message on end) -->
+  <!-- Video for slide 3: TUESDAY.mp4 with built-in audio (plays once, triggers 6BDM message after 2 seconds) -->
   <video
     id="bg-video2"
     class="bg-video"
@@ -1072,7 +1072,7 @@ z-index: 2 !important;
     volume="0.7"
     style="display: none;"
   >
-    <source src="https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/THISMUSTBEITMONDAY.mp4" type="video/mp4" />
+    <source src="VIDEOS/TUESDAY.mp4" type="video/mp4" />
   </video>
 
   <!-- Trailer video for slide 7 with controls -->
@@ -1302,13 +1302,25 @@ FOR THIS, WE NEED YOUR HELP.
           video.removeEventListener('error', onError);
         };
         
+        let subtitleTriggered = false;
+        
+        const onTimeUpdate = () => {
+          if (!subtitleTriggered && video.currentTime >= 2.0) {
+            console.log(' Video2 reached 2 seconds - triggering 6BDM message...');
+            subtitleTriggered = true;
+            startVideoEndSubtitle();
+            video.removeEventListener('timeupdate', onTimeUpdate);
+          }
+        };
+        
         const onEnded = () => {
-          console.log(' Video2 ended - triggering 6BDM message...');
-          startVideoEndSubtitle();
+          console.log(' Video2 ended');
+          video.removeEventListener('timeupdate', onTimeUpdate);
         };
         
         video.addEventListener('canplay', onCanPlay);
         video.addEventListener('error', onError);
+        video.addEventListener('timeupdate', onTimeUpdate);
         video.addEventListener('ended', onEnded);
         
         video.play().then(() => {
