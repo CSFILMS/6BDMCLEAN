@@ -1513,7 +1513,7 @@ FOR THIS, WE NEED YOUR HELP.
       
       // Create a new audio instance for typing sound
       typingAudio = new Audio('VIDEOS/LONGTYPINGSOUND.wav');
-      typingAudio.volume = 0.9; // Much louder typing audio volume
+      typingAudio.volume = 1.0; // Maximum typing audio volume
       typingAudio.loop = true; // Loop during typing
       typingAudio.muted = false; // Ensure not muted
       
@@ -2499,7 +2499,7 @@ FOR THIS, WE NEED YOUR HELP.
         // Create and play typing audio
         const slideTypingAudio = new Audio('VIDEOS/speduptyping.wav');
         slideTypingAudio.loop = true;
-        slideTypingAudio.volume = 0.8; // Increased volume
+        slideTypingAudio.volume = 1.0; // Maximum volume
         slideTypingAudio.preload = 'auto';
         slideTypingAudio.playbackRate = 1.0; // Normal speed
         slideTypingAudio.preservesPitch = true; // Preserve pitch
@@ -2752,7 +2752,7 @@ FOR THIS, WE NEED YOUR HELP.
         setTimeout(() => {
           // Start typing audio right before animation
           typingAudio = new Audio('VIDEOS/LONGTYPINGSOUND.wav');
-          typingAudio.volume = 0.9;
+          typingAudio.volume = 1.0;
           typingAudio.loop = true;
           typingAudio.muted = false;
           
@@ -2895,7 +2895,7 @@ FOR THIS, WE NEED YOUR HELP.
         setTimeout(() => {
           // Start typing audio right before animation
           typingAudio = new Audio('VIDEOS/LONGTYPINGSOUND.wav');
-          typingAudio.volume = 0.9;
+          typingAudio.volume = 1.0;
           typingAudio.loop = true;
           typingAudio.muted = false;
           
@@ -2944,7 +2944,7 @@ FOR THIS, WE NEED YOUR HELP.
       
       // Start typing audio
       characterRevealTypingAudio = new Audio('VIDEOS/LONGTYPINGSOUND.wav');
-      characterRevealTypingAudio.volume = 0.9;
+      characterRevealTypingAudio.volume = 1.0;
       characterRevealTypingAudio.loop = true;
       characterRevealTypingAudio.muted = false;
       
