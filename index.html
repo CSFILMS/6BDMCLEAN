@@ -1267,9 +1267,10 @@ FOR THIS, WE NEED YOUR HELP.
       const video = document.getElementById('bg-video2');
       const filmByText = document.getElementById('film-by-text');
       
-      // Show "A FILM BY EUGENE JARECKI" text
+      // Hide text initially (will be typed in at 1 second)
       if (filmByText) {
-        filmByText.style.display = 'block';
+        filmByText.style.display = 'none';
+        filmByText.textContent = '';
       }
       
       if (video) {
@@ -1302,9 +1303,18 @@ FOR THIS, WE NEED YOUR HELP.
           video.removeEventListener('error', onError);
         };
         
+        let filmByTriggered = false;
         let subtitleTriggered = false;
         
         const onTimeUpdate = () => {
+          // Trigger "A FILM BY EUGENE JARECKI" typing at 1 second
+          if (!filmByTriggered && video.currentTime >= 1.0) {
+            console.log(' Video2 reached 1 second - typing A FILM BY EUGENE JARECKI...');
+            filmByTriggered = true;
+            typeFilmByText();
+          }
+          
+          // Trigger 6BDM message at 2 seconds
           if (!subtitleTriggered && video.currentTime >= 2.0) {
             console.log(' Video2 reached 2 seconds - triggering 6BDM message...');
             subtitleTriggered = true;
@@ -1346,6 +1356,7 @@ FOR THIS, WE NEED YOUR HELP.
       // Hide "A FILM BY EUGENE JARECKI" text
       if (filmByText) {
         filmByText.style.display = 'none';
+        filmByText.textContent = ''; // Clear content
       }
       
       // Hide 6BDM subtitle
@@ -1435,6 +1446,26 @@ FOR THIS, WE NEED YOUR HELP.
       }
     }
     
+    // Function to type "A FILM BY EUGENE JARECKI" text
+    function typeFilmByText() {
+      const filmByText = document.getElementById('film-by-text');
+      if (!filmByText) return;
+      
+      const text = 'A FILM BY EUGENE JARECKI';
+      filmByText.style.display = 'block';
+      filmByText.textContent = '';
+      
+      let charIndex = 0;
+      const typingInterval = setInterval(() => {
+        if (charIndex < text.length) {
+          filmByText.textContent = text.substring(0, charIndex + 1);
+          charIndex++;
+        } else {
+          clearInterval(typingInterval);
+        }
+      }, 50); // 50ms per character, same as 6BDM message
+    }
+
     // Function to start typing subtitle when video ends
     function startVideoEndSubtitle() {
       // Create or get the subtitle element
