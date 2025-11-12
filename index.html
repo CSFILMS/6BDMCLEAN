@@ -2097,7 +2097,7 @@ FOR THIS, WE NEED YOUR HELP.
       cannesContainer.id = 'cannes-photo-container';
       cannesContainer.style.cssText = `
         position: fixed !important;
-        bottom: ${isMobile ? 'calc(20vh - 75px)' : 'calc(18vh - 75px)'} !important;
+        bottom: ${isMobile ? 'calc(20vh - 25px)' : 'calc(18vh - 25px)'} !important;
         left: 50% !important;
         transform: translateX(calc(-50% + 50px)) !important;
         max-width: ${isMobile ? '63.75vw' : '52.5vw'} !important;
@@ -2135,11 +2135,11 @@ FOR THIS, WE NEED YOUR HELP.
         arrestImg.style.setProperty('opacity', '0.65', 'important');
       }, 50);
       
-      // Quick fade-in effect for Cannes photo (90% opacity)
+      // Quick fade-in effect for Cannes photo (reduced opacity)
       cannesContainer.style.opacity = '0';
       setTimeout(() => {
         cannesContainer.style.opacity = '1';
-        cannesImg.style.opacity = '0.9';
+        cannesImg.style.opacity = '0.6';
         // Set steady filter without flash
         cannesImg.style.filter = 'brightness(0.8) sepia(1) hue-rotate(60deg) saturate(4.0)';
       }, 50);
