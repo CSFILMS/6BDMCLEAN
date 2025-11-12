@@ -2243,7 +2243,7 @@ FOR THIS, WE NEED YOUR HELP.
         max-height: none !important;
         object-fit: cover !important;
         object-position: center !important;
-        filter: brightness(0.7) sepia(1) hue-rotate(60deg) saturate(1.5) !important;
+        filter: brightness(0.7) sepia(1) hue-rotate(60deg) saturate(3.0) !important;
         display: block !important;
         opacity: 0 !important;
         transition: opacity 0.4s ease-in-out !important;
@@ -2254,7 +2254,7 @@ FOR THIS, WE NEED YOUR HELP.
       imageContainer.style.opacity = '0';
       setTimeout(() => {
         imageContainer.style.opacity = '1';
-        img.style.opacity = '0.5';
+        img.style.opacity = '0.75';
       }, 50);
       
       console.log('Correa photo added to slide 4 as large background element');
