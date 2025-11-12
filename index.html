@@ -2223,7 +2223,7 @@ FOR THIS, WE NEED YOUR HELP.
         bottom: ${isMobile ? '15vh' : '12vh'} !important;
         left: 50% !important;
         transform: translateX(-30%) !important;
-        width: 90vw !important;
+        width: 75vw !important;
         height: auto !important;
         z-index: 0 !important;
         pointer-events: none !important;
@@ -2232,7 +2232,7 @@ FOR THIS, WE NEED YOUR HELP.
       `;
       document.body.appendChild(imageContainer);
       
-      // Add Correa photo - large background with desaturation, allowed to be cropped
+      // Add Correa photo - large background with desaturation and green tint, allowed to be cropped
       const img = document.createElement('img');
       img.id = 'correa-photo';
       img.src = 'PHOTOS/photo_correa.jpg';
@@ -2243,7 +2243,7 @@ FOR THIS, WE NEED YOUR HELP.
         max-height: none !important;
         object-fit: cover !important;
         object-position: center !important;
-        filter: brightness(0.7) saturate(0.4) sepia(0.3) !important;
+        filter: brightness(0.7) saturate(0.5) hue-rotate(80deg) sepia(0.2) !important;
         display: block !important;
         opacity: 0 !important;
         transition: opacity 0.4s ease-in-out !important;
