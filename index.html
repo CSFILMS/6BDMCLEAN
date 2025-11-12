@@ -3301,13 +3301,15 @@ FOR THIS, WE NEED YOUR HELP.
            // Slide 2 - wait for slide animation to complete before unscrambling
            console.log(` SLIDE 2: Waiting for slide animation to complete before unscrambling`);
            
-           // Play slide 2 audio once (uninterrupted)
+           // Play slide 2 audio after 1 second delay
            if (audioPool.slide2 && audioPool.slide2.paused) {
-             console.log(' Starting slide 2 audio (uninterrupted)');
-             audioPool.slide2.currentTime = 0;
-             audioPool.slide2.loop = false;
-             audioPool.slide2.volume = 1.0;
-             audioPool.slide2.play().catch(err => console.log(' Slide 2 audio blocked:', err.message));
+             setTimeout(() => {
+               console.log(' Starting slide 2 audio (1 second delay)');
+               audioPool.slide2.currentTime = 0;
+               audioPool.slide2.loop = false;
+               audioPool.slide2.volume = 1.0;
+               audioPool.slide2.play().catch(err => console.log(' Slide 2 audio blocked:', err.message));
+             }, 1000);
            }
            
            el.textContent = '';
