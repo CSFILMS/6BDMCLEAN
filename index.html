@@ -2219,20 +2219,20 @@ FOR THIS, WE NEED YOUR HELP.
       imageContainer.id = 'correa-photo-container';
       imageContainer.style.cssText = `
         position: fixed !important;
-        top: ${isMobile ? '1vh' : '2vh'} !important;
+        top: ${isMobile ? '0vh' : '0vh'} !important;
         bottom: ${isMobile ? '15vh' : '12vh'} !important;
         left: 50% !important;
         transform: translateX(-60%) !important;
-        width: ${isMobile ? '110vw' : '95vw'} !important;
+        width: 100vw !important;
         height: auto !important;
         z-index: 0 !important;
         pointer-events: none !important;
-        overflow: visible !important;
+        overflow: hidden !important;
         transition: opacity 0.15s ease-in-out !important;
       `;
       document.body.appendChild(imageContainer);
       
-      // Add Correa photo - large background with desaturation
+      // Add Correa photo - large background with desaturation, allowed to be cropped
       const img = document.createElement('img');
       img.id = 'correa-photo';
       img.src = 'PHOTOS/photo_correa.jpg';
@@ -2241,7 +2241,8 @@ FOR THIS, WE NEED YOUR HELP.
         height: 100% !important;
         max-width: none !important;
         max-height: none !important;
-        object-fit: contain !important;
+        object-fit: cover !important;
+        object-position: center !important;
         filter: brightness(0.7) saturate(0.4) sepia(0.3) !important;
         display: block !important;
         opacity: 0 !important;
