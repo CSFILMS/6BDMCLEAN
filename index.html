@@ -1252,13 +1252,34 @@ FOR THIS, WE NEED YOUR HELP.
         // Initialize audio context first
         initAudioContext();
         
-            if (audioContext && audioContext.state === 'suspended') {
-              audioContext.resume().then(() => {
-                audioContextUnlocked = true;
-                console.log(' Audio context unlocked via resume');
-              }).catch(resumeErr => {
-                console.log(' Audio context resume failed:', resumeErr.message);
-              });
+        if (audioContext && audioContext.state === 'suspended') {
+          audioContext.resume().then(() => {
+            audioContextUnlocked = true;
+            console.log(' Audio context unlocked via resume');
+          }).catch(resumeErr => {
+            console.log(' Audio context resume failed:', resumeErr.message);
+          });
+        } else {
+          audioContextUnlocked = true;
+        }
+        
+        // For mobile: Create and immediately pause a dummy audio to unlock audio playback
+        // This allows future audio elements to play without user interaction
+        try {
+          const dummyAudio = new Audio();
+          dummyAudio.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+          const playPromise = dummyAudio.play();
+          if (playPromise !== undefined) {
+            playPromise.then(() => {
+              dummyAudio.pause();
+              dummyAudio.remove();
+              console.log(' Mobile audio unlocked via dummy audio');
+            }).catch(err => {
+              console.log(' Dummy audio play blocked (expected on some browsers):', err.message);
+            });
+          }
+        } catch (err) {
+          console.log(' Dummy audio creation failed:', err.message);
         }
       }
     }
@@ -1520,13 +1541,17 @@ FOR THIS, WE NEED YOUR HELP.
       typingAudio.loop = true; // Loop during typing
       typingAudio.muted = false; // Ensure not muted
       
-      // Play typing audio
+      // Play typing audio with mobile-friendly error handling
       console.log(' Playing LONGTYPINGSOUND.wav for 6BDM message... Volume:', typingAudio.volume, 'Muted:', typingAudio.muted);
-      typingAudio.play().then(() => {
-        console.log(' LONGTYPINGSOUND.wav playing successfully - Volume:', typingAudio.volume, 'Paused:', typingAudio.paused);
-      }).catch(err => {
-        console.error(' LONGTYPINGSOUND.wav play failed:', err.message);
-      });
+      const playPromise = typingAudio.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          console.log(' LONGTYPINGSOUND.wav playing successfully - Volume:', typingAudio.volume, 'Paused:', typingAudio.paused);
+        }).catch(err => {
+          console.log(' LONGTYPINGSOUND.wav play blocked (mobile autoplay restriction) - continuing silently:', err.message);
+          // Continue typing animation without audio on mobile
+        });
+      }
       
       let lineIndex = 0;
       let charIndex = 0;
@@ -2528,23 +2553,32 @@ FOR THIS, WE NEED YOUR HELP.
           }
         };
         
-        // Play audio immediately
+        // Play audio immediately with mobile-friendly error handling
         console.log(' Attempting to play typing audio immediately...');
-        slideTypingAudio.play()
-          .then(() => {
-            console.log(' Typing audio playing successfully!');
-          })
-          .catch(err => {
-            console.error(' Typing audio play failed:', err.name, err.message);
-            // Try loading first, then play
-            slideTypingAudio.load();
-            slideTypingAudio.addEventListener('canplaythrough', () => {
-              console.log(' Audio loaded, trying to play again...');
-              slideTypingAudio.play()
-                .then(() => console.log(' Typing audio playing on retry!'))
-                .catch(err2 => console.error(' Retry failed:', err2));
-            }, { once: true });
-          });
+        const playPromise = slideTypingAudio.play();
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              console.log(' Typing audio playing successfully!');
+            })
+            .catch(err => {
+              console.log(' Typing audio play blocked (mobile autoplay restriction) - continuing silently:', err.name, err.message);
+              // Try loading first, then play as fallback
+              slideTypingAudio.load();
+              slideTypingAudio.addEventListener('canplaythrough', () => {
+                console.log(' Audio loaded, trying to play again...');
+                const retryPromise = slideTypingAudio.play();
+                if (retryPromise !== undefined) {
+                  retryPromise
+                    .then(() => console.log(' Typing audio playing on retry!'))
+                    .catch(err2 => {
+                      console.log(' Retry blocked (expected on mobile) - continuing animation silently:', err2.message);
+                      // Continue without audio - animation will work fine
+                    });
+                }
+              }, { once: true });
+            });
+        }
         
         // Function to type out a single line character by character
         const typeLine = (span, callback) => {
@@ -2769,11 +2803,14 @@ FOR THIS, WE NEED YOUR HELP.
           typingAudio.muted = false;
           
           console.log(' Playing typing sound for slide 2 (synced with animation)...');
-          typingAudio.play().then(() => {
-            console.log(' Typing sound playing on slide 2');
-          }).catch(err => {
-            console.log(' Typing sound play failed:', err);
-          });
+          const playPromise = typingAudio.play();
+          if (playPromise !== undefined) {
+            playPromise.then(() => {
+              console.log(' Typing sound playing on slide 2');
+            }).catch(err => {
+              console.log(' Typing sound play blocked (mobile) - continuing silently:', err.message);
+            });
+          }
           
           // Start animation
           animationId = requestAnimationFrame(animate);
@@ -2931,11 +2968,14 @@ FOR THIS, WE NEED YOUR HELP.
           typingAudio.muted = false;
           
           console.log(' Playing typing sound for slide 2 ultrafast (synced with animation)...');
-          typingAudio.play().then(() => {
-            console.log(' Typing sound playing on slide 2');
-          }).catch(err => {
-            console.log(' Typing sound play failed:', err);
-          });
+          const playPromise = typingAudio.play();
+          if (playPromise !== undefined) {
+            playPromise.then(() => {
+              console.log(' Typing sound playing on slide 2');
+            }).catch(err => {
+              console.log(' Typing sound play blocked (mobile) - continuing silently:', err.message);
+            });
+          }
           
           // Start animation
           animationId = requestAnimationFrame(animate);
@@ -2987,11 +3027,14 @@ FOR THIS, WE NEED YOUR HELP.
       characterRevealTypingAudio.muted = false;
       
       console.log(' Starting character reveal with typing audio...');
-      characterRevealTypingAudio.play().then(() => {
-        console.log(' Character reveal typing audio playing');
-      }).catch(err => {
-        console.error(' Typing audio play failed:', err.message);
-      });
+      const playPromise = characterRevealTypingAudio.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          console.log(' Character reveal typing audio playing');
+        }).catch(err => {
+          console.log(' Character reveal audio blocked (mobile) - continuing silently:', err.message);
+        });
+      }
       
       element.textContent = '';
       let charIndex = 0;
