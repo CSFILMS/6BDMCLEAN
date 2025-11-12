@@ -2223,11 +2223,12 @@ FOR THIS, WE NEED YOUR HELP.
         bottom: ${isMobile ? '15vh' : '12vh'} !important;
         right: ${isMobile ? '2%' : '3%'} !important;
         left: auto !important;
-        transform: none !important;
-        width: 32vw !important;
+        transform: scale(0.8) !important;
+        transform-origin: right center !important;
+        width: 40vw !important;
         z-index: 5 !important;
         pointer-events: none !important;
-        overflow: hidden !important;
+        overflow: visible !important;
         transition: opacity 0.15s ease-in-out !important;
       `;
       document.body.appendChild(imageContainer);
