@@ -2214,21 +2214,18 @@ FOR THIS, WE NEED YOUR HELP.
       // Check if mobile
       const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       
-      // Create container for Correa photo - huge background element spanning almost entire screen
+      // Create container for Correa photo - big, centered, uncropped, under text
       const imageContainer = document.createElement('div');
       imageContainer.id = 'correa-photo-container';
       imageContainer.style.cssText = `
         position: fixed !important;
-        top: ${isMobile ? '2vh' : '3vh'} !important;
-        bottom: ${isMobile ? '15vh' : '12vh'} !important;
-        right: ${isMobile ? '50%' : '65%'} !important;
-        left: auto !important;
-        transform: scale(0.8) !important;
-        transform-origin: right center !important;
-        width: 40vw !important;
-        z-index: 5 !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        width: auto !important;
+        height: 80vh !important;
+        z-index: 0 !important;
         pointer-events: none !important;
-        overflow: visible !important;
         transition: opacity 0.15s ease-in-out !important;
       `;
       document.body.appendChild(imageContainer);
@@ -2239,17 +2236,16 @@ FOR THIS, WE NEED YOUR HELP.
       if (pageEl) pageEl.style.background = 'transparent';
       if (textWrap) textWrap.style.background = 'transparent';
       
-      // Add Correa photo - large background with green terminal effects from lorem_new.html
+      // Add Correa photo - big, uncropped, with green terminal effects
       const img = document.createElement('img');
       img.id = 'correa-photo';
       img.src = 'PHOTOS/photo_correa.jpg';
       img.style.cssText = `
-        width: 100% !important;
+        width: auto !important;
         height: 100% !important;
         max-width: none !important;
         max-height: none !important;
-        object-fit: cover !important;
-        object-position: left center !important;
+        object-fit: contain !important;
         filter: brightness(0.7) sepia(1) hue-rotate(60deg) saturate(3.0) !important;
         display: block !important;
         opacity: 0 !important;
