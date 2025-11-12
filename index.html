@@ -1982,7 +1982,7 @@ FOR THIS, WE NEED YOUR HELP.
       `;
       document.body.appendChild(arrestContainer);
       
-      // Add Julian photo - no effects
+      // Add Julian photo - with Correa effects
       const arrestImg = document.createElement('img');
       arrestImg.id = 'arrest-photo-slide6';
       arrestImg.src = 'PHOTOS/photo_julian3.png';
@@ -1992,7 +1992,7 @@ FOR THIS, WE NEED YOUR HELP.
         max-width: none !important;
         max-height: none !important;
         object-fit: contain !important;
-        filter: none !important;
+        filter: brightness(0.7) sepia(1) hue-rotate(60deg) saturate(3.0) !important;
         display: block !important;
         opacity: 0 !important;
         transition: opacity 0.4s ease-in-out !important;
@@ -2035,7 +2035,7 @@ FOR THIS, WE NEED YOUR HELP.
       `;
       cannesContainer.appendChild(cannesImg);
       
-      // Quick fade-in effect for Julian photo - no effects
+      // Quick fade-in effect for Julian photo - with Correa effects
       arrestContainer.style.opacity = '0';
       setTimeout(() => {
         arrestContainer.style.opacity = '1';
@@ -2080,7 +2080,7 @@ FOR THIS, WE NEED YOUR HELP.
       `;
       document.body.appendChild(imageContainer);
       
-      // Add Arrest photo - no effects
+      // Add Arrest photo - with Correa effects
       const img = document.createElement('img');
       img.id = 'arrest-photo';
       img.src = 'PHOTOS/photo_arrest.webp';
@@ -2090,7 +2090,7 @@ FOR THIS, WE NEED YOUR HELP.
         max-width: none !important;
         max-height: none !important;
         object-fit: contain !important;
-        filter: none !important;
+        filter: brightness(0.7) sepia(1) hue-rotate(60deg) saturate(3.0) !important;
         display: block !important;
         opacity: 0 !important;
         transition: opacity 0.4s ease-in-out !important;
@@ -2132,7 +2132,7 @@ FOR THIS, WE NEED YOUR HELP.
         transition: opacity 0.15s ease-in-out !important;
       `;
       
-      // Add desktop-only styling with higher specificity - no effects
+      // Add desktop-only styling with higher specificity - with Correa effects
       const style = document.createElement('style');
       style.textContent = `
         @media (min-width: 769px) {
@@ -2142,7 +2142,7 @@ FOR THIS, WE NEED YOUR HELP.
           #collateral-photo {
             display: block !important;
             opacity: 1 !important;
-            filter: none !important;
+            filter: brightness(0.7) sepia(1) hue-rotate(60deg) saturate(3.0) !important;
           }
         }
         @media (max-width: 768px) {
@@ -2152,7 +2152,7 @@ FOR THIS, WE NEED YOUR HELP.
           #collateral-photo {
             display: block !important;
             opacity: 1 !important;
-            filter: none !important;
+            filter: brightness(0.7) sepia(1) hue-rotate(60deg) saturate(3.0) !important;
           }
         }
         /* Override any conflicting CSS rules */
@@ -2164,7 +2164,7 @@ FOR THIS, WE NEED YOUR HELP.
       document.head.appendChild(style);
       document.getElementById('page').appendChild(imageContainer);
       
-      // Add Collateral photo - no effects
+      // Add Collateral photo - with Correa effects
       const img = document.createElement('img');
       img.id = 'collateral-photo';
       img.src = 'PHOTOS/photo_collateral_crop.jpg';
@@ -2174,7 +2174,7 @@ FOR THIS, WE NEED YOUR HELP.
         max-width: none !important;
         max-height: none !important;
         object-fit: contain !important;
-        filter: none !important;
+        filter: brightness(0.7) sepia(1) hue-rotate(60deg) saturate(3.0) !important;
         display: block !important;
         opacity: 0 !important;
         transition: opacity 0.4s ease-in-out !important;
