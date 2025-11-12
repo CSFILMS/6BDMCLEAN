@@ -3314,14 +3314,16 @@ FOR THIS, WE NEED YOUR HELP.
            // Slides 4 and 5 - character-by-character reveal with year pauses
            console.log(` CHARACTER REVEAL: Starting for slide ${pageIndex + 1}`);
            
-           // Play slide 4 or 5 audio once (uninterrupted)
+           // Play slide 4 or 5 audio after 1 second delay
            const slideAudio = pageIndex === 3 ? audioPool.slide4 : audioPool.slide5;
            if (slideAudio && slideAudio.paused) {
-             console.log(` Starting slide ${pageIndex + 1} audio (uninterrupted)`);
-             slideAudio.currentTime = 0;
-             slideAudio.loop = false;
-             slideAudio.volume = 1.0;
-             slideAudio.play().catch(err => console.log(` Slide ${pageIndex + 1} audio blocked:`, err.message));
+             setTimeout(() => {
+               console.log(` Starting slide ${pageIndex + 1} audio (1 second delay)`);
+               slideAudio.currentTime = 0;
+               slideAudio.loop = false;
+               slideAudio.volume = 1.0;
+               slideAudio.play().catch(err => console.log(` Slide ${pageIndex + 1} audio blocked:`, err.message));
+             }, 1000);
            }
            
            el.textContent = '';
