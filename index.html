@@ -2049,9 +2049,9 @@ FOR THIS, WE NEED YOUR HELP.
         position: fixed !important;
         bottom: ${isMobile ? 'calc(18vh + 150px)' : 'calc(16vh + 150px)'} !important;
         left: ${isMobile ? '5vw' : '5vw'} !important;
-        max-width: ${isMobile ? '54vw' : '47vw'} !important;
+        max-width: ${isMobile ? '32vw' : '28vw'} !important;
         max-height: ${isMobile ? '60vh' : '70vh'} !important;
-        width: ${isMobile ? '54vw' : '47vw'} !important;
+        width: ${isMobile ? '32vw' : '28vw'} !important;
         height: auto !important;
         z-index: 2 !important;
         pointer-events: none !important;
@@ -2084,9 +2084,9 @@ FOR THIS, WE NEED YOUR HELP.
       cannesContainer.id = 'cannes-photo-container';
       cannesContainer.style.cssText = `
         position: fixed !important;
-        bottom: ${isMobile ? '20vh' : '18vh'} !important;
+        bottom: ${isMobile ? 'calc(20vh - 75px)' : 'calc(18vh - 75px)'} !important;
         left: 50% !important;
-        transform: translateX(-50%) !important;
+        transform: translateX(calc(-50% - 50px)) !important;
         max-width: ${isMobile ? '85vw' : '70vw'} !important;
         max-height: ${isMobile ? '50vh' : '45vh'} !important;
         width: ${isMobile ? '85vw' : '70vw'} !important;
