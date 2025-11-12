@@ -2226,12 +2226,18 @@ FOR THIS, WE NEED YOUR HELP.
         transform: none !important;
         width: 40vw !important;
         height: auto !important;
-        z-index: 0 !important;
+        z-index: 5 !important;
         pointer-events: none !important;
         overflow: hidden !important;
         transition: opacity 0.15s ease-in-out !important;
       `;
       document.body.appendChild(imageContainer);
+      
+      // Make sure page and text-wrap have transparent backgrounds on slide 4
+      const pageEl = document.getElementById('page');
+      const textWrap = document.getElementById('text-wrap');
+      if (pageEl) pageEl.style.background = 'transparent';
+      if (textWrap) textWrap.style.background = 'transparent';
       
       // Add Correa photo - large background with green terminal effects from lorem_new.html
       const img = document.createElement('img');
