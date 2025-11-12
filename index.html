@@ -3292,6 +3292,23 @@ FOR THIS, WE NEED YOUR HELP.
         // Reset line reveal mode
         isInLineRevealMode = false;
         
+        // Clear all typing text elements to prevent messages appearing on next slide
+        const filmByText = document.getElementById('film-by-text');
+        if (filmByText) {
+          filmByText.textContent = '';
+          filmByText.style.display = 'none';
+        }
+        
+        const bdmSubtitle = document.getElementById('bdm-subtitle');
+        if (bdmSubtitle) {
+          bdmSubtitle.remove();
+        }
+        
+        // Clear main text element to prevent remnants
+        if (el) {
+          el.textContent = '';
+        }
+        
         
         // Set data-page attribute for CSS targeting
         pageEl.setAttribute('data-page', pageIndex + 1);
