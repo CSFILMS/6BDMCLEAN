@@ -1287,7 +1287,7 @@ FOR THIS, WE NEED YOUR HELP.
           // Create slide 4 audio
           if (!audioPool.slide4) {
             audioPool.slide4 = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/251112-typing_audio-slide4.mp3');
-            audioPool.slide4.loop = true;
+            audioPool.slide4.loop = false; // Play once, no loop
             audioPool.slide4.volume = 1.0;
             audioPool.slide4.preload = 'auto';
             console.log(' Created slide4 audio');
@@ -1296,7 +1296,7 @@ FOR THIS, WE NEED YOUR HELP.
           // Create slide 5 audio
           if (!audioPool.slide5) {
             audioPool.slide5 = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/251112-typing_audio-slide5.mp3');
-            audioPool.slide5.loop = true;
+            audioPool.slide5.loop = false; // Play once, no loop
             audioPool.slide5.volume = 1.0;
             audioPool.slide5.preload = 'auto';
             console.log(' Created slide5 audio');
@@ -2555,71 +2555,28 @@ FOR THIS, WE NEED YOUR HELP.
         
         if (!slideTypingAudio) {
           console.log(' Audio pool not initialized - typing audio unavailable');
-          return;
-        }
-        
-        slideTypingAudio.currentTime = 0; // Reset to start
-        slideTypingAudio.loop = true;
-        slideTypingAudio.volume = 1.0; // Maximum volume
-        slideTypingAudio.playbackRate = 1.0; // Normal speed
-        slideTypingAudio.preservesPitch = true; // Preserve pitch
-        slideTypingAudio.mozPreservesPitch = true; // Firefox compatibility
-        slideTypingAudio.webkitPreservesPitch = true; // Webkit compatibility
-        
-        // Store reference before playing
-        typingAudio = slideTypingAudio;
-        
-        // Log audio element details
-        console.log(' Created typing audio:', {
-          src: slideTypingAudio.src,
-          readyState: slideTypingAudio.readyState,
-          volume: slideTypingAudio.volume,
-          playbackRate: slideTypingAudio.playbackRate,
-          preservesPitch: slideTypingAudio.preservesPitch
-        });
-        
-        // Function to stop the typing audio for this slide
-        const stopTypingAudio = () => {
-          console.log(' Stopping typing audio (from stopTypingAudio function)');
-          try {
-            slideTypingAudio.pause();
-            slideTypingAudio.currentTime = 0;
-            slideTypingAudio.src = '';
-            slideTypingAudio.loop = false;
-            console.log(' Typing audio stopped successfully');
-          } catch (err) {
-            console.error(' Error stopping audio:', err);
+          // Continue without audio
+        } else {
+          // Just play the audio once without looping or syncing to animation
+          slideTypingAudio.currentTime = 0; // Reset to start
+          slideTypingAudio.loop = false; // Don't loop - play once
+          slideTypingAudio.volume = 1.0;
+          
+          // Store reference
+          typingAudio = slideTypingAudio;
+          
+          // Play audio immediately
+          console.log(` Playing slide ${currentPage + 1} audio once (no loop, no sync)...`);
+          const playPromise = slideTypingAudio.play();
+          if (playPromise !== undefined) {
+            playPromise
+              .then(() => {
+                console.log(` Slide ${currentPage + 1} audio playing successfully!`);
+              })
+              .catch(err => {
+                console.log(` Slide ${currentPage + 1} audio blocked (mobile) - continuing silently:`, err.message);
+              });
           }
-          if (typingAudio === slideTypingAudio) {
-            typingAudio = null;
-          }
-        };
-        
-        // Play audio immediately with mobile-friendly error handling
-        console.log(' Attempting to play typing audio immediately...');
-        const playPromise = slideTypingAudio.play();
-        if (playPromise !== undefined) {
-          playPromise
-            .then(() => {
-              console.log(' Typing audio playing successfully!');
-            })
-            .catch(err => {
-              console.log(' Typing audio play blocked (mobile autoplay restriction) - continuing silently:', err.name, err.message);
-              // Try loading first, then play as fallback
-              slideTypingAudio.load();
-              slideTypingAudio.addEventListener('canplaythrough', () => {
-                console.log(' Audio loaded, trying to play again...');
-                const retryPromise = slideTypingAudio.play();
-                if (retryPromise !== undefined) {
-                  retryPromise
-                    .then(() => console.log(' Typing audio playing on retry!'))
-                    .catch(err2 => {
-                      console.log(' Retry blocked (expected on mobile) - continuing animation silently:', err2.message);
-                      // Continue without audio - animation will work fine
-                    });
-                }
-              }, { once: true });
-            });
         }
         
         // Function to type out a single line character by character
@@ -2664,11 +2621,8 @@ FOR THIS, WE NEED YOUR HELP.
                 lineRevealTimeouts.push(timeoutId);
               } else {
                 // All lines revealed
-                console.log(' All year lines typed - STOPPING AUDIO NOW');
-                // Stop typing audio using the local function
-                stopTypingAudio();
-                // Also kill all audio as a failsafe
-                killAllAudio();
+                console.log(' All year lines typed - animation complete');
+                // Audio will finish naturally (no loop), no need to stop it
                 onComplete && onComplete();
               }
             });
