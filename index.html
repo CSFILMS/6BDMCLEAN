@@ -1205,6 +1205,14 @@ FOR THIS, WE NEED YOUR HELP.
     let typingAudio = null; // Track typing audio for video end subtitle
     let preloadedSlide2Audio = null; // Preloaded audio for slide 2
     
+    // Pre-created audio pool for mobile compatibility
+    let audioPool = {
+      slide2: null,
+      slide4: null,
+      slide5: null,
+      longTyping: null
+    };
+    
     // Function to stop any currently playing audio
     function stopCurrentAudio() {
       if (currentAudio) {
@@ -1263,23 +1271,49 @@ FOR THIS, WE NEED YOUR HELP.
           audioContextUnlocked = true;
         }
         
-        // For mobile: Create and immediately pause a dummy audio to unlock audio playback
-        // This allows future audio elements to play without user interaction
+        // CRITICAL FOR MOBILE: Pre-create all audio elements during user interaction
+        // Mobile browsers only allow audio to play if created during user gesture
+        console.log(' Pre-creating audio pool for mobile compatibility...');
         try {
-          const dummyAudio = new Audio();
-          dummyAudio.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
-          const playPromise = dummyAudio.play();
-          if (playPromise !== undefined) {
-            playPromise.then(() => {
-              dummyAudio.pause();
-              dummyAudio.remove();
-              console.log(' Mobile audio unlocked via dummy audio');
-            }).catch(err => {
-              console.log(' Dummy audio play blocked (expected on some browsers):', err.message);
-            });
+          // Create slide 2 audio
+          if (!audioPool.slide2) {
+            audioPool.slide2 = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/251112-typing_audio-slide2.mp3');
+            audioPool.slide2.loop = true;
+            audioPool.slide2.volume = 1.0;
+            audioPool.slide2.preload = 'auto';
+            console.log(' Created slide2 audio');
           }
+          
+          // Create slide 4 audio
+          if (!audioPool.slide4) {
+            audioPool.slide4 = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/251112-typing_audio-slide4.mp3');
+            audioPool.slide4.loop = true;
+            audioPool.slide4.volume = 1.0;
+            audioPool.slide4.preload = 'auto';
+            console.log(' Created slide4 audio');
+          }
+          
+          // Create slide 5 audio
+          if (!audioPool.slide5) {
+            audioPool.slide5 = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/251112-typing_audio-slide5.mp3');
+            audioPool.slide5.loop = true;
+            audioPool.slide5.volume = 1.0;
+            audioPool.slide5.preload = 'auto';
+            console.log(' Created slide5 audio');
+          }
+          
+          // Create long typing sound for 6BDM message
+          if (!audioPool.longTyping) {
+            audioPool.longTyping = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/LONGTYPINGSOUND.wav');
+            audioPool.longTyping.loop = true;
+            audioPool.longTyping.volume = 1.0;
+            audioPool.longTyping.preload = 'auto';
+            console.log(' Created longTyping audio');
+          }
+          
+          console.log(' Audio pool created successfully');
         } catch (err) {
-          console.log(' Dummy audio creation failed:', err.message);
+          console.log(' Audio pool creation failed:', err.message);
         }
       }
     }
@@ -1532,25 +1566,30 @@ FOR THIS, WE NEED YOUR HELP.
       // Stop any existing typing audio
       if (typingAudio) {
         typingAudio.pause();
+        typingAudio.currentTime = 0;
         typingAudio = null;
       }
       
-      // Create a new audio instance for typing sound
-      typingAudio = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/LONGTYPINGSOUND.wav');
-      typingAudio.volume = 1.0; // Maximum typing audio volume
-      typingAudio.loop = true; // Loop during typing
-      typingAudio.muted = false; // Ensure not muted
-      
-      // Play typing audio with mobile-friendly error handling
-      console.log(' Playing LONGTYPINGSOUND.wav for 6BDM message... Volume:', typingAudio.volume, 'Muted:', typingAudio.muted);
-      const playPromise = typingAudio.play();
-      if (playPromise !== undefined) {
-        playPromise.then(() => {
-          console.log(' LONGTYPINGSOUND.wav playing successfully - Volume:', typingAudio.volume, 'Paused:', typingAudio.paused);
-        }).catch(err => {
-          console.log(' LONGTYPINGSOUND.wav play blocked (mobile autoplay restriction) - continuing silently:', err.message);
-          // Continue typing animation without audio on mobile
-        });
+      // Use pre-created audio from pool (created during user interaction for mobile compatibility)
+      if (audioPool.longTyping) {
+        typingAudio = audioPool.longTyping;
+        typingAudio.currentTime = 0; // Reset to start
+        typingAudio.volume = 1.0;
+        typingAudio.loop = true;
+        typingAudio.muted = false;
+        
+        // Play typing audio
+        console.log(' Playing LONGTYPINGSOUND.wav for 6BDM message from audio pool...');
+        const playPromise = typingAudio.play();
+        if (playPromise !== undefined) {
+          playPromise.then(() => {
+            console.log(' LONGTYPINGSOUND.wav playing successfully');
+          }).catch(err => {
+            console.log(' LONGTYPINGSOUND.wav play blocked:', err.message);
+          });
+        }
+      } else {
+        console.log(' Audio pool not initialized - typing audio unavailable');
       }
       
       let lineIndex = 0;
@@ -2511,14 +2550,17 @@ FOR THIS, WE NEED YOUR HELP.
         console.log(' Stopping any previous typing audio before starting new');
         killAllAudio();
         
-        // Create and play typing audio - different audio for slide 4 vs slide 5
-        const typingAudioSrc = currentPage === 3 
-          ? 'https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/251112-typing_audio-slide4.mp3'
-          : 'https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/251112-typing_audio-slide5.mp3';
-        const slideTypingAudio = new Audio(typingAudioSrc);
+        // Use pre-created audio from pool - different audio for slide 4 vs slide 5
+        const slideTypingAudio = currentPage === 3 ? audioPool.slide4 : audioPool.slide5;
+        
+        if (!slideTypingAudio) {
+          console.log(' Audio pool not initialized - typing audio unavailable');
+          return;
+        }
+        
+        slideTypingAudio.currentTime = 0; // Reset to start
         slideTypingAudio.loop = true;
         slideTypingAudio.volume = 1.0; // Maximum volume
-        slideTypingAudio.preload = 'auto';
         slideTypingAudio.playbackRate = 1.0; // Normal speed
         slideTypingAudio.preservesPitch = true; // Preserve pitch
         slideTypingAudio.mozPreservesPitch = true; // Firefox compatibility
@@ -2789,27 +2831,28 @@ FOR THIS, WE NEED YOUR HELP.
       // Delay animation start by 500ms for slide 2, start typing audio just before
       if (currentPage === 1) {
         setTimeout(() => {
-          // Use preloaded audio if available, otherwise create new
-          if (preloadedSlide2Audio) {
-            console.log(' Using preloaded slide 2 audio');
-            typingAudio = preloadedSlide2Audio;
-            preloadedSlide2Audio = null; // Clear reference after use
-          } else {
-            console.log(' Creating new slide 2 audio (preload not available)');
-            typingAudio = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/251112-typing_audio-slide2.mp3');
+          // Use pre-created audio from pool
+          if (audioPool.slide2) {
+            console.log(' Using slide 2 audio from pool');
+            typingAudio = audioPool.slide2;
+            typingAudio.currentTime = 0; // Reset to start
             typingAudio.volume = 1.0;
             typingAudio.loop = true;
+            typingAudio.muted = false;
+          } else {
+            console.log(' Audio pool not initialized - typing audio unavailable');
           }
-          typingAudio.muted = false;
           
-          console.log(' Playing typing sound for slide 2 (synced with animation)...');
-          const playPromise = typingAudio.play();
-          if (playPromise !== undefined) {
-            playPromise.then(() => {
-              console.log(' Typing sound playing on slide 2');
-            }).catch(err => {
-              console.log(' Typing sound play blocked (mobile) - continuing silently:', err.message);
-            });
+          if (typingAudio) {
+            console.log(' Playing typing sound for slide 2 (synced with animation)...');
+            const playPromise = typingAudio.play();
+            if (playPromise !== undefined) {
+              playPromise.then(() => {
+                console.log(' Typing sound playing on slide 2');
+              }).catch(err => {
+                console.log(' Typing sound play blocked (mobile) - continuing silently:', err.message);
+              });
+            }
           }
           
           // Start animation
@@ -2954,27 +2997,28 @@ FOR THIS, WE NEED YOUR HELP.
       // Delay animation start by 500ms for slide 2, start typing audio just before
       if (currentPage === 1) {
         setTimeout(() => {
-          // Use preloaded audio if available, otherwise create new
-          if (preloadedSlide2Audio) {
-            console.log(' Using preloaded slide 2 audio (ultrafast)');
-            typingAudio = preloadedSlide2Audio;
-            preloadedSlide2Audio = null; // Clear reference after use
-          } else {
-            console.log(' Creating new slide 2 audio ultrafast (preload not available)');
-            typingAudio = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/251112-typing_audio-slide2.mp3');
+          // Use pre-created audio from pool
+          if (audioPool.slide2) {
+            console.log(' Using slide 2 audio from pool (ultrafast)');
+            typingAudio = audioPool.slide2;
+            typingAudio.currentTime = 0; // Reset to start
             typingAudio.volume = 1.0;
             typingAudio.loop = true;
+            typingAudio.muted = false;
+          } else {
+            console.log(' Audio pool not initialized - typing audio unavailable');
           }
-          typingAudio.muted = false;
           
-          console.log(' Playing typing sound for slide 2 ultrafast (synced with animation)...');
-          const playPromise = typingAudio.play();
-          if (playPromise !== undefined) {
-            playPromise.then(() => {
-              console.log(' Typing sound playing on slide 2');
-            }).catch(err => {
-              console.log(' Typing sound play blocked (mobile) - continuing silently:', err.message);
-            });
+          if (typingAudio) {
+            console.log(' Playing typing sound for slide 2 ultrafast (synced with animation)...');
+            const playPromise = typingAudio.play();
+            if (playPromise !== undefined) {
+              playPromise.then(() => {
+                console.log(' Typing sound playing on slide 2');
+              }).catch(err => {
+                console.log(' Typing sound play blocked (mobile) - continuing silently:', err.message);
+              });
+            }
           }
           
           // Start animation
@@ -3013,27 +3057,28 @@ FOR THIS, WE NEED YOUR HELP.
         characterRevealTypingAudio = null;
       }
       
-      // Start typing audio - use preloaded if available
-      if (preloadedSlide2Audio) {
-        console.log(' Using preloaded slide 2 audio for character reveal');
-        characterRevealTypingAudio = preloadedSlide2Audio;
-        preloadedSlide2Audio = null; // Clear reference after use
-      } else {
-        console.log(' Creating new slide 2 audio for character reveal');
-        characterRevealTypingAudio = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/251112-typing_audio-slide2.mp3');
+      // Start typing audio - use pre-created audio from pool
+      if (audioPool.slide2) {
+        console.log(' Using slide 2 audio from pool for character reveal');
+        characterRevealTypingAudio = audioPool.slide2;
+        characterRevealTypingAudio.currentTime = 0; // Reset to start
         characterRevealTypingAudio.volume = 1.0;
         characterRevealTypingAudio.loop = true;
+        characterRevealTypingAudio.muted = false;
+      } else {
+        console.log(' Audio pool not initialized - typing audio unavailable');
       }
-      characterRevealTypingAudio.muted = false;
       
-      console.log(' Starting character reveal with typing audio...');
-      const playPromise = characterRevealTypingAudio.play();
-      if (playPromise !== undefined) {
-        playPromise.then(() => {
-          console.log(' Character reveal typing audio playing');
-        }).catch(err => {
-          console.log(' Character reveal audio blocked (mobile) - continuing silently:', err.message);
-        });
+      if (characterRevealTypingAudio) {
+        console.log(' Starting character reveal with typing audio...');
+        const playPromise = characterRevealTypingAudio.play();
+        if (playPromise !== undefined) {
+          playPromise.then(() => {
+            console.log(' Character reveal typing audio playing');
+          }).catch(err => {
+            console.log(' Character reveal audio blocked (mobile) - continuing silently:', err.message);
+          });
+        }
       }
       
       element.textContent = '';
@@ -3352,14 +3397,8 @@ FOR THIS, WE NEED YOUR HELP.
               textWrap.style.display = 'block';
             }
             
-            // Preload slide 2 typing audio during slide 1
-            console.log(' Preloading slide 2 typing audio...');
-            preloadedSlide2Audio = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/251112-typing_audio-slide2.mp3');
-            preloadedSlide2Audio.preload = 'auto';
-            preloadedSlide2Audio.volume = 1.0;
-            preloadedSlide2Audio.loop = true;
-            preloadedSlide2Audio.load(); // Force loading
-            console.log(' Slide 2 audio preloading started');
+            // Audio is already pre-created in audioPool during user interaction
+            console.log(' Audio pool should already contain all typing sounds');
             
             // Start decoding immediately (no delay needed on first slide)
             scrambleFastChunks(el, pages[pageIndex], () => {
