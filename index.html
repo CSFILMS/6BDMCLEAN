@@ -1982,7 +1982,7 @@ FOR THIS, WE NEED YOUR HELP.
       `;
       document.body.appendChild(arrestContainer);
       
-      // Add Julian photo
+      // Add Julian photo - no effects
       const arrestImg = document.createElement('img');
       arrestImg.id = 'arrest-photo-slide6';
       arrestImg.src = 'PHOTOS/photo_julian3.png';
@@ -1992,7 +1992,7 @@ FOR THIS, WE NEED YOUR HELP.
         max-width: none !important;
         max-height: none !important;
         object-fit: contain !important;
-        filter: brightness(0.8) sepia(1) hue-rotate(60deg) saturate(3.4) !important;
+        filter: none !important;
         display: block !important;
         opacity: 0 !important;
         transition: opacity 0.4s ease-in-out !important;
@@ -2035,18 +2035,11 @@ FOR THIS, WE NEED YOUR HELP.
       `;
       cannesContainer.appendChild(cannesImg);
       
-      // Quick fade-in effect for Julian photo (reduced opacity)
+      // Quick fade-in effect for Julian photo - no effects
       arrestContainer.style.opacity = '0';
       setTimeout(() => {
         arrestContainer.style.opacity = '1';
-        arrestImg.style.opacity = '0.6'; // Reduced opacity
-        // Add brightness flash effect with intense glow
-        arrestImg.style.filter = 'brightness(1.2) sepia(1) hue-rotate(60deg) saturate(3.4)';
-        arrestImg.style.boxShadow = 'inset 0 0 50px rgba(0, 255, 0, 0.6), 0 0 30px rgba(0, 255, 0, 0.4)';
-        setTimeout(() => {
-          arrestImg.style.filter = 'brightness(0.8) sepia(1) hue-rotate(60deg) saturate(3.4)';
-          arrestImg.style.boxShadow = 'none';
-        }, 200);
+        arrestImg.style.opacity = '1';
       }, 50);
       
       // Quick fade-in effect for Cannes photo (full opacity)
@@ -2087,7 +2080,7 @@ FOR THIS, WE NEED YOUR HELP.
       `;
       document.body.appendChild(imageContainer);
       
-      // Add Arrest photo
+      // Add Arrest photo - no effects
       const img = document.createElement('img');
       img.id = 'arrest-photo';
       img.src = 'PHOTOS/photo_arrest.webp';
@@ -2097,7 +2090,7 @@ FOR THIS, WE NEED YOUR HELP.
         max-width: none !important;
         max-height: none !important;
         object-fit: contain !important;
-        filter: brightness(0.8) sepia(1) hue-rotate(60deg) saturate(4.0) !important;
+        filter: none !important;
         display: block !important;
         opacity: 0 !important;
         transition: opacity 0.4s ease-in-out !important;
@@ -2108,7 +2101,7 @@ FOR THIS, WE NEED YOUR HELP.
       imageContainer.style.opacity = '0';
       setTimeout(() => {
         imageContainer.style.opacity = '1';
-        img.style.opacity = '0.4';
+        img.style.opacity = '1';
       }, 50);
       
       console.log('Arrest photo added to slide 5');
@@ -2139,7 +2132,7 @@ FOR THIS, WE NEED YOUR HELP.
         transition: opacity 0.15s ease-in-out !important;
       `;
       
-      // Add desktop-only styling with higher specificity
+      // Add desktop-only styling with higher specificity - no effects
       const style = document.createElement('style');
       style.textContent = `
         @media (min-width: 769px) {
@@ -2148,8 +2141,8 @@ FOR THIS, WE NEED YOUR HELP.
           }
           #collateral-photo {
             display: block !important;
-            opacity: 0.35 !important;
-            filter: brightness(0.8) sepia(1) hue-rotate(60deg) saturate(4.0) !important;
+            opacity: 1 !important;
+            filter: none !important;
           }
         }
         @media (max-width: 768px) {
@@ -2158,8 +2151,8 @@ FOR THIS, WE NEED YOUR HELP.
           }
           #collateral-photo {
             display: block !important;
-            opacity: 0.35 !important;
-            filter: brightness(0.8) sepia(1) hue-rotate(60deg) saturate(4.0) !important;
+            opacity: 1 !important;
+            filter: none !important;
           }
         }
         /* Override any conflicting CSS rules */
@@ -2171,7 +2164,7 @@ FOR THIS, WE NEED YOUR HELP.
       document.head.appendChild(style);
       document.getElementById('page').appendChild(imageContainer);
       
-      // Add Collateral photo
+      // Add Collateral photo - no effects
       const img = document.createElement('img');
       img.id = 'collateral-photo';
       img.src = 'PHOTOS/photo_collateral_crop.jpg';
@@ -2181,7 +2174,7 @@ FOR THIS, WE NEED YOUR HELP.
         max-width: none !important;
         max-height: none !important;
         object-fit: contain !important;
-        filter: brightness(0.5) sepia(1) hue-rotate(60deg) saturate(4.0) !important;
+        filter: none !important;
         display: block !important;
         opacity: 0 !important;
         transition: opacity 0.4s ease-in-out !important;
@@ -2193,13 +2186,6 @@ FOR THIS, WE NEED YOUR HELP.
       setTimeout(() => {
         imageContainer.style.opacity = '1';
         img.style.opacity = '1';
-        // Add brightness flash effect with intense glow
-        img.style.filter = 'brightness(0.7) sepia(1) hue-rotate(60deg) saturate(4.0)';
-        img.style.boxShadow = 'inset 0 0 50px rgba(0, 255, 0, 0.6), 0 0 30px rgba(0, 255, 0, 0.4)';
-        setTimeout(() => {
-          img.style.filter = 'brightness(0.5) sepia(1) hue-rotate(60deg) saturate(4.0)';
-          img.style.boxShadow = 'none';
-        }, 200);
       }, 50);
       
       console.log('Collateral photo added - should be behind text and dimmed on desktop');
@@ -2219,7 +2205,7 @@ FOR THIS, WE NEED YOUR HELP.
       imageContainer.id = 'correa-photo-container';
       imageContainer.style.cssText = `
         position: fixed !important;
-        top: calc(50% - 90px) !important;
+        top: calc(50% - 120px) !important;
         left: 75% !important;
         transform: translate(-50%, -50%) scale(3.4) !important;
         width: 80vw !important;
@@ -2236,7 +2222,7 @@ FOR THIS, WE NEED YOUR HELP.
       if (pageEl) pageEl.style.background = 'transparent';
       if (textWrap) textWrap.style.background = 'transparent';
       
-      // Add Correa photo - big, uncropped, with green terminal effects
+      // Add Correa photo - large background with green terminal effects from lorem_new.html
       const img = document.createElement('img');
       img.id = 'correa-photo';
       img.src = 'PHOTOS/photo_correa.jpg';
@@ -2255,7 +2241,7 @@ FOR THIS, WE NEED YOUR HELP.
       imageContainer.style.opacity = '0';
       setTimeout(() => {
         imageContainer.style.opacity = '1';
-        img.style.opacity = '0.60';
+        img.style.opacity = '0.45';
       }, 50);
       
       console.log('Correa photo added to slide 4 as large background element');
