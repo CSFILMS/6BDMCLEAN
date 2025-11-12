@@ -3328,18 +3328,6 @@ FOR THIS, WE NEED YOUR HELP.
            // Slides 4 and 5 - character-by-character reveal with year pauses
            console.log(` CHARACTER REVEAL: Starting for slide ${pageIndex + 1}`);
            
-           // Play slide 4 or 5 audio after 1/3 second delay
-           const slideAudio = pageIndex === 3 ? audioPool.slide4 : audioPool.slide5;
-           if (slideAudio && slideAudio.paused) {
-             setTimeout(() => {
-               console.log(` Starting slide ${pageIndex + 1} audio (333ms delay)`);
-               slideAudio.currentTime = 0;
-               slideAudio.loop = false;
-               slideAudio.volume = 1.0;
-               slideAudio.play().catch(err => console.log(` Slide ${pageIndex + 1} audio blocked:`, err.message));
-             }, 333);
-           }
-           
            el.textContent = '';
            // Show text wrap
            const textWrap = document.getElementById('text-wrap');
@@ -3348,6 +3336,16 @@ FOR THIS, WE NEED YOUR HELP.
            }
            // Wait for slide animation to complete
            setTimeout(() => {
+             // Play slide 4 or 5 audio at the moment animation starts
+             const slideAudio = pageIndex === 3 ? audioPool.slide4 : audioPool.slide5;
+             if (slideAudio && slideAudio.paused) {
+               console.log(` Starting slide ${pageIndex + 1} audio with animation`);
+               slideAudio.currentTime = 0;
+               slideAudio.loop = false;
+               slideAudio.volume = 1.0;
+               slideAudio.play().catch(err => console.log(` Slide ${pageIndex + 1} audio blocked:`, err.message));
+             }
+             
              console.log(` Starting character reveal for slide ${pageIndex + 1}:`, pages[pageIndex].substring(0, 100));
              revealByCharacterWithYearPauses(el, pages[pageIndex], () => {
                console.log(` Slide ${pageIndex + 1} character reveal completed`);
