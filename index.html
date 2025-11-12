@@ -1203,6 +1203,7 @@ FOR THIS, WE NEED YOUR HELP.
     let currentAudio = null; // Track currently playing audio
     let audioVolume = 0.67; // Default volume level
     let typingAudio = null; // Track typing audio for video end subtitle
+    let preloadedSlide2Audio = null; // Preloaded audio for slide 2
     
     // Function to stop any currently playing audio
     function stopCurrentAudio() {
@@ -2755,10 +2756,17 @@ FOR THIS, WE NEED YOUR HELP.
       // Delay animation start by 500ms for slide 2, start typing audio just before
       if (currentPage === 1) {
         setTimeout(() => {
-          // Start typing audio right before animation
-          typingAudio = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/251112-typing_audio-slide2.mov');
-          typingAudio.volume = 1.0;
-          typingAudio.loop = true;
+          // Use preloaded audio if available, otherwise create new
+          if (preloadedSlide2Audio) {
+            console.log(' Using preloaded slide 2 audio');
+            typingAudio = preloadedSlide2Audio;
+            preloadedSlide2Audio = null; // Clear reference after use
+          } else {
+            console.log(' Creating new slide 2 audio (preload not available)');
+            typingAudio = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/251112-typing_audio-slide2.mov');
+            typingAudio.volume = 1.0;
+            typingAudio.loop = true;
+          }
           typingAudio.muted = false;
           
           console.log(' Playing typing sound for slide 2 (synced with animation)...');
@@ -2898,10 +2906,17 @@ FOR THIS, WE NEED YOUR HELP.
       // Delay animation start by 500ms for slide 2, start typing audio just before
       if (currentPage === 1) {
         setTimeout(() => {
-          // Start typing audio right before animation
-          typingAudio = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/251112-typing_audio-slide2.mov');
-          typingAudio.volume = 1.0;
-          typingAudio.loop = true;
+          // Use preloaded audio if available, otherwise create new
+          if (preloadedSlide2Audio) {
+            console.log(' Using preloaded slide 2 audio (ultrafast)');
+            typingAudio = preloadedSlide2Audio;
+            preloadedSlide2Audio = null; // Clear reference after use
+          } else {
+            console.log(' Creating new slide 2 audio ultrafast (preload not available)');
+            typingAudio = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/251112-typing_audio-slide2.mov');
+            typingAudio.volume = 1.0;
+            typingAudio.loop = true;
+          }
           typingAudio.muted = false;
           
           console.log(' Playing typing sound for slide 2 ultrafast (synced with animation)...');
@@ -2947,10 +2962,17 @@ FOR THIS, WE NEED YOUR HELP.
         characterRevealTypingAudio = null;
       }
       
-      // Start typing audio
-      characterRevealTypingAudio = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/251112-typing_audio-slide2.mov');
-      characterRevealTypingAudio.volume = 1.0;
-      characterRevealTypingAudio.loop = true;
+      // Start typing audio - use preloaded if available
+      if (preloadedSlide2Audio) {
+        console.log(' Using preloaded slide 2 audio for character reveal');
+        characterRevealTypingAudio = preloadedSlide2Audio;
+        preloadedSlide2Audio = null; // Clear reference after use
+      } else {
+        console.log(' Creating new slide 2 audio for character reveal');
+        characterRevealTypingAudio = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/251112-typing_audio-slide2.mov');
+        characterRevealTypingAudio.volume = 1.0;
+        characterRevealTypingAudio.loop = true;
+      }
       characterRevealTypingAudio.muted = false;
       
       console.log(' Starting character reveal with typing audio...');
@@ -3258,6 +3280,16 @@ FOR THIS, WE NEED YOUR HELP.
             if (textWrap) {
               textWrap.style.display = 'block';
             }
+            
+            // Preload slide 2 typing audio during slide 1
+            console.log(' Preloading slide 2 typing audio...');
+            preloadedSlide2Audio = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/251112-typing_audio-slide2.mov');
+            preloadedSlide2Audio.preload = 'auto';
+            preloadedSlide2Audio.volume = 1.0;
+            preloadedSlide2Audio.loop = true;
+            preloadedSlide2Audio.load(); // Force loading
+            console.log(' Slide 2 audio preloading started');
+            
             // Start decoding immediately (no delay needed on first slide)
             scrambleFastChunks(el, pages[pageIndex], () => {
               console.log(` Slide 1 decoding completed`);
