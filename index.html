@@ -1172,7 +1172,9 @@ PRESS [F] FOR FULL SCREEN
 
 2019: ASSANGE IMPRISONED IN THE UK FOR 5 YEARS. AWAITS EXTRADITION TO THE US TO FACE A FURTHER 175.
 
-2024: US  DROPS 17 OF 18 COUNTS AGAINST ASSANGE, DISMISSES CASE. ASSANGE PLEADS GUILTY TO JOURNALISM AND RETURNS TO AUSTRALIA A FREE MAN.
+2024: US  DROPS 17 OF 18 COUNTS AGAINST ASSANGE, DISMISSES CASE. 
+
+ASSANGE PLEADS GUILTY TO JOURNALISM AND RETURNS TO AUSTRALIA A FREE MAN.
 
 
 
@@ -2496,8 +2498,11 @@ FOR THIS, WE NEED YOUR HELP.
         console.log(' Stopping any previous typing audio before starting new');
         killAllAudio();
         
-        // Create and play typing audio
-        const slideTypingAudio = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/speduptyping.wav');
+        // Create and play typing audio - different audio for slide 4 vs slide 5
+        const typingAudioSrc = currentPage === 3 
+          ? 'https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/251112-typing_audio-slide4.mov'
+          : 'https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/251112-typing_audio-slide5.mov';
+        const slideTypingAudio = new Audio(typingAudioSrc);
         slideTypingAudio.loop = true;
         slideTypingAudio.volume = 1.0; // Maximum volume
         slideTypingAudio.preload = 'auto';
@@ -2751,7 +2756,7 @@ FOR THIS, WE NEED YOUR HELP.
       if (currentPage === 1) {
         setTimeout(() => {
           // Start typing audio right before animation
-          typingAudio = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/LONGTYPINGSOUND.wav');
+          typingAudio = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/251112-typing_audio-slide2.mov');
           typingAudio.volume = 1.0;
           typingAudio.loop = true;
           typingAudio.muted = false;
@@ -2894,7 +2899,7 @@ FOR THIS, WE NEED YOUR HELP.
       if (currentPage === 1) {
         setTimeout(() => {
           // Start typing audio right before animation
-          typingAudio = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/LONGTYPINGSOUND.wav');
+          typingAudio = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/251112-typing_audio-slide2.mov');
           typingAudio.volume = 1.0;
           typingAudio.loop = true;
           typingAudio.muted = false;
@@ -2943,7 +2948,7 @@ FOR THIS, WE NEED YOUR HELP.
       }
       
       // Start typing audio
-      characterRevealTypingAudio = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/LONGTYPINGSOUND.wav');
+      characterRevealTypingAudio = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/251112-typing_audio-slide2.mov');
       characterRevealTypingAudio.volume = 1.0;
       characterRevealTypingAudio.loop = true;
       characterRevealTypingAudio.muted = false;
