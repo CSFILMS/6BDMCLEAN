@@ -2219,8 +2219,8 @@ FOR THIS, WE NEED YOUR HELP.
       imageContainer.id = 'correa-photo-container';
       imageContainer.style.cssText = `
         position: fixed !important;
-        top: 50% !important;
-        left: 25% !important;
+        top: calc(50% - 30px) !important;
+        left: 75% !important;
         transform: translate(-50%, -50%) scale(4) !important;
         width: 80vw !important;
         height: 80vh !important;
@@ -2255,7 +2255,7 @@ FOR THIS, WE NEED YOUR HELP.
       imageContainer.style.opacity = '0';
       setTimeout(() => {
         imageContainer.style.opacity = '1';
-        img.style.opacity = '0.75';
+        img.style.opacity = '0.60';
       }, 50);
       
       console.log('Correa photo added to slide 4 as large background element');
