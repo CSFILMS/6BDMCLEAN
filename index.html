@@ -119,7 +119,7 @@
       box-sizing: border-box;
     }
     
-    /* CRT scanline effect */
+    /* CRT scanline effect - slightly thinner and blurry */
     body::before {
       content: '';
       position: fixed;
@@ -130,15 +130,16 @@
       background: repeating-linear-gradient(
 0deg,
 transparent 0px,
-transparent 4px,
-rgba(0, 255, 0, 0.03) 4px,
-rgba(0, 255, 0, 0.03) 8px
+transparent 3px,
+rgba(0, 255, 0, 0.03) 3px,
+rgba(0, 255, 0, 0.03) 6px
       );
       pointer-events: none;
       z-index: 99998;
+      filter: blur(0.5px);
     }
     
-    /* Black scanlines on top */
+    /* Black scanlines on top - slightly thinner and blurry */
     body::after {
       content: '';
       position: fixed;
@@ -149,12 +150,13 @@ rgba(0, 255, 0, 0.03) 8px
       background: repeating-linear-gradient(
 0deg,
 rgba(0, 0, 0, 0.26) 0px,
-rgba(0, 0, 0, 0.26) 4px,
-transparent 4px,
-transparent 8px
+rgba(0, 0, 0, 0.26) 3px,
+transparent 3px,
+transparent 6px
       );
       pointer-events: none;
       z-index: 99999;
+      filter: blur(0.5px);
     }
     
     /* Disable scanlines on slide 7 (trailer slide) only */
@@ -2011,6 +2013,8 @@ FOR THIS, WE NEED YOUR HELP.
         display: block !important;
         opacity: 0 !important;
         transition: opacity 0.4s ease-in-out !important;
+        mask-image: radial-gradient(ellipse 100% 100% at center, black 60%, transparent 100%) !important;
+        -webkit-mask-image: radial-gradient(ellipse 100% 100% at center, black 60%, transparent 100%) !important;
       `;
       imageContainer.appendChild(img);
       
@@ -2070,6 +2074,8 @@ FOR THIS, WE NEED YOUR HELP.
         display: block !important;
         opacity: 0 !important;
         transition: opacity 0.4s ease-in-out !important;
+        mask-image: radial-gradient(ellipse 100% 100% at center, black 60%, transparent 100%) !important;
+        -webkit-mask-image: radial-gradient(ellipse 100% 100% at center, black 60%, transparent 100%) !important;
       `;
       arrestContainer.appendChild(arrestImg);
       
@@ -2106,6 +2112,8 @@ FOR THIS, WE NEED YOUR HELP.
         display: block !important;
         opacity: 0 !important;
         transition: opacity 0.4s ease-in-out !important;
+        mask-image: radial-gradient(ellipse 100% 100% at center, black 60%, transparent 100%) !important;
+        -webkit-mask-image: radial-gradient(ellipse 100% 100% at center, black 60%, transparent 100%) !important;
       `;
       cannesContainer.appendChild(cannesImg);
       
@@ -2168,6 +2176,8 @@ FOR THIS, WE NEED YOUR HELP.
         display: block !important;
         opacity: 0 !important;
         transition: opacity 0.4s ease-in-out !important;
+        mask-image: radial-gradient(ellipse 100% 100% at center, black 60%, transparent 100%) !important;
+        -webkit-mask-image: radial-gradient(ellipse 100% 100% at center, black 60%, transparent 100%) !important;
       `;
       imageContainer.appendChild(img);
       
@@ -2252,6 +2262,8 @@ FOR THIS, WE NEED YOUR HELP.
         display: block !important;
         opacity: 0 !important;
         transition: opacity 0.4s ease-in-out !important;
+        mask-image: radial-gradient(ellipse 100% 100% at center, black 60%, transparent 100%) !important;
+        -webkit-mask-image: radial-gradient(ellipse 100% 100% at center, black 60%, transparent 100%) !important;
       `;
       imageContainer.appendChild(img);
       
@@ -2308,6 +2320,8 @@ FOR THIS, WE NEED YOUR HELP.
         display: block !important;
         opacity: 0 !important;
         transition: opacity 0.4s ease-in-out !important;
+        mask-image: radial-gradient(ellipse 100% 100% at center, black 60%, transparent 100%) !important;
+        -webkit-mask-image: radial-gradient(ellipse 100% 100% at center, black 60%, transparent 100%) !important;
       `;
       imageContainer.appendChild(img);
       
