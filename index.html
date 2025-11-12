@@ -303,9 +303,16 @@ transparent 6px
         line-height: 1.3 !important;
       }
       
-      /* Slides 4, 5, 6, 7 mobile - slightly bigger text */
+      /* Slides 4, 5 mobile - much smaller text */
       #page[data-page="4"] #unscramble,
-      #page[data-page="5"] #unscramble,
+      #page[data-page="5"] #unscramble {
+        font-size: 1.092em !important;
+        line-height: 1.3 !important;
+        overflow: hidden !important;
+        height: 100% !important;
+      }
+      
+      /* Slides 6, 7 mobile - slightly bigger text */
       #page[data-page="6"] #unscramble,
       #page[data-page="7"] #unscramble {
         font-size: 1.0em !important;
@@ -504,9 +511,15 @@ z-index: 1;
       text-align: center !important;
     }
     
-    /* Slides 4, 5, 6, 7 - slightly bigger text */
+    /* Slides 4, 5 - much smaller text */
     #page[data-page="4"] #unscramble,
-    #page[data-page="5"] #unscramble,
+    #page[data-page="5"] #unscramble {
+      font-size: 1.17em !important;
+      overflow: hidden !important;
+      height: 100% !important;
+    }
+    
+    /* Slides 6, 7 - slightly bigger text */
     #page[data-page="6"] #unscramble,
     #page[data-page="7"] #unscramble {
       font-size: 1.05em !important;
@@ -2049,9 +2062,9 @@ FOR THIS, WE NEED YOUR HELP.
         position: fixed !important;
         bottom: ${isMobile ? 'calc(18vh + 150px)' : 'calc(16vh + 150px)'} !important;
         left: ${isMobile ? 'calc(5vw + 30px)' : 'calc(5vw + 30px)'} !important;
-        max-width: ${isMobile ? '42.24vw' : '36.96vw'} !important;
-        max-height: ${isMobile ? '60vh' : '70vh'} !important;
-        width: ${isMobile ? '42.24vw' : '36.96vw'} !important;
+        max-width: ${isMobile ? '52.8vw' : '46.2vw'} !important;
+        max-height: ${isMobile ? '75vh' : '87.5vh'} !important;
+        width: ${isMobile ? '52.8vw' : '46.2vw'} !important;
         height: auto !important;
         z-index: 2 !important;
         pointer-events: none !important;
@@ -2087,9 +2100,9 @@ FOR THIS, WE NEED YOUR HELP.
         bottom: ${isMobile ? 'calc(20vh - 75px)' : 'calc(18vh - 75px)'} !important;
         left: 50% !important;
         transform: translateX(calc(-50% + 50px)) !important;
-        max-width: ${isMobile ? '85vw' : '70vw'} !important;
-        max-height: ${isMobile ? '50vh' : '45vh'} !important;
-        width: ${isMobile ? '85vw' : '70vw'} !important;
+        max-width: ${isMobile ? '63.75vw' : '52.5vw'} !important;
+        max-height: ${isMobile ? '37.5vh' : '33.75vh'} !important;
+        width: ${isMobile ? '63.75vw' : '52.5vw'} !important;
         height: auto !important;
         z-index: 1 !important;
         pointer-events: none !important;
@@ -2118,10 +2131,8 @@ FOR THIS, WE NEED YOUR HELP.
       cannesContainer.appendChild(cannesImg);
       
       // Quick fade-in effect for Julian photo - with Correa effects
-      arrestContainer.style.opacity = '0';
       setTimeout(() => {
-        arrestContainer.style.opacity = '1';
-        arrestImg.style.opacity = '0.45';
+        arrestImg.style.setProperty('opacity', '0.65', 'important');
       }, 50);
       
       // Quick fade-in effect for Cannes photo (90% opacity)
@@ -2143,34 +2154,35 @@ FOR THIS, WE NEED YOUR HELP.
       // Check if mobile
       const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       
-      // Create container for Arrest photo
+      // Create container for Arrest photo - big, centered, uncropped, under text
       const imageContainer = document.createElement('div');
       imageContainer.id = 'arrest-photo-container';
       imageContainer.style.cssText = `
         position: fixed !important;
-        bottom: ${isMobile ? '25vh' : '20vh'} !important;
-        left: 50% !important;
-        transform: translateX(-50%) !important;
-        max-width: ${isMobile ? '84vw' : '56vw'} !important;
-        max-height: ${isMobile ? '39.2vh' : '28vh'} !important;
-        width: ${isMobile ? '84vw' : '56vw'} !important;
-        height: auto !important;
-        z-index: 1 !important;
+        top: calc(-10vh + 135px) !important;
+        left: 45% !important;
+        transform: translate(-50%, 0) scale(2.8) !important;
+        width: 80vw !important;
+        height: 80vh !important;
+        z-index: 0 !important;
         pointer-events: none !important;
-        overflow: visible !important;
         transition: opacity 0.15s ease-in-out !important;
       `;
       document.body.appendChild(imageContainer);
       
-      // Add Arrest photo - with Correa effects
+      // Make sure page and text-wrap have transparent backgrounds
+      const pageEl = document.getElementById('page');
+      const textWrap = document.getElementById('text-wrap');
+      if (pageEl) pageEl.style.background = 'transparent';
+      if (textWrap) textWrap.style.background = 'transparent';
+      
+      // Add Arrest photo - large background with green terminal effects
       const img = document.createElement('img');
       img.id = 'arrest-photo';
       img.src = 'PHOTOS/photo_arrest.webp';
       img.style.cssText = `
         width: 100% !important;
         height: 100% !important;
-        max-width: none !important;
-        max-height: none !important;
         object-fit: contain !important;
         filter: brightness(0.7) sepia(1) hue-rotate(60deg) saturate(3.0) !important;
         display: block !important;
@@ -2185,7 +2197,7 @@ FOR THIS, WE NEED YOUR HELP.
       imageContainer.style.opacity = '0';
       setTimeout(() => {
         imageContainer.style.opacity = '1';
-        img.style.opacity = '0.9';
+        img.style.setProperty('opacity', '0.45', 'important');
       }, 50);
       
       console.log('Arrest photo added to slide 5');
