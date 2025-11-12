@@ -2214,26 +2214,25 @@ FOR THIS, WE NEED YOUR HELP.
       // Check if mobile
       const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       
-      // Create container for Correa photo
+      // Create container for Correa photo - huge background element
       const imageContainer = document.createElement('div');
       imageContainer.id = 'correa-photo-container';
       imageContainer.style.cssText = `
         position: fixed !important;
-        bottom: ${isMobile ? '25vh' : '20vh'} !important;
+        top: ${isMobile ? '5vh' : '8vh'} !important;
+        bottom: ${isMobile ? '18vh' : '15vh'} !important;
         left: 50% !important;
         transform: translateX(-50%) !important;
-        max-width: ${isMobile ? '60vw' : '40vw'} !important;
-        max-height: ${isMobile ? '28vh' : '20vh'} !important;
-        width: ${isMobile ? '60vw' : '40vw'} !important;
+        width: ${isMobile ? '90vw' : '70vw'} !important;
         height: auto !important;
-        z-index: 1 !important;
+        z-index: 0 !important;
         pointer-events: none !important;
         overflow: visible !important;
         transition: opacity 0.15s ease-in-out !important;
       `;
       document.body.appendChild(imageContainer);
       
-      // Add Correa photo
+      // Add Correa photo - large background with desaturation
       const img = document.createElement('img');
       img.id = 'correa-photo';
       img.src = 'PHOTOS/photo_correa.jpg';
@@ -2243,7 +2242,7 @@ FOR THIS, WE NEED YOUR HELP.
         max-width: none !important;
         max-height: none !important;
         object-fit: contain !important;
-        filter: brightness(0.8) sepia(1) hue-rotate(60deg) saturate(4.0) !important;
+        filter: brightness(0.7) saturate(0.4) sepia(0.3) !important;
         display: block !important;
         opacity: 0 !important;
         transition: opacity 0.4s ease-in-out !important;
@@ -2254,10 +2253,10 @@ FOR THIS, WE NEED YOUR HELP.
       imageContainer.style.opacity = '0';
       setTimeout(() => {
         imageContainer.style.opacity = '1';
-        img.style.opacity = '0.6';
+        img.style.opacity = '0.5';
       }, 50);
       
-      console.log('Correa photo added to slide 4');
+      console.log('Correa photo added to slide 4 as large background element');
     }
     
     
