@@ -1207,6 +1207,7 @@ FOR THIS, WE NEED YOUR HELP.
     
     // Pre-created audio pool for mobile compatibility
     let audioPool = {
+      slide1: null,
       slide2: null,
       slide4: null,
       slide5: null,
@@ -1275,9 +1276,18 @@ FOR THIS, WE NEED YOUR HELP.
         // Mobile browsers only allow audio to play if created during user gesture
         console.log(' Pre-creating audio pool for mobile compatibility...');
         try {
+          // Create slide 1 audio
+          if (!audioPool.slide1) {
+            audioPool.slide1 = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/211112-Sound_for_Website-slide1.mp3');
+            audioPool.slide1.loop = false; // Play once, no loop
+            audioPool.slide1.volume = 1.0;
+            audioPool.slide1.preload = 'auto';
+            console.log(' Created slide1 audio');
+          }
+          
           // Create slide 2 audio
           if (!audioPool.slide2) {
-            audioPool.slide2 = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/251112-typing_audio-slide2.mp3');
+            audioPool.slide2 = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/211112-Sound_for_Website-slide2.mp3');
             audioPool.slide2.loop = false; // Play once, no loop
             audioPool.slide2.volume = 1.0;
             audioPool.slide2.preload = 'auto';
@@ -1286,7 +1296,7 @@ FOR THIS, WE NEED YOUR HELP.
           
           // Create slide 4 audio
           if (!audioPool.slide4) {
-            audioPool.slide4 = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/251112-typing_audio-slide4.mp3');
+            audioPool.slide4 = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/211112-Sound_for_Website-slide4.mp3');
             audioPool.slide4.loop = false; // Play once, no loop
             audioPool.slide4.volume = 1.0;
             audioPool.slide4.preload = 'auto';
@@ -1295,7 +1305,7 @@ FOR THIS, WE NEED YOUR HELP.
           
           // Create slide 5 audio
           if (!audioPool.slide5) {
-            audioPool.slide5 = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/251112-typing_audio-slide5.mp3');
+            audioPool.slide5 = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/211112-Sound_for_Website-slide5.mp3');
             audioPool.slide5.loop = false; // Play once, no loop
             audioPool.slide5.volume = 1.0;
             audioPool.slide5.preload = 'auto';
@@ -3231,18 +3241,25 @@ FOR THIS, WE NEED YOUR HELP.
          
          
          
-          // Use decoding animation for page 0 (without audio)
+          // Use decoding animation for page 0 (with audio)
           if (pageIndex === 0) {
-            console.log(` SLIDE 1: Starting decoding animation without audio`);
+            console.log(` SLIDE 1: Starting decoding animation`);
+            
+            // Play slide 1 audio once (uninterrupted)
+            if (audioPool.slide1 && audioPool.slide1.paused) {
+              console.log(' Starting slide 1 audio (uninterrupted)');
+              audioPool.slide1.currentTime = 0;
+              audioPool.slide1.loop = false;
+              audioPool.slide1.volume = 1.0;
+              audioPool.slide1.play().catch(err => console.log(' Slide 1 audio blocked:', err.message));
+            }
+            
             el.textContent = '';
             // Show text wrap
             const textWrap = document.getElementById('text-wrap');
             if (textWrap) {
               textWrap.style.display = 'block';
             }
-            
-            // Audio is already pre-created in audioPool during user interaction
-            console.log(' Audio pool should already contain all typing sounds');
             
             // Start decoding immediately (no delay needed on first slide)
             scrambleFastChunks(el, pages[pageIndex], () => {
