@@ -2675,6 +2675,8 @@ FOR THIS, WE NEED YOUR HELP.
       // Use requestAnimationFrame for better performance with progressive acceleration
       let lastTime = 0;
       let animationId = null;
+      let scrambleOnlyFrames = currentPage === 0 ? 5 : 0; // Add 5 frames of pure scrambling for slide 1 (~500ms delay)
+      let frameCount = 0;
       
       function animate(currentTime) {
         // Calculate dynamic interval based on characters revealed
@@ -2684,15 +2686,25 @@ FOR THIS, WE NEED YOUR HELP.
         
         if (currentTime - lastTime >= dynamicInterval) {
           const display = scrambled.slice();
-          for (let i=0;i<index;i++){
-            let s=i*chunkSize, e=Math.min(s+chunkSize,len);
-            for (let j=s;j<e;j++) display[j]=text[j];
+          
+          // If we're still in scramble-only frames (for slide 1), just show scrambled text
+          if (frameCount < scrambleOnlyFrames) {
+            // Just re-scramble without revealing any text
+            for (let k=0;k<len;k++) display[k] = /\s/.test(text[k]) ? text[k] : chars[Math.floor(Math.random()*chars.length)];
+            element.textContent = display.join('');
+            frameCount++;
+          } else {
+            // Normal reveal logic
+            for (let i=0;i<index;i++){
+              let s=i*chunkSize, e=Math.min(s+chunkSize,len);
+              for (let j=s;j<e;j++) display[j]=text[j];
+            }
+            for (let k=index*chunkSize;k<len;k++) display[k] = /\s/.test(text[k]) ? text[k] : chars[Math.floor(Math.random()*chars.length)];
+            element.textContent = display.join('');
+            index++;
           }
-          for (let k=index*chunkSize;k<len;k++) display[k] = /\s/.test(text[k]) ? text[k] : chars[Math.floor(Math.random()*chars.length)];
-          element.textContent = display.join('');
 
           lastTime = currentTime;
-          index++;
           
           if ((index*chunkSize)>=len){
             cancelAnimationFrame(animationId);
@@ -2847,6 +2859,8 @@ FOR THIS, WE NEED YOUR HELP.
       // Use requestAnimationFrame for better performance with progressive acceleration
       let lastTime = 0;
       let animationId = null;
+      let scrambleOnlyFrames = currentPage === 0 ? 5 : 0; // Add 5 frames of pure scrambling for slide 1 (~500ms delay)
+      let frameCount = 0;
       
       function animate(currentTime) {
         // Calculate dynamic interval based on characters revealed
@@ -2856,15 +2870,25 @@ FOR THIS, WE NEED YOUR HELP.
         
         if (currentTime - lastTime >= dynamicInterval) {
           const display = scrambled.slice();
-          for (let i=0;i<index;i++){
-            let s=i*chunkSize, e=Math.min(s+chunkSize,len);
-            for (let j=s;j<e;j++) display[j]=text[j];
+          
+          // If we're still in scramble-only frames (for slide 1), just show scrambled text
+          if (frameCount < scrambleOnlyFrames) {
+            // Just re-scramble without revealing any text
+            for (let k=0;k<len;k++) display[k] = /\s/.test(text[k]) ? text[k] : chars[Math.floor(Math.random()*chars.length)];
+            element.textContent = display.join('');
+            frameCount++;
+          } else {
+            // Normal reveal logic
+            for (let i=0;i<index;i++){
+              let s=i*chunkSize, e=Math.min(s+chunkSize,len);
+              for (let j=s;j<e;j++) display[j]=text[j];
+            }
+            for (let k=index*chunkSize;k<len;k++) display[k] = /\s/.test(text[k]) ? text[k] : chars[Math.floor(Math.random()*chars.length)];
+            element.textContent = display.join('');
+            index++;
           }
-          for (let k=index*chunkSize;k<len;k++) display[k] = /\s/.test(text[k]) ? text[k] : chars[Math.floor(Math.random()*chars.length)];
-          element.textContent = display.join('');
 
           lastTime = currentTime;
-          index++;
           
           if ((index*chunkSize)>=len){
             cancelAnimationFrame(animationId);
