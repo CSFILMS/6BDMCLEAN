@@ -1278,7 +1278,7 @@ FOR THIS, WE NEED YOUR HELP.
           // Create slide 2 audio
           if (!audioPool.slide2) {
             audioPool.slide2 = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/251112-typing_audio-slide2.mp3');
-            audioPool.slide2.loop = true;
+            audioPool.slide2.loop = false; // Play once, no loop
             audioPool.slide2.volume = 1.0;
             audioPool.slide2.preload = 'auto';
             console.log(' Created slide2 audio');
@@ -2546,38 +2546,7 @@ FOR THIS, WE NEED YOUR HELP.
         lineRevealTimeouts.forEach(timeout => clearTimeout(timeout));
         lineRevealTimeouts = [];
         
-        // Stop any existing typing audio before starting new one
-        console.log(' Stopping any previous typing audio before starting new');
-        killAllAudio();
-        
-        // Use pre-created audio from pool - different audio for slide 4 vs slide 5
-        const slideTypingAudio = currentPage === 3 ? audioPool.slide4 : audioPool.slide5;
-        
-        if (!slideTypingAudio) {
-          console.log(' Audio pool not initialized - typing audio unavailable');
-          // Continue without audio
-        } else {
-          // Just play the audio once without looping or syncing to animation
-          slideTypingAudio.currentTime = 0; // Reset to start
-          slideTypingAudio.loop = false; // Don't loop - play once
-          slideTypingAudio.volume = 1.0;
-          
-          // Store reference
-          typingAudio = slideTypingAudio;
-          
-          // Play audio immediately
-          console.log(` Playing slide ${currentPage + 1} audio once (no loop, no sync)...`);
-          const playPromise = slideTypingAudio.play();
-          if (playPromise !== undefined) {
-            playPromise
-              .then(() => {
-                console.log(` Slide ${currentPage + 1} audio playing successfully!`);
-              })
-              .catch(err => {
-                console.log(` Slide ${currentPage + 1} audio blocked (mobile) - continuing silently:`, err.message);
-              });
-          }
-        }
+        // Audio already started at slide initialization - don't restart it
         
         // Function to type out a single line character by character
         const typeLine = (span, callback) => {
@@ -2782,33 +2751,10 @@ FOR THIS, WE NEED YOUR HELP.
         currentAnimationFrame = animationId;
       }
       
-      // Delay animation start by 500ms for slide 2, start typing audio just before
+      // Delay animation start by 500ms for slide 2
       if (currentPage === 1) {
+        // Audio already started at slide initialization
         setTimeout(() => {
-          // Use pre-created audio from pool
-          if (audioPool.slide2) {
-            console.log(' Using slide 2 audio from pool');
-            typingAudio = audioPool.slide2;
-            typingAudio.currentTime = 0; // Reset to start
-            typingAudio.volume = 1.0;
-            typingAudio.loop = true;
-            typingAudio.muted = false;
-          } else {
-            console.log(' Audio pool not initialized - typing audio unavailable');
-          }
-          
-          if (typingAudio) {
-            console.log(' Playing typing sound for slide 2 (synced with animation)...');
-            const playPromise = typingAudio.play();
-            if (playPromise !== undefined) {
-              playPromise.then(() => {
-                console.log(' Typing sound playing on slide 2');
-              }).catch(err => {
-                console.log(' Typing sound play blocked (mobile) - continuing silently:', err.message);
-              });
-            }
-          }
-          
           // Start animation
           animationId = requestAnimationFrame(animate);
           currentAnimationFrame = animationId;
@@ -2948,33 +2894,10 @@ FOR THIS, WE NEED YOUR HELP.
         currentAnimationFrame = animationId;
       }
       
-      // Delay animation start by 500ms for slide 2, start typing audio just before
+      // Delay animation start by 500ms for slide 2
       if (currentPage === 1) {
+        // Audio already playing from slide start - don't restart it
         setTimeout(() => {
-          // Use pre-created audio from pool
-          if (audioPool.slide2) {
-            console.log(' Using slide 2 audio from pool (ultrafast)');
-            typingAudio = audioPool.slide2;
-            typingAudio.currentTime = 0; // Reset to start
-            typingAudio.volume = 1.0;
-            typingAudio.loop = true;
-            typingAudio.muted = false;
-          } else {
-            console.log(' Audio pool not initialized - typing audio unavailable');
-          }
-          
-          if (typingAudio) {
-            console.log(' Playing typing sound for slide 2 ultrafast (synced with animation)...');
-            const playPromise = typingAudio.play();
-            if (playPromise !== undefined) {
-              playPromise.then(() => {
-                console.log(' Typing sound playing on slide 2');
-              }).catch(err => {
-                console.log(' Typing sound play blocked (mobile) - continuing silently:', err.message);
-              });
-            }
-          }
-          
           // Start animation
           animationId = requestAnimationFrame(animate);
           currentAnimationFrame = animationId;
@@ -3004,36 +2927,8 @@ FOR THIS, WE NEED YOUR HELP.
       characterRevealTimeouts.forEach(timeout => clearTimeout(timeout));
       characterRevealTimeouts = [];
       
-      // Stop any existing typing audio
-      if (characterRevealTypingAudio) {
-        characterRevealTypingAudio.pause();
-        characterRevealTypingAudio.currentTime = 0;
-        characterRevealTypingAudio = null;
-      }
-      
-      // Start typing audio - use pre-created audio from pool
-      if (audioPool.slide2) {
-        console.log(' Using slide 2 audio from pool for character reveal');
-        characterRevealTypingAudio = audioPool.slide2;
-        characterRevealTypingAudio.currentTime = 0; // Reset to start
-        characterRevealTypingAudio.volume = 1.0;
-        characterRevealTypingAudio.loop = true;
-        characterRevealTypingAudio.muted = false;
-      } else {
-        console.log(' Audio pool not initialized - typing audio unavailable');
-      }
-      
-      if (characterRevealTypingAudio) {
-        console.log(' Starting character reveal with typing audio...');
-        const playPromise = characterRevealTypingAudio.play();
-        if (playPromise !== undefined) {
-          playPromise.then(() => {
-            console.log(' Character reveal typing audio playing');
-          }).catch(err => {
-            console.log(' Character reveal audio blocked (mobile) - continuing silently:', err.message);
-          });
-        }
-      }
+      // Audio is already playing from slide start - don't restart it
+      // This function is called for slides 4 and 5, audio already started when slide loaded
       
       element.textContent = '';
       let charIndex = 0;
@@ -3043,12 +2938,7 @@ FOR THIS, WE NEED YOUR HELP.
       
       function typeNextCharacter() {
         if (currentLineIndex >= lines.length) {
-          // Done with all lines
-          if (characterRevealTypingAudio) {
-            characterRevealTypingAudio.pause();
-            characterRevealTypingAudio.currentTime = 0;
-            characterRevealTypingAudio = null;
-          }
+          // Done with all lines - audio continues playing naturally
           console.log(' Character reveal completed');
           wrapYearsInSpans(element);
           if (onComplete) onComplete();
@@ -3379,6 +3269,16 @@ FOR THIS, WE NEED YOUR HELP.
          } else if (pageIndex === 1) {
            // Slide 2 - wait for slide animation to complete before unscrambling
            console.log(` SLIDE 2: Waiting for slide animation to complete before unscrambling`);
+           
+           // Play slide 2 audio once (uninterrupted)
+           if (audioPool.slide2 && audioPool.slide2.paused) {
+             console.log(' Starting slide 2 audio (uninterrupted)');
+             audioPool.slide2.currentTime = 0;
+             audioPool.slide2.loop = false;
+             audioPool.slide2.volume = 1.0;
+             audioPool.slide2.play().catch(err => console.log(' Slide 2 audio blocked:', err.message));
+           }
+           
            el.textContent = '';
            // Show text wrap on other slides
            const textWrap = document.getElementById('text-wrap');
@@ -3396,6 +3296,17 @@ FOR THIS, WE NEED YOUR HELP.
          } else if (pageIndex === 3 || pageIndex === 4) {
            // Slides 4 and 5 - character-by-character reveal with year pauses
            console.log(` CHARACTER REVEAL: Starting for slide ${pageIndex + 1}`);
+           
+           // Play slide 4 or 5 audio once (uninterrupted)
+           const slideAudio = pageIndex === 3 ? audioPool.slide4 : audioPool.slide5;
+           if (slideAudio && slideAudio.paused) {
+             console.log(` Starting slide ${pageIndex + 1} audio (uninterrupted)`);
+             slideAudio.currentTime = 0;
+             slideAudio.loop = false;
+             slideAudio.volume = 1.0;
+             slideAudio.play().catch(err => console.log(` Slide ${pageIndex + 1} audio blocked:`, err.message));
+           }
+           
            el.textContent = '';
            // Show text wrap
            const textWrap = document.getElementById('text-wrap');
