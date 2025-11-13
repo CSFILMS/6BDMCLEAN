@@ -2089,6 +2089,68 @@ FOR THIS, WE NEED YOUR HELP.
       console.log('Cannes photo added to slide 5');
     }
     
+    function addCannesPhotoBig() {
+      // Remove any existing images first
+      removeAllImages();
+      
+      // Check if mobile
+      const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      
+      // Create container for BIG centered Cannes photo
+      const imageContainer = document.createElement('div');
+      imageContainer.id = 'cannes-photo-container-big';
+      imageContainer.style.cssText = `
+        position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        max-width: ${isMobile ? '95vw' : '85vw'} !important;
+        max-height: ${isMobile ? '70vh' : '75vh'} !important;
+        width: ${isMobile ? '95vw' : '85vw'} !important;
+        height: auto !important;
+        z-index: 1 !important;
+        pointer-events: none !important;
+        overflow: visible !important;
+        transition: opacity 0.15s ease-in-out !important;
+      `;
+      document.body.appendChild(imageContainer);
+      
+      // Add Cannes photo
+      const img = document.createElement('img');
+      img.id = 'cannes-photo-big';
+      img.src = 'PHOTOS/photo_cannes.png.jpeg';
+      img.style.cssText = `
+        width: 100% !important;
+        height: 100% !important;
+        max-width: none !important;
+        max-height: none !important;
+        object-fit: contain !important;
+        filter: brightness(0.8) sepia(1) hue-rotate(60deg) saturate(4.0) !important;
+        display: block !important;
+        opacity: 0 !important;
+        transition: opacity 0.4s ease-in-out !important;
+        mask-image: radial-gradient(ellipse 100% 100% at center, black 60%, transparent 100%) !important;
+        -webkit-mask-image: radial-gradient(ellipse 100% 100% at center, black 60%, transparent 100%) !important;
+      `;
+      imageContainer.appendChild(img);
+      
+      // Quick fade-in effect
+      imageContainer.style.opacity = '0';
+      setTimeout(() => {
+        imageContainer.style.opacity = '1';
+        img.style.opacity = '1';
+        // Add brightness flash effect with intense glow
+        img.style.filter = 'brightness(1.2) sepia(1) hue-rotate(60deg) saturate(4.0)';
+        img.style.boxShadow = 'inset 0 0 50px rgba(0, 255, 0, 0.6), 0 0 30px rgba(0, 255, 0, 0.4)';
+        setTimeout(() => {
+          img.style.filter = 'brightness(0.8) sepia(1) hue-rotate(60deg) saturate(4.0)';
+          img.style.boxShadow = 'none';
+        }, 200);
+      }, 50);
+      
+      console.log('BIG centered Cannes photo added to slide 6');
+    }
+    
     function addArrestAndCannesPhotos() {
       // Remove any existing images first
       removeAllImages();
@@ -2393,6 +2455,7 @@ FOR THIS, WE NEED YOUR HELP.
       // Quick fade out all image containers
       const containers = [
         document.getElementById('cannes-photo-container'),
+        document.getElementById('cannes-photo-container-big'),
         document.getElementById('arrest-photo-container'),
         document.getElementById('arrest-photo-container-slide6'),
         document.getElementById('correa-photo-container'),
@@ -3483,9 +3546,10 @@ FOR THIS, WE NEED YOUR HELP.
       } else if (pageIndex === 4) { // Slide 5 - Arrest photo
         console.log(` DEBUG: Adding Arrest photo for slide 5`);
         addArrestPhoto();
-      } else if (pageIndex === 5) { // Slide 6 - Julian and Cannes photos (commented out for now)
-        console.log(` DEBUG: Julian and Cannes photos disabled for slide 6`);
-        // addArrestAndCannesPhotos(); // COMMENTED OUT - uncomment to bring back photos
+      } else if (pageIndex === 5) { // Slide 6 - BIG centered Cannes photo
+        console.log(` DEBUG: Adding BIG centered Cannes photo for slide 6`);
+        addCannesPhotoBig();
+        // OLD VERSION (commented out): addArrestAndCannesPhotos(); // COMMENTED OUT - uncomment to bring back Julian + Cannes photos
       }
       // Note: removeAllImages() already called at start of startPage, so no need to call it here
        
