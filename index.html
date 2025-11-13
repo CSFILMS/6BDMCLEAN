@@ -36,7 +36,7 @@
       }
     }
     
-    /* "A FILM BY EUGENE JARECKI" text for slide 3 */
+    /* "A FILM BY EUGENE JARECKI" text for slide 4 */
     #film-by-text {
       position: fixed;
       top: 4rem;
@@ -159,7 +159,7 @@ transparent 6px
       filter: blur(0.5px);
     }
     
-    /* Disable scanlines on slide 7 (trailer slide) only */
+    /* Disable scanlines on slide 8 (trailer slide) only */
     body.no-scanlines::before,
     body.no-scanlines::after {
       display: none !important;
@@ -297,46 +297,64 @@ transparent 6px
         max-width: 100vw !important;
       }
       
-      /* First slide mobile - bigger text */
+      /* Slide 1 (PROCEED?) mobile - centered lower on screen */
+      #page[data-page="1"] #text-wrap {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        height: 100vh !important;
+        padding-top: 0 !important;
+        margin-top: 15vh !important;
+      }
+      
       #page[data-page="1"] #unscramble {
+        font-size: 1.8em !important;
+        line-height: 1.2 !important;
+        text-align: center !important;
+        animation: proceedFadeIn 0.8s ease-out forwards !important;
+        opacity: 0;
+      }
+      
+      /* First slide mobile (was data-page 1, now 2) - bigger text */
+      #page[data-page="2"] #unscramble {
         font-size: 1.1em !important;
         line-height: 1.3 !important;
       }
       
-      /* Slides 4, 5 mobile - much smaller text */
-      #page[data-page="4"] #unscramble,
-      #page[data-page="5"] #unscramble {
+      /* Slides 5, 6 mobile (was 4, 5) - much smaller text */
+      #page[data-page="5"] #unscramble,
+      #page[data-page="6"] #unscramble {
         font-size: 1.092em !important;
         line-height: 1.3 !important;
         overflow: hidden !important;
         height: 100% !important;
       }
       
-      /* Slides 6, 7 mobile - slightly bigger text */
-      #page[data-page="6"] #unscramble,
-      #page[data-page="7"] #unscramble {
+      /* Slides 7, 8 mobile (was 6, 7) - slightly bigger text */
+      #page[data-page="7"] #unscramble,
+      #page[data-page="8"] #unscramble {
         font-size: 1.0em !important;
         line-height: 1.3 !important;
         overflow: hidden !important;
         height: 100% !important;
       }
       
-      /* Slides 4, 5, 6, 7 mobile - reduce top padding and prevent scrolling */
-      #page[data-page="4"] #text-wrap,
+      /* Slides 5, 6, 7, 8 mobile (was 4, 5, 6, 7) - reduce top padding and prevent scrolling */
       #page[data-page="5"] #text-wrap,
       #page[data-page="6"] #text-wrap,
-      #page[data-page="7"] #text-wrap {
+      #page[data-page="7"] #text-wrap,
+      #page[data-page="8"] #text-wrap {
         padding-top: 0.5vw !important;
         padding-bottom: 10vh !important;
         overflow: hidden !important;
         height: 100vh !important;
       }
       
-      /* Slides 4, 5, 6, 7 mobile - ensure page container has no scroll */
-      #page[data-page="4"],
+      /* Slides 5, 6, 7, 8 mobile (was 4, 5, 6, 7) - ensure page container has no scroll */
       #page[data-page="5"],
       #page[data-page="6"],
-      #page[data-page="7"] {
+      #page[data-page="7"],
+      #page[data-page="8"] {
         overflow: hidden !important;
       }
       
@@ -494,44 +512,82 @@ z-index: 1;
       }
     }
     
-    /* First slide text - bigger */
+    /* Slide 1 (PROCEED?) desktop - centered lower on screen */
+    #page[data-page="1"] #text-wrap {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      height: 100vh !important;
+      padding-top: 0 !important;
+      margin-top: 15vh !important;
+    }
+    
     #page[data-page="1"] #unscramble {
+      font-size: 2.5em !important;
+      line-height: 1.2 !important;
+      text-align: center !important;
+      padding: 0 !important;
+      animation: proceedFadeIn 0.8s ease-out forwards !important;
+      opacity: 0;
+    }
+    
+    @keyframes proceedFadeIn {
+      0% { 
+        opacity: 0; 
+        transform: scale(0.98);
+      }
+      15% { 
+        opacity: 0.2; 
+        transform: scale(0.99);
+      }
+      30% { 
+        opacity: 0.85; 
+        transform: scale(1);
+      }
+      100% { 
+        opacity: 1; 
+        transform: scale(1);
+      }
+    }
+    
+    /* First slide text (was slide 2, now slide 3) - bigger */
+    #page[data-page="2"] #unscramble {
       font-size: 1.2em !important;
       line-height: 1.4 !important;
     }
     
-    /* Slide 2 text 10% bigger */
-    #page[data-page="2"] #unscramble {
+    /* Slide 4 (was slide 3) text 10% bigger */
+    #page[data-page="3"] #unscramble {
       font-size: 1.1em !important;
     }
     
-    /* Slide 3 text slightly smaller and centered */
-    #page[data-page="3"] #unscramble {
+    /* Slide 5 (was slide 4) text slightly smaller and centered */
+    #page[data-page="4"] #unscramble {
       font-size: 0.95em !important;
       text-align: center !important;
     }
     
-    /* Slides 4, 5 - much smaller text */
-    #page[data-page="4"] #unscramble,
-    #page[data-page="5"] #unscramble {
+    /* Slides 5, 6 (was 4, 5) - much smaller text */
+    #page[data-page="5"] #unscramble,
+    #page[data-page="6"] #unscramble {
       font-size: 1.17em !important;
       overflow: hidden !important;
       height: 100% !important;
     }
     
-    /* Slides 6, 7 - slightly bigger text */
-    #page[data-page="6"] #unscramble,
-    #page[data-page="7"] #unscramble {
+    /* Slides 7, 8 (was 6, 7) - slightly bigger text */
+    #page[data-page="7"] #unscramble,
+    #page[data-page="8"] #unscramble {
       font-size: 1.05em !important;
       overflow: hidden !important;
       height: 100% !important;
     }
     
-    /* Slides 4, 5, 6, 7 - fix text positioning for image slides */
-    #page[data-page="4"] #text-wrap,
+    /* Slides 5, 6, 7, 8 (was 4, 5, 6, 7) - fix text positioning for image slides */
     #page[data-page="5"] #text-wrap,
     #page[data-page="6"] #text-wrap,
-    #page[data-page="7"] #text-wrap {
+    #page[data-page="7"] #text-wrap,
+    #page[data-page="8"] #text-wrap {
       padding-top: 0.5rem !important; /* Less padding to move text down */
       padding-bottom: 4rem !important;
       overflow: hidden !important;
@@ -544,11 +600,11 @@ z-index: 1;
       position: relative;
     }
     
-    /* Slides 4, 5, 6, 7 - ensure page container has no scroll */
-    #page[data-page="4"],
+    /* Slides 5, 6, 7, 8 (was 4, 5, 6, 7) - ensure page container has no scroll */
     #page[data-page="5"],
     #page[data-page="6"],
-    #page[data-page="7"] {
+    #page[data-page="7"],
+    #page[data-page="8"] {
       overflow: hidden !important;
     }
     
@@ -917,9 +973,10 @@ z-index: 1;
       height: 7vh;
     }
     
-    /* Push slide counter down on pages 1 and 2 */
+    /* Push slide counter down on pages 1, 2, and 3 (was 1 and 2) */
     #page[data-page="1"] ~ #slide-counter,
-    #page[data-page="2"] ~ #slide-counter {
+    #page[data-page="2"] ~ #slide-counter,
+    #page[data-page="3"] ~ #slide-counter {
       bottom: 5vh;
     }
     
@@ -976,17 +1033,18 @@ z-index: 2 !important;
       padding-top: 0 !important; /* No top padding - container handles it */
     }
     
-    /* Add top padding for slides 2 and 3 */
+    /* Add top padding for slides 2, 3, and 4 (was 2 and 3) */
     #page[data-page="2"] #unscramble,
-    #page[data-page="3"] #unscramble {
+    #page[data-page="3"] #unscramble,
+    #page[data-page="4"] #unscramble {
       padding-top: 1rem !important;
     }
     
-    /* Slides 4, 5, 6, 7 - NO extra top padding on unscramble (container handles it) */
-    #page[data-page="4"] #unscramble,
+    /* Slides 5, 6, 7, 8 (was 4, 5, 6, 7) - NO extra top padding on unscramble (container handles it) */
     #page[data-page="5"] #unscramble,
     #page[data-page="6"] #unscramble,
-    #page[data-page="7"] #unscramble {
+    #page[data-page="7"] #unscramble,
+    #page[data-page="8"] #unscramble {
       padding-top: 0 !important;
     }
     
@@ -1072,7 +1130,7 @@ z-index: 2 !important;
 </head>
 <body>
 
-  <!-- Video for slide 3: TUESDAY2.mp4 with built-in audio (plays once, triggers 6BDM message after 2 seconds) -->
+  <!-- Video for slide 4: TUESDAY2.mp4 with built-in audio (plays once, triggers 6BDM message after 2 seconds) -->
   <video
     id="bg-video2"
     class="bg-video"
@@ -1090,7 +1148,7 @@ z-index: 2 !important;
     <source src="https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/TUESDAY2.mp4" type="video/mp4" />
   </video>
 
-  <!-- Trailer video for slide 7 with controls -->
+  <!-- Trailer video for slide 8 with controls -->
   <video
     id="trailer-video"
     class="trailer-video"
@@ -1105,7 +1163,7 @@ z-index: 2 !important;
 
   <div class="bg-overlay" id="bg-overlay" style="display: none;"></div>
 
-  <!-- "A FILM BY EUGENE JARECKI" text for slide 3 -->
+  <!-- "A FILM BY EUGENE JARECKI" text for slide 4 -->
   <div id="film-by-text">A FILM BY EUGENE JARECKI</div>
 
   <div id="page">
@@ -1123,7 +1181,7 @@ z-index: 2 !important;
     <span id="nav-next">&gt;</span>
   </div>
 
-  <div id="slide-counter">SLIDE 1 / 1</div>
+  <div id="slide-counter">SLIDE 2 / 1</div>
 
   
   <!-- Custom cursor -->
@@ -1132,6 +1190,11 @@ z-index: 2 !important;
   <script>
     /* ================== CONTENT ================== */
     const fullTextRaw = `
+PROCEED?
+
+
+
+
 RECIPIENT: DORSEY.6BDM180925
 
 EYES ONLY / NO FWD / 
@@ -1218,7 +1281,7 @@ FOR THIS, WE NEED YOUR HELP.
     let currentAudio = null; // Track currently playing audio
     let audioVolume = 0.67; // Default volume level
     let typingAudio = null; // Track typing audio for video end subtitle
-    let preloadedSlide2Audio = null; // Preloaded audio for slide 2
+    let preloadedSlide2Audio = null; // Preloaded audio for slide 3
     
     // Pre-created audio pool for mobile compatibility
     let audioPool = {
@@ -1296,7 +1359,7 @@ FOR THIS, WE NEED YOUR HELP.
         // Mobile browsers only allow audio to play if created during user gesture
         console.log(' Pre-creating audio pool for mobile compatibility...');
         try {
-          // Create slide 1 audio
+          // Create slide 2 audio
           if (!audioPool.slide1) {
             audioPool.slide1 = new Audio('VIDEOS/211112-Sound_for_Website-slide1.2.mov');
             audioPool.slide1.loop = false; // Play once, no loop
@@ -1305,7 +1368,7 @@ FOR THIS, WE NEED YOUR HELP.
             console.log(' Created slide1 audio');
           }
           
-          // Create slide 2 audio
+          // Create slide 3 audio
           if (!audioPool.slide2) {
             audioPool.slide2 = new Audio('VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide2.2.wav');
             audioPool.slide2.loop = false; // Play once, no loop
@@ -1314,7 +1377,7 @@ FOR THIS, WE NEED YOUR HELP.
             console.log(' Created slide2 audio');
           }
           
-          // Create slide 4 audio files (one per line)
+          // Create slide 5 audio files (one per line)
           if (!audioPool.slide4) {
             audioPool.slide4 = new Audio('VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide4.2.wav');
             audioPool.slide4.loop = false;
@@ -1344,7 +1407,7 @@ FOR THIS, WE NEED YOUR HELP.
             console.log(' Created slide4 line 4 audio');
           }
           
-          // Create slide 5 audio files (one per line)
+          // Create slide 6 audio files (one per line)
           if (!audioPool.slide5) {
             audioPool.slide5 = new Audio('VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide5.2.wav');
             audioPool.slide5.loop = false;
@@ -1367,7 +1430,7 @@ FOR THIS, WE NEED YOUR HELP.
             console.log(' Created slide5 line 3 audio');
           }
           
-          // Create slide 6 audio files
+          // Create slide 7 audio files
           if (!audioPool.slide6A) {
             audioPool.slide6A = new Audio('VIDEOS/211112-Sound_for_Website-slide6.A.3.wav');
             audioPool.slide6A.loop = false;
@@ -1510,7 +1573,7 @@ FOR THIS, WE NEED YOUR HELP.
       }
     }
 
-    // Trailer video functions for slide 7
+    // Trailer video functions for slide 8
     function showTrailerVideo() {
       console.log(' Showing trailer video with controls...');
       const video = document.getElementById('trailer-video');
@@ -1778,7 +1841,7 @@ FOR THIS, WE NEED YOUR HELP.
           if (beforeIn2025 && in2025Content) {
             pages[pages.length - 1] = beforeIn2025;
             pages.push(in2025Content);
-            console.log(' Split last page to create slide 7');
+            console.log(' Split last page to create slide 8');
           }
         }
       }
@@ -1787,7 +1850,7 @@ FOR THIS, WE NEED YOUR HELP.
     // Add empty slide for trailer if needed
     if (pages.length < 7) {
       pages.push(''); // Empty page for trailer
-      console.log(' Added empty slide 7 for trailer');
+      console.log(' Added empty slide 8 for trailer');
     }
     
     console.log(' Final total pages:', pages.length);
@@ -2095,7 +2158,7 @@ FOR THIS, WE NEED YOUR HELP.
         }, 200);
       }, 50);
       
-      console.log('Cannes photo added to slide 5');
+      console.log('Cannes photo added to slide 6');
     }
     
     function addCannesPhotoBig() {
@@ -2157,7 +2220,7 @@ FOR THIS, WE NEED YOUR HELP.
         }, 200);
       }, 50);
       
-      console.log('BIG centered Cannes photo added to slide 6');
+      console.log('BIG centered Cannes photo added to slide 7');
     }
     
     function addArrestAndCannesPhotos() {
@@ -2256,7 +2319,7 @@ FOR THIS, WE NEED YOUR HELP.
         cannesImg.style.filter = 'brightness(0.8) sepia(1) hue-rotate(60deg) saturate(4.0)';
       }, 50);
       
-      console.log('Julian and Cannes photos added to slide 6');
+      console.log('Julian and Cannes photos added to slide 7');
     }
     
     function addArrestPhoto() {
@@ -2312,7 +2375,7 @@ FOR THIS, WE NEED YOUR HELP.
         img.style.setProperty('opacity', '0.45', 'important');
       }, 50);
       
-      console.log('Arrest photo added to slide 5');
+      console.log('Arrest photo added to slide 6');
     }
     
     function addCollateralPhoto() {
@@ -2426,7 +2489,7 @@ FOR THIS, WE NEED YOUR HELP.
       `;
       document.body.appendChild(imageContainer);
       
-      // Make sure page and text-wrap have transparent backgrounds on slide 4
+      // Make sure page and text-wrap have transparent backgrounds on slide 5
       const pageEl = document.getElementById('page');
       const textWrap = document.getElementById('text-wrap');
       if (pageEl) pageEl.style.background = 'transparent';
@@ -2456,7 +2519,7 @@ FOR THIS, WE NEED YOUR HELP.
         img.style.opacity = '0.9';
       }, 50);
       
-      console.log('Correa photo added to slide 4 as large background element');
+      console.log('Correa photo added to slide 5 as large background element');
     }
     
     
@@ -2648,7 +2711,7 @@ FOR THIS, WE NEED YOUR HELP.
         killAllAudio();
       }
       
-      if ((currentPage === 3 || currentPage === 4) && !scramblingDisabled) {
+      if ((currentPage === 4 || currentPage === 5) && !scramblingDisabled) {
         console.log(` Sequential reveal animation for slide ${currentPage + 1} - TYPING ANIMATION ACTIVE`);
         
         // Display the text normally first
@@ -2753,9 +2816,9 @@ FOR THIS, WE NEED YOUR HELP.
         return;
       }
       
-      // Check if scrambling is disabled or if we're after slide 3
+      // Check if scrambling is disabled or if we're after slide 4
       if (scramblingDisabled || currentPage > 2) {
-        console.log(' Scrambling disabled - displaying text instantly (after slide 3)');
+        console.log(' Scrambling disabled - displaying text instantly (after slide 4)');
         element.textContent = text;
         wrapYearsInSpans(element);
         onComplete && onComplete();
@@ -2787,9 +2850,9 @@ FOR THIS, WE NEED YOUR HELP.
         typingAudio = null;
       }
       
-      // Only play unscramble audio on slide 2 (pageIndex 1)
-      if (currentPage === 1) {
-        // Play unscramble audio for slide 2 only
+      // Only play unscramble audio on slide 3 (pageIndex 1)
+      if (currentPage === 2) {
+        // Play unscramble audio for slide 3 only
         const unscrambleAudioEl = document.getElementById('unscramble-audio');
         if (unscrambleAudioEl) {
           unscrambleAudioEl.volume = 0.3;
@@ -2804,13 +2867,13 @@ FOR THIS, WE NEED YOUR HELP.
           });
         }
       } else {
-        console.log(' Skipping unscramble audio - not on slide 2');
+        console.log(' Skipping unscramble audio - not on slide 3');
       }
 
       // Use requestAnimationFrame for better performance with progressive acceleration
       let lastTime = 0;
       let animationId = null;
-      let scrambleOnlyFrames = currentPage === 0 ? 5 : 0; // Add 5 frames of pure scrambling for slide 1 (~500ms delay)
+      let scrambleOnlyFrames = currentPage === 1 ? 5 : 0; // Add 5 frames of pure scrambling for slide 2 (~500ms delay)
       let frameCount = 0;
       
       function animate(currentTime) {
@@ -2822,7 +2885,7 @@ FOR THIS, WE NEED YOUR HELP.
         if (currentTime - lastTime >= dynamicInterval) {
           const display = scrambled.slice();
           
-          // If we're still in scramble-only frames (for slide 1), just show scrambled text
+          // If we're still in scramble-only frames (for slide 2), just show scrambled text
           if (frameCount < scrambleOnlyFrames) {
             // Just re-scramble without revealing any text
             for (let k=0;k<len;k++) display[k] = /\s/.test(text[k]) ? text[k] : chars[Math.floor(Math.random()*chars.length)];
@@ -2900,8 +2963,8 @@ FOR THIS, WE NEED YOUR HELP.
         currentAnimationFrame = animationId;
       }
       
-      // Delay animation start by 500ms for slide 2
-      if (currentPage === 1) {
+      // Delay animation start by 500ms for slide 3
+      if (currentPage === 2) {
         // Audio already started at slide initialization
         setTimeout(() => {
           // Start animation
@@ -2917,9 +2980,9 @@ FOR THIS, WE NEED YOUR HELP.
 
     // Ultra-fast scrambling specifically for 2006 text - much faster interval
     function scrambleUltraFastChunks(element, text, onComplete) {
-      // Check if scrambling is disabled or if we're after slide 3
+      // Check if scrambling is disabled or if we're after slide 4
       if (scramblingDisabled || currentPage > 2) {
-        console.log(' Scrambling disabled - displaying text instantly (after slide 3)');
+        console.log(' Scrambling disabled - displaying text instantly (after slide 4)');
         element.textContent = text;
         wrapYearsInSpans(element);
         onComplete && onComplete();
@@ -2951,9 +3014,9 @@ FOR THIS, WE NEED YOUR HELP.
         typingAudio = null;
       }
       
-      // Only play unscramble audio on slide 2 (pageIndex 1)
-      if (currentPage === 1) {
-        // Play unscramble audio for slide 2 with progressive acceleration
+      // Only play unscramble audio on slide 3 (pageIndex 1)
+      if (currentPage === 2) {
+        // Play unscramble audio for slide 3 with progressive acceleration
         const unscrambleAudioEl2 = document.getElementById('unscramble-audio');
         if (unscrambleAudioEl2) {
           unscrambleAudioEl2.volume = 0.3;
@@ -2969,13 +3032,13 @@ FOR THIS, WE NEED YOUR HELP.
           });
         }
       } else {
-        console.log(' Skipping unscramble audio - not on slide 2');
+        console.log(' Skipping unscramble audio - not on slide 3');
       }
 
       // Use requestAnimationFrame for better performance with progressive acceleration
       let lastTime = 0;
       let animationId = null;
-      let scrambleOnlyFrames = currentPage === 0 ? 5 : 0; // Add 5 frames of pure scrambling for slide 1 (~500ms delay)
+      let scrambleOnlyFrames = currentPage === 1 ? 5 : 0; // Add 5 frames of pure scrambling for slide 2 (~500ms delay)
       let frameCount = 0;
       
       function animate(currentTime) {
@@ -2987,7 +3050,7 @@ FOR THIS, WE NEED YOUR HELP.
         if (currentTime - lastTime >= dynamicInterval) {
           const display = scrambled.slice();
           
-          // If we're still in scramble-only frames (for slide 1), just show scrambled text
+          // If we're still in scramble-only frames (for slide 2), just show scrambled text
           if (frameCount < scrambleOnlyFrames) {
             // Just re-scramble without revealing any text
             for (let k=0;k<len;k++) display[k] = /\s/.test(text[k]) ? text[k] : chars[Math.floor(Math.random()*chars.length)];
@@ -3043,8 +3106,8 @@ FOR THIS, WE NEED YOUR HELP.
         currentAnimationFrame = animationId;
       }
       
-      // Delay animation start by 500ms for slide 2
-      if (currentPage === 1) {
+      // Delay animation start by 500ms for slide 3
+      if (currentPage === 2) {
         // Audio already playing from slide start - don't restart it
         setTimeout(() => {
           // Start animation
@@ -3094,13 +3157,13 @@ FOR THIS, WE NEED YOUR HELP.
       
       function playLineAudio(lineContent) {
         // Map content lines to audio files
-        // Slide 4: line 1 = slide4, line 2 = slide4A, line 3 = slide4B, line 4 = slide4C
-        // Slide 5: line 1 = slide5, line 2 = slide5A, line 3 = slide5B
-        // Slide 6: no audio yet (to be added later)
+        // Slide 5: line 1 = slide4, line 2 = slide4A, line 3 = slide4B, line 4 = slide4C
+        // Slide 6: line 1 = slide5, line 2 = slide5A, line 3 = slide5B
+        // Slide 7: no audio yet (to be added later)
         const slide4Audios = ['slide4', 'slide4A', 'slide4B', 'slide4C'];
         const slide5Audios = ['slide5', 'slide5A', 'slide5B'];
         const slide6Audios = ['slide6A'];
-        const audioKeys = pageIndex === 3 ? slide4Audios : (pageIndex === 4 ? slide5Audios : slide6Audios);
+        const audioKeys = pageIndex === 4 ? slide4Audios : (pageIndex === 5 ? slide5Audios : slide6Audios);
         
         console.log(` DEBUG: Attempting to play audio for content line ${contentLineCount + 1}, pageIndex: ${pageIndex}`);
         console.log(` DEBUG: audioKeys array:`, audioKeys);
@@ -3411,10 +3474,10 @@ FOR THIS, WE NEED YOUR HELP.
         // Set data-page attribute for CSS targeting
         pageEl.setAttribute('data-page', pageIndex + 1);
         
-        // Disable scanlines on slide 7 (last slide) only
-        if (pageIndex === 6) { // Slide 7 (index 6)
+        // Disable scanlines on slide 8 (last slide) only
+        if (pageIndex === 7) { // Slide 8 (index 6)
           document.body.classList.add('no-scanlines');
-          console.log(' Slide 7: Scanlines disabled');
+          console.log(' Slide 8: Scanlines disabled');
         } else {
           document.body.classList.remove('no-scanlines');
         }
@@ -3440,17 +3503,25 @@ FOR THIS, WE NEED YOUR HELP.
          
          
          
-          // Use decoding animation for page 0 (with audio)
+          // SLIDE 1 (PROCEED?) - show immediately with no animation
           if (pageIndex === 0) {
-            console.log(` SLIDE 1: Starting decoding animation`);
+            console.log(` SLIDE 1 (PROCEED?): Showing text immediately`);
+            el.textContent = pages[pageIndex];
+            const textWrap = document.getElementById('text-wrap');
+            if (textWrap) {
+              textWrap.style.display = 'block';
+            }
+          // Use decoding animation for page 1 (was page 0) (with audio)
+          } else if (pageIndex === 1) {
+            console.log(` SLIDE 3 (was SLIDE 2): Starting decoding animation`);
             
-            // Play slide 1 audio once (uninterrupted)
+            // Play slide 2 audio once (uninterrupted)
             if (audioPool.slide1 && audioPool.slide1.paused) {
-              console.log(' Starting slide 1 audio (uninterrupted)');
+              console.log(' Starting slide 2 audio (uninterrupted)');
               audioPool.slide1.currentTime = 0;
               audioPool.slide1.loop = false;
               audioPool.slide1.volume = 1.0;
-              audioPool.slide1.play().catch(err => console.log(' Slide 1 audio blocked:', err.message));
+              audioPool.slide1.play().catch(err => console.log(' Slide 2 audio blocked:', err.message));
             }
             
             el.textContent = '';
@@ -3462,10 +3533,10 @@ FOR THIS, WE NEED YOUR HELP.
             
             // Start decoding immediately (no delay needed on first slide)
             scrambleFastChunks(el, pages[pageIndex], () => {
-              console.log(` Slide 1 decoding completed`);
+              console.log(` Slide 2 decoding completed`);
             });
-         } else if (pageIndex === 2) {
-           // Slide 3 (video slide) - no text initially, just video
+         } else if (pageIndex === 3) {
+           // Slide 4 (video slide) - no text initially, just video
            console.log(` Video slide ${pageIndex + 1}: Clearing text, showing video and "A FILM BY" only`);
            el.textContent = '';
            // Hide text wrap on video slide
@@ -3473,8 +3544,8 @@ FOR THIS, WE NEED YOUR HELP.
            if (textWrap) {
              textWrap.style.display = 'none';
            }
-         } else if (pageIndex === 6) {
-           // Slide 7 (trailer video slide) - no text, just video
+         } else if (pageIndex === 7) {
+           // Slide 8 (trailer video slide) - no text, just video
            console.log(` Trailer slide ${pageIndex + 1}: Clearing text, showing video only`);
            el.textContent = '';
            // Hide text wrap on trailer slide
@@ -3482,18 +3553,18 @@ FOR THIS, WE NEED YOUR HELP.
            if (textWrap) {
              textWrap.style.display = 'none';
            }
-         } else if (pageIndex === 1) {
-           // Slide 2 - wait for slide animation to complete before unscrambling
-           console.log(` SLIDE 2: Waiting for slide animation to complete before unscrambling`);
+         } else if (pageIndex === 2) {
+           // Slide 3 - wait for slide animation to complete before unscrambling
+           console.log(` SLIDE 3: Waiting for slide animation to complete before unscrambling`);
            
-           // Play slide 2 audio after 1 second delay
+           // Play slide 3 audio after 1 second delay
            if (audioPool.slide2 && audioPool.slide2.paused) {
              setTimeout(() => {
-               console.log(' Starting slide 2 audio (1 second delay)');
+               console.log(' Starting slide 3 audio (1 second delay)');
                audioPool.slide2.currentTime = 0;
                audioPool.slide2.loop = false;
                audioPool.slide2.volume = 1.0;
-               audioPool.slide2.play().catch(err => console.log(' Slide 2 audio blocked:', err.message));
+               audioPool.slide2.play().catch(err => console.log(' Slide 3 audio blocked:', err.message));
              }, 1000);
            }
            
@@ -3508,10 +3579,10 @@ FOR THIS, WE NEED YOUR HELP.
              console.log(` SCRAMBLE: Starting delayed unscrambling for slide ${pageIndex + 1}:`, pages[pageIndex].substring(0, 100));
              scrambleFastChunks(el, pages[pageIndex], () => {
                // Text displayed
-               console.log(` Slide 2 unscrambling completed`);
+               console.log(` Slide 3 unscrambling completed`);
              });
            }, 750);
-         } else if (pageIndex === 3 || pageIndex === 4 || pageIndex === 5) {
+         } else if (pageIndex === 4 || pageIndex === 5 || pageIndex === 6) {
            // Slides 4, 5, and 6 - character-by-character reveal with year pauses
            console.log(` CHARACTER REVEAL: Starting for slide ${pageIndex + 1}`);
            
@@ -3544,19 +3615,19 @@ FOR THIS, WE NEED YOUR HELP.
        
       // Handle specific images for different slides
       console.log(` DEBUG: Checking images for pageIndex ${pageIndex} (slide ${pageIndex + 1})`);
-      if (pageIndex === 3) { // Slide 4 - Correa photo
-        console.log(` DEBUG: Scheduling Correa photo for slide 4 (appears 4.5s after typing starts)`);
+      if (pageIndex === 4) { // Slide 5 - Correa photo
+        console.log(` DEBUG: Scheduling Correa photo for slide 5 (appears 4.5s after typing starts)`);
         // Typing starts at 750ms, photo appears 4.5s after that = 5250ms total
         imageTimeout = setTimeout(() => {
-          console.log(` DEBUG: Now adding Correa photo for slide 4`);
+          console.log(` DEBUG: Now adding Correa photo for slide 5`);
           addCorreaPhoto();
           imageTimeout = null; // Clear reference after it fires
         }, 5250);
-      } else if (pageIndex === 4) { // Slide 5 - Arrest photo
-        console.log(` DEBUG: Adding Arrest photo for slide 5`);
+      } else if (pageIndex === 5) { // Slide 6 - Arrest photo
+        console.log(` DEBUG: Adding Arrest photo for slide 6`);
         addArrestPhoto();
-      } else if (pageIndex === 5) { // Slide 6 - BIG centered Cannes photo
-        console.log(` DEBUG: Adding BIG centered Cannes photo for slide 6`);
+      } else if (pageIndex === 6) { // Slide 7 - BIG centered Cannes photo
+        console.log(` DEBUG: Adding BIG centered Cannes photo for slide 7`);
         addCannesPhotoBig();
         // OLD VERSION (commented out): addArrestAndCannesPhotos(); // COMMENTED OUT - uncomment to bring back Julian + Cannes photos
       }
@@ -3565,8 +3636,8 @@ FOR THIS, WE NEED YOUR HELP.
        
        
        // Audio disabled - no sounds
-       if (pageIndex + 1 === 7) {
-         console.log(' Audio disabled for page 7');
+       if (pageIndex + 1 === 8) {
+         console.log(' Audio disabled for page 8');
        }
        
        // Audio disabled - no sounds
@@ -3589,24 +3660,24 @@ FOR THIS, WE NEED YOUR HELP.
         console.log(' Audio disabled for page 15');
       }
        
-       // Show video2 on slide 3
-       console.log(` Debug: Current page ${pageIndex + 1}, checking for video2 on slide 3...`);
-       if (pageIndex + 1 === 3) {
-         console.log(' SLIDE 3 - Showing video2...');
+       // Show video2 on slide 4
+       console.log(` Debug: Current page ${pageIndex + 1}, checking for video2 on slide 4...`);
+       if (pageIndex + 1 === 4) {
+         console.log(' SLIDE 4 - Showing video2...');
          showVideo2Background();
        } else {
-         console.log(` Not slide 3 (current: ${pageIndex + 1}), hiding video2...`);
+         console.log(` Not slide 4 (current: ${pageIndex + 1}), hiding video2...`);
          // Hide video2 on other pages
          hideVideo2Background();
        }
        
-       // Show trailer on slide 7
-       console.log(` Debug: Current page ${pageIndex + 1}, checking for trailer on slide 7...`);
-       if (pageIndex + 1 === 7) {
-         console.log(' SLIDE 7 - Showing trailer...');
+       // Show trailer on slide 8
+       console.log(` Debug: Current page ${pageIndex + 1}, checking for trailer on slide 8...`);
+       if (pageIndex + 1 === 8) {
+         console.log(' SLIDE 8 - Showing trailer...');
          showTrailerVideo();
        } else {
-         console.log(` Not slide 7 (current: ${pageIndex + 1}), hiding trailer...`);
+         console.log(` Not slide 8 (current: ${pageIndex + 1}), hiding trailer...`);
          hideTrailerVideo();
        }
        
@@ -3614,8 +3685,8 @@ FOR THIS, WE NEED YOUR HELP.
        const navMsg = document.getElementById('nav-msg');
        const slideCounter = document.getElementById('slide-counter');
        
-       if (pageIndex <= 1) {
-         // Slides 1-2: Show PRESS SPACEBAR in nav-msg, hide slide counter
+       if (pageIndex <= 2) {
+         // Slides 1-3 (was 1-2): Show PRESS SPACEBAR in nav-msg, hide slide counter
          if (navMsg) {
            navMsg.innerHTML = 'PRESS SPACEBAR<br>TO CONTINUE';
            navMsg.style.fontSize = '0.7rem';
@@ -3630,7 +3701,7 @@ FOR THIS, WE NEED YOUR HELP.
            slideCounter.style.visibility = 'hidden';
          }
        } else {
-         // Slide 3 onwards: Show slide counter in nav-msg area, hide bottom counter
+         // Slide 4 onwards: Show slide counter in nav-msg area, hide bottom counter
          if (navMsg) {
            navMsg.textContent = `SLIDE ${pageIndex + 1} / ${pages.length}`;
            navMsg.style.fontSize = '0.7rem';
@@ -3675,16 +3746,16 @@ FOR THIS, WE NEED YOUR HELP.
 document.addEventListener('click', (e)=>{ 
       if (e.target.id==='nav-prev'||e.target.id==='nav-next') return; 
       
-      // Ignore clicks on video player and controls (for trailer on slide 7 only)
-      // Only ignore video container clicks if we're on slide 7 (trailer with controls)
-      if (currentPage === 6) { // Slide 7 - trailer with video controls
+      // Ignore clicks on video player and controls (for trailer on slide 8 only)
+      // Only ignore video container clicks if we're on slide 8 (trailer with controls)
+      if (currentPage === 7) { // Slide 8 - trailer with video controls
         if (e.target.tagName === 'VIDEO' || 
             e.target.closest('video') ||
             e.target.closest('#video-container') ||
             e.target.closest('.video-container') ||
             e.target.classList.contains('video-controls') ||
             e.target.closest('.video-controls')) {
-          return; // Let video controls handle the click on slide 7 only
+          return; // Let video controls handle the click on slide 8 only
         }
       }
       
