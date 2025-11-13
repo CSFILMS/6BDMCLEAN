@@ -3023,9 +3023,11 @@ FOR THIS, WE NEED YOUR HELP.
         // Map content lines to audio files
         // Slide 4: line 1 = slide4, line 2 = slide4A, line 3 = slide4B, line 4 = slide4C
         // Slide 5: line 1 = slide5, line 2 = slide5A, line 3 = slide5B
+        // Slide 6: no audio yet (to be added later)
         const slide4Audios = ['slide4', 'slide4A', 'slide4B', 'slide4C'];
         const slide5Audios = ['slide5', 'slide5A', 'slide5B'];
-        const audioKeys = pageIndex === 3 ? slide4Audios : slide5Audios;
+        const slide6Audios = []; // No audio for slide 6 yet
+        const audioKeys = pageIndex === 3 ? slide4Audios : (pageIndex === 4 ? slide5Audios : slide6Audios);
         
         console.log(` DEBUG: Attempting to play audio for content line ${contentLineCount + 1}, pageIndex: ${pageIndex}`);
         console.log(` DEBUG: audioKeys array:`, audioKeys);
@@ -3426,8 +3428,8 @@ FOR THIS, WE NEED YOUR HELP.
                console.log(` Slide 2 unscrambling completed`);
              });
            }, 750);
-         } else if (pageIndex === 3 || pageIndex === 4) {
-           // Slides 4 and 5 - character-by-character reveal with year pauses
+         } else if (pageIndex === 3 || pageIndex === 4 || pageIndex === 5) {
+           // Slides 4, 5, and 6 - character-by-character reveal with year pauses
            console.log(` CHARACTER REVEAL: Starting for slide ${pageIndex + 1}`);
            
            el.textContent = '';
