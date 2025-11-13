@@ -1298,7 +1298,7 @@ FOR THIS, WE NEED YOUR HELP.
         try {
           // Create slide 1 audio
           if (!audioPool.slide1) {
-            audioPool.slide1 = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide1.2.wav');
+            audioPool.slide1 = new Audio('VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide1.2.wav');
             audioPool.slide1.loop = false; // Play once, no loop
             audioPool.slide1.volume = 1.0;
             audioPool.slide1.preload = 'auto';
@@ -1307,7 +1307,7 @@ FOR THIS, WE NEED YOUR HELP.
           
           // Create slide 2 audio
           if (!audioPool.slide2) {
-            audioPool.slide2 = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide2.2.wav');
+            audioPool.slide2 = new Audio('VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide2.2.wav');
             audioPool.slide2.loop = false; // Play once, no loop
             audioPool.slide2.volume = 1.0;
             audioPool.slide2.preload = 'auto';
@@ -1316,28 +1316,28 @@ FOR THIS, WE NEED YOUR HELP.
           
           // Create slide 4 audio files (one per line)
           if (!audioPool.slide4) {
-            audioPool.slide4 = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide4.2.wav');
+            audioPool.slide4 = new Audio('VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide4.2.wav');
             audioPool.slide4.loop = false;
             audioPool.slide4.volume = 1.0;
             audioPool.slide4.preload = 'auto';
             console.log(' Created slide4 line 1 audio');
           }
           if (!audioPool.slide4A) {
-            audioPool.slide4A = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide4.A.2.wav');
+            audioPool.slide4A = new Audio('VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide4.A.2.wav');
             audioPool.slide4A.loop = false;
             audioPool.slide4A.volume = 1.0;
             audioPool.slide4A.preload = 'auto';
             console.log(' Created slide4 line 2 audio');
           }
           if (!audioPool.slide4B) {
-            audioPool.slide4B = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide4.B.2.wav');
+            audioPool.slide4B = new Audio('VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide4.B.2.wav');
             audioPool.slide4B.loop = false;
             audioPool.slide4B.volume = 1.0;
             audioPool.slide4B.preload = 'auto';
             console.log(' Created slide4 line 3 audio');
           }
           if (!audioPool.slide4C) {
-            audioPool.slide4C = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide4.C.2.wav');
+            audioPool.slide4C = new Audio('VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide4.C.2.wav');
             audioPool.slide4C.loop = false;
             audioPool.slide4C.volume = 1.0;
             audioPool.slide4C.preload = 'auto';
@@ -1346,21 +1346,21 @@ FOR THIS, WE NEED YOUR HELP.
           
           // Create slide 5 audio files (one per line)
           if (!audioPool.slide5) {
-            audioPool.slide5 = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide5.2.wav');
+            audioPool.slide5 = new Audio('VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide5.2.wav');
             audioPool.slide5.loop = false;
             audioPool.slide5.volume = 1.0;
             audioPool.slide5.preload = 'auto';
             console.log(' Created slide5 line 1 audio');
           }
           if (!audioPool.slide5A) {
-            audioPool.slide5A = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide5.A.2.wav');
+            audioPool.slide5A = new Audio('VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide5.A.2.wav');
             audioPool.slide5A.loop = false;
             audioPool.slide5A.volume = 1.0;
             audioPool.slide5A.preload = 'auto';
             console.log(' Created slide5 line 2 audio');
           }
           if (!audioPool.slide5B) {
-            audioPool.slide5B = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide5.B.2.wav');
+            audioPool.slide5B = new Audio('VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide5.B.2.wav');
             audioPool.slide5B.loop = false;
             audioPool.slide5B.volume = 1.0;
             audioPool.slide5B.preload = 'auto';
@@ -3021,21 +3021,34 @@ FOR THIS, WE NEED YOUR HELP.
       
       function playLineAudio(lineContent) {
         // Map content lines to audio files
-        // Slide 4: line 1 = slide4, line 2 = slide4A, line 3 = slide4B
+        // Slide 4: line 1 = slide4, line 2 = slide4A, line 3 = slide4B, line 4 = slide4C
         // Slide 5: line 1 = slide5, line 2 = slide5A, line 3 = slide5B
         const slide4Audios = ['slide4', 'slide4A', 'slide4B', 'slide4C'];
         const slide5Audios = ['slide5', 'slide5A', 'slide5B'];
         const audioKeys = pageIndex === 3 ? slide4Audios : slide5Audios;
         
+        console.log(` DEBUG: Attempting to play audio for content line ${contentLineCount + 1}, pageIndex: ${pageIndex}`);
+        console.log(` DEBUG: audioKeys array:`, audioKeys);
+        console.log(` DEBUG: contentLineCount: ${contentLineCount}, max: ${audioKeys.length}`);
+        
         if (contentLineCount < audioKeys.length) {
           const audioKey = audioKeys[contentLineCount];
+          console.log(` DEBUG: audioKey: ${audioKey}, audioPool has it:`, !!audioPool[audioKey]);
+          
           if (audioKey && audioPool[audioKey]) {
             const audio = audioPool[audioKey];
+            console.log(` DEBUG: Audio object state - paused: ${audio.paused}, currentTime: ${audio.currentTime}, src: ${audio.src}`);
             console.log(` Playing ${audioKey} audio for content line ${contentLineCount + 1}: "${lineContent.substring(0, 50)}..."`);
             audio.currentTime = 0;
             audio.volume = 1.0;
-            audio.play().catch(err => console.log(` ${audioKey} audio blocked:`, err.message));
+            audio.play()
+              .then(() => console.log(` ${audioKey} audio playing successfully`))
+              .catch(err => console.log(` ${audioKey} audio blocked:`, err.message));
+          } else {
+            console.log(` WARNING: Audio ${audioKey} not found in audioPool`);
           }
+        } else {
+          console.log(` DEBUG: contentLineCount ${contentLineCount} >= audioKeys.length ${audioKeys.length}, skipping`);
         }
         contentLineCount++;
       }
