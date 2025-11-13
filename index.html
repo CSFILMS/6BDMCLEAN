@@ -1225,7 +1225,12 @@ FOR THIS, WE NEED YOUR HELP.
       slide1: null,
       slide2: null,
       slide4: null,
+      slide4A: null,
+      slide4B: null,
+      slide4C: null,
       slide5: null,
+      slide5A: null,
+      slide5B: null,
       longTyping: null
     };
     
@@ -1293,7 +1298,7 @@ FOR THIS, WE NEED YOUR HELP.
         try {
           // Create slide 1 audio
           if (!audioPool.slide1) {
-            audioPool.slide1 = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/211112-Sound_for_Website-slide1.mp3');
+            audioPool.slide1 = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide1.2.wav');
             audioPool.slide1.loop = false; // Play once, no loop
             audioPool.slide1.volume = 1.0;
             audioPool.slide1.preload = 'auto';
@@ -1302,29 +1307,64 @@ FOR THIS, WE NEED YOUR HELP.
           
           // Create slide 2 audio
           if (!audioPool.slide2) {
-            audioPool.slide2 = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/211112-Sound_for_Website-slide2.mp3');
+            audioPool.slide2 = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide2.2.wav');
             audioPool.slide2.loop = false; // Play once, no loop
             audioPool.slide2.volume = 1.0;
             audioPool.slide2.preload = 'auto';
             console.log(' Created slide2 audio');
           }
           
-          // Create slide 4 audio
+          // Create slide 4 audio files (one per line)
           if (!audioPool.slide4) {
-            audioPool.slide4 = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/211112-Sound_for_Website-slide4.mp3');
-            audioPool.slide4.loop = false; // Play once, no loop
+            audioPool.slide4 = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide4.2.wav');
+            audioPool.slide4.loop = false;
             audioPool.slide4.volume = 1.0;
             audioPool.slide4.preload = 'auto';
-            console.log(' Created slide4 audio');
+            console.log(' Created slide4 line 1 audio');
+          }
+          if (!audioPool.slide4A) {
+            audioPool.slide4A = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide4.A.2.wav');
+            audioPool.slide4A.loop = false;
+            audioPool.slide4A.volume = 1.0;
+            audioPool.slide4A.preload = 'auto';
+            console.log(' Created slide4 line 2 audio');
+          }
+          if (!audioPool.slide4B) {
+            audioPool.slide4B = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide4.B.2.wav');
+            audioPool.slide4B.loop = false;
+            audioPool.slide4B.volume = 1.0;
+            audioPool.slide4B.preload = 'auto';
+            console.log(' Created slide4 line 3 audio');
+          }
+          if (!audioPool.slide4C) {
+            audioPool.slide4C = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide4.C.2.wav');
+            audioPool.slide4C.loop = false;
+            audioPool.slide4C.volume = 1.0;
+            audioPool.slide4C.preload = 'auto';
+            console.log(' Created slide4 line 4 audio');
           }
           
-          // Create slide 5 audio
+          // Create slide 5 audio files (one per line)
           if (!audioPool.slide5) {
-            audioPool.slide5 = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/211112-Sound_for_Website-slide5.mp3');
-            audioPool.slide5.loop = false; // Play once, no loop
+            audioPool.slide5 = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide5.2.wav');
+            audioPool.slide5.loop = false;
             audioPool.slide5.volume = 1.0;
             audioPool.slide5.preload = 'auto';
-            console.log(' Created slide5 audio');
+            console.log(' Created slide5 line 1 audio');
+          }
+          if (!audioPool.slide5A) {
+            audioPool.slide5A = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide5.A.2.wav');
+            audioPool.slide5A.loop = false;
+            audioPool.slide5A.volume = 1.0;
+            audioPool.slide5A.preload = 'auto';
+            console.log(' Created slide5 line 2 audio');
+          }
+          if (!audioPool.slide5B) {
+            audioPool.slide5B = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide5.B.2.wav');
+            audioPool.slide5B.loop = false;
+            audioPool.slide5B.volume = 1.0;
+            audioPool.slide5B.preload = 'auto';
+            console.log(' Created slide5 line 3 audio');
           }
           
           // Create long typing sound for 6BDM message
@@ -2952,8 +2992,10 @@ FOR THIS, WE NEED YOUR HELP.
     let characterRevealInterval = null;
     let characterRevealTimeouts = [];
     let characterRevealTypingAudio = null; // Track typing audio for cleanup
+    let currentSlideAudioIndex = 0;
+    let currentPageIndexForAudio = -1;
     
-    function revealByCharacterWithYearPauses(element, text, onComplete) {
+    function revealByCharacterWithYearPauses(element, text, onComplete, pageIndex) {
       // Clear any existing intervals and timeouts
       if (characterRevealInterval) {
         clearInterval(characterRevealInterval);
@@ -2963,18 +3005,44 @@ FOR THIS, WE NEED YOUR HELP.
       characterRevealTimeouts.forEach(timeout => clearTimeout(timeout));
       characterRevealTimeouts = [];
       
-      // Audio is already playing from slide start - don't restart it
-      // This function is called for slides 4 and 5, audio already started when slide loaded
+      // Initialize line audio tracking
+      currentSlideAudioIndex = 0;
+      currentPageIndexForAudio = pageIndex;
       
       element.textContent = '';
       let charIndex = 0;
       const lines = text.split('\n');
       let currentLineIndex = 0;
       let currentLineCharIndex = 0;
+      let lineStarted = false;
+      
+      // Track which content line we're on (ignore empty lines)
+      let contentLineCount = 0;
+      
+      function playLineAudio(lineContent) {
+        // Map content lines to audio files
+        // Slide 4: line 1 = slide4, line 2 = slide4A, line 3 = slide4B
+        // Slide 5: line 1 = slide5, line 2 = slide5A, line 3 = slide5B
+        const slide4Audios = ['slide4', 'slide4A', 'slide4B', 'slide4C'];
+        const slide5Audios = ['slide5', 'slide5A', 'slide5B'];
+        const audioKeys = pageIndex === 3 ? slide4Audios : slide5Audios;
+        
+        if (contentLineCount < audioKeys.length) {
+          const audioKey = audioKeys[contentLineCount];
+          if (audioKey && audioPool[audioKey]) {
+            const audio = audioPool[audioKey];
+            console.log(` Playing ${audioKey} audio for content line ${contentLineCount + 1}: "${lineContent.substring(0, 50)}..."`);
+            audio.currentTime = 0;
+            audio.volume = 1.0;
+            audio.play().catch(err => console.log(` ${audioKey} audio blocked:`, err.message));
+          }
+        }
+        contentLineCount++;
+      }
       
       function typeNextCharacter() {
         if (currentLineIndex >= lines.length) {
-          // Done with all lines - audio continues playing naturally
+          // Done with all lines
           console.log(' Character reveal completed');
           wrapYearsInSpans(element);
           if (onComplete) onComplete();
@@ -2982,6 +3050,12 @@ FOR THIS, WE NEED YOUR HELP.
         }
         
         const currentLine = lines[currentLineIndex];
+        
+        // Play audio when starting a new line (first character) - only for non-empty lines
+        if (currentLineCharIndex === 0 && currentLine.trim().length > 0 && !lineStarted) {
+          playLineAudio(currentLine);
+          lineStarted = true;
+        }
         
         if (currentLineCharIndex < currentLine.length) {
           // Type next character in current line
@@ -2996,6 +3070,7 @@ FOR THIS, WE NEED YOUR HELP.
           element.textContent += '\n';
           currentLineIndex++;
           currentLineCharIndex = 0;
+          lineStarted = false;
           
           // Check if next line starts with a year pattern (e.g., "2006:", "2012-2019:")
           const nextLine = lines[currentLineIndex];
@@ -3350,20 +3425,11 @@ FOR THIS, WE NEED YOUR HELP.
            }
            // Wait for slide animation to complete
            setTimeout(() => {
-             // Play slide 4 or 5 audio at the moment animation starts
-             const slideAudio = pageIndex === 3 ? audioPool.slide4 : audioPool.slide5;
-             if (slideAudio && slideAudio.paused) {
-               console.log(` Starting slide ${pageIndex + 1} audio with animation`);
-               slideAudio.currentTime = 0;
-               slideAudio.loop = false;
-               slideAudio.volume = 1.0;
-               slideAudio.play().catch(err => console.log(` Slide ${pageIndex + 1} audio blocked:`, err.message));
-             }
-             
+             // Don't play old slide audio - individual line audios will play instead
              console.log(` Starting character reveal for slide ${pageIndex + 1}:`, pages[pageIndex].substring(0, 100));
              revealByCharacterWithYearPauses(el, pages[pageIndex], () => {
                console.log(` Slide ${pageIndex + 1} character reveal completed`);
-             });
+             }, pageIndex);
            }, 750);
          } else {
            // Show text wrap on other slides
