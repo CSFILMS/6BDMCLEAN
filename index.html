@@ -1812,6 +1812,7 @@ FOR THIS, WE NEED YOUR HELP.
     let currentPage = 0;
     let isAnimating = false;
     let currentInterval = null;
+    let imageTimeout = null; // Track delayed image appearance timeouts
     let currentAnimationFrame = null;
     let audioTimeout = null; // Track audio timeout
     let lineRevealTimeouts = []; // Track line reveal timeouts
@@ -3208,6 +3209,16 @@ FOR THIS, WE NEED YOUR HELP.
         console.log(' startPage called - killing all audio immediately');
         killAllAudio();
         
+        // Clear any pending image timeouts to prevent images from appearing on wrong slides
+        if (imageTimeout) {
+          console.log(' Clearing pending image timeout');
+          clearTimeout(imageTimeout);
+          imageTimeout = null;
+        }
+        
+        // Remove all images immediately when changing slides
+        removeAllImages();
+        
         if (pageIndex >= pages.length) pageIndex = 0;
         if (pageIndex < 0) pageIndex = pages.length - 1;
         
@@ -3464,9 +3475,10 @@ FOR THIS, WE NEED YOUR HELP.
       if (pageIndex === 3) { // Slide 4 - Correa photo
         console.log(` DEBUG: Scheduling Correa photo for slide 4 (appears 4.5s after typing starts)`);
         // Typing starts at 750ms, photo appears 4.5s after that = 5250ms total
-        setTimeout(() => {
+        imageTimeout = setTimeout(() => {
           console.log(` DEBUG: Now adding Correa photo for slide 4`);
           addCorreaPhoto();
+          imageTimeout = null; // Clear reference after it fires
         }, 5250);
       } else if (pageIndex === 4) { // Slide 5 - Arrest photo
         console.log(` DEBUG: Adding Arrest photo for slide 5`);
@@ -3474,11 +3486,8 @@ FOR THIS, WE NEED YOUR HELP.
       } else if (pageIndex === 5) { // Slide 6 - Julian and Cannes photos
         console.log(` DEBUG: Adding Julian and Cannes photos for slide 6`);
         addArrestAndCannesPhotos();
-      } else {
-        console.log(` DEBUG: Removing all images for slide ${pageIndex + 1}`);
-        // Remove any existing images for other slides
-        removeAllImages();
       }
+      // Note: removeAllImages() already called at start of startPage, so no need to call it here
        
        
        
