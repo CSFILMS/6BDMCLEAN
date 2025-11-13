@@ -1824,7 +1824,7 @@ FOR THIS, WE NEED YOUR HELP.
     console.log(' Total pages created:', pages.length);
     console.log(' Pages:', pages.map((p, i) => `Page ${i + 1}: ${p.substring(0, 50)}...`));
     
-    // Ensure we have at least 7 pages for trailer slide
+    // Ensure we have at least 8 pages for trailer slide (including PROCEED?)
     // Check if "IN 2025" content exists and ensure it's a separate page
     const in2025Index = pages.findIndex(p => p.includes('IN 2025, THE SIX BILLION DOLLAR MAN'));
     if (in2025Index === -1) {
@@ -1848,7 +1848,7 @@ FOR THIS, WE NEED YOUR HELP.
     }
     
     // Add empty slide for trailer if needed
-    if (pages.length < 7) {
+    if (pages.length < 8) {
       pages.push(''); // Empty page for trailer
       console.log(' Added empty slide 8 for trailer');
     }
