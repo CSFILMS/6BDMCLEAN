@@ -1367,6 +1367,15 @@ FOR THIS, WE NEED YOUR HELP.
             console.log(' Created slide5 line 3 audio');
           }
           
+          // Create slide 6 audio files
+          if (!audioPool.slide6A) {
+            audioPool.slide6A = new Audio('VIDEOS/211112-Sound_for_Website-slide6.A.3.wav');
+            audioPool.slide6A.loop = false;
+            audioPool.slide6A.volume = 1.0;
+            audioPool.slide6A.preload = 'auto';
+            console.log(' Created slide6 line 1 audio');
+          }
+          
           // Create long typing sound for 6BDM message
           if (!audioPool.longTyping) {
             audioPool.longTyping = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/LONGTYPINGSOUND.wav');
@@ -3090,7 +3099,7 @@ FOR THIS, WE NEED YOUR HELP.
         // Slide 6: no audio yet (to be added later)
         const slide4Audios = ['slide4', 'slide4A', 'slide4B', 'slide4C'];
         const slide5Audios = ['slide5', 'slide5A', 'slide5B'];
-        const slide6Audios = []; // No audio for slide 6 yet
+        const slide6Audios = ['slide6A'];
         const audioKeys = pageIndex === 3 ? slide4Audios : (pageIndex === 4 ? slide5Audios : slide6Audios);
         
         console.log(` DEBUG: Attempting to play audio for content line ${contentLineCount + 1}, pageIndex: ${pageIndex}`);
