@@ -3462,8 +3462,12 @@ FOR THIS, WE NEED YOUR HELP.
       // Handle specific images for different slides
       console.log(` DEBUG: Checking images for pageIndex ${pageIndex} (slide ${pageIndex + 1})`);
       if (pageIndex === 3) { // Slide 4 - Correa photo
-        console.log(` DEBUG: Adding Correa photo for slide 4`);
-        addCorreaPhoto();
+        console.log(` DEBUG: Scheduling Correa photo for slide 4 (appears 4.5s after typing starts)`);
+        // Typing starts at 750ms, photo appears 4.5s after that = 5250ms total
+        setTimeout(() => {
+          console.log(` DEBUG: Now adding Correa photo for slide 4`);
+          addCorreaPhoto();
+        }, 5250);
       } else if (pageIndex === 4) { // Slide 5 - Arrest photo
         console.log(` DEBUG: Adding Arrest photo for slide 5`);
         addArrestPhoto();
