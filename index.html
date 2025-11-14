@@ -1136,7 +1136,7 @@ z-index: 2 !important;
     class="bg-video"
     autoplay
     playsinline
-    preload="metadata"
+    preload="none"
     poster="./assets/bg-poster.jpg"
     aria-hidden="true"
     tabindex="-1"
@@ -1154,7 +1154,7 @@ z-index: 2 !important;
     class="trailer-video"
     playsinline
     controls
-    preload="metadata"
+    preload="none"
     style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90vw; max-width: 1200px; height: auto; z-index: 100; max-height: 80vh;"
   >
     <!-- TRAILERSLOWFADE.mp4 for the final slide -->
@@ -1328,7 +1328,42 @@ FOR THIS, WE NEED YOUR HELP.
 
 
 
-
+    // Function to preload audio for next slide
+    function preloadNextSlideAudio(currentPageIndex) {
+      const nextPageIndex = currentPageIndex + 1;
+      console.log(` Preloading audio for slide ${nextPageIndex + 1} (pageIndex ${nextPageIndex})`);
+      
+      // Slide 2 (pageIndex 1): preload slide1
+      if (nextPageIndex === 1 && audioPool.slide1) {
+        audioPool.slide1.load();
+        console.log(' Preloaded slide1 audio for slide 2');
+      }
+      // Slide 3 (pageIndex 2): preload slide2
+      else if (nextPageIndex === 2 && audioPool.slide2) {
+        audioPool.slide2.load();
+        console.log(' Preloaded slide2 audio for slide 3');
+      }
+      // Slide 5 (pageIndex 4): preload slide4 audios
+      else if (nextPageIndex === 4) {
+        if (audioPool.slide4) audioPool.slide4.load();
+        if (audioPool.slide4A) audioPool.slide4A.load();
+        if (audioPool.slide4B) audioPool.slide4B.load();
+        if (audioPool.slide4C) audioPool.slide4C.load();
+        console.log(' Preloaded slide4 audios for slide 5');
+      }
+      // Slide 6 (pageIndex 5): preload slide5 audios
+      else if (nextPageIndex === 5) {
+        if (audioPool.slide5) audioPool.slide5.load();
+        if (audioPool.slide5A) audioPool.slide5A.load();
+        if (audioPool.slide5B) audioPool.slide5B.load();
+        console.log(' Preloaded slide5 audios for slide 6');
+      }
+      // Slide 7 (pageIndex 6): preload slide6A audio
+      else if (nextPageIndex === 6 && audioPool.slide6A) {
+        audioPool.slide6A.load();
+        console.log(' Preloaded slide6A audio for slide 7');
+      }
+    }
 
     // Unlock audio context on user interaction
     function unlockAudioContext() {
@@ -1364,7 +1399,7 @@ FOR THIS, WE NEED YOUR HELP.
             audioPool.slide1 = new Audio('VIDEOS/211114-Sound_for_Website-slide1.A.3.wav');
             audioPool.slide1.loop = false; // Play once, no loop
             audioPool.slide1.volume = 1.0;
-            audioPool.slide1.preload = 'auto';
+            audioPool.slide1.preload = 'none';
             console.log(' Created slide1 audio');
           }
           
@@ -1373,7 +1408,7 @@ FOR THIS, WE NEED YOUR HELP.
             audioPool.slide2 = new Audio('VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide2.2.wav');
             audioPool.slide2.loop = false; // Play once, no loop
             audioPool.slide2.volume = 1.0;
-            audioPool.slide2.preload = 'auto';
+            audioPool.slide2.preload = 'none';
             console.log(' Created slide2 audio');
           }
           
@@ -1382,28 +1417,28 @@ FOR THIS, WE NEED YOUR HELP.
             audioPool.slide4 = new Audio('VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide4.2.wav');
             audioPool.slide4.loop = false;
             audioPool.slide4.volume = 1.0;
-            audioPool.slide4.preload = 'auto';
+            audioPool.slide4.preload = 'none';
             console.log(' Created slide4 line 1 audio');
           }
           if (!audioPool.slide4A) {
             audioPool.slide4A = new Audio('VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide4.A.2.wav');
             audioPool.slide4A.loop = false;
             audioPool.slide4A.volume = 1.0;
-            audioPool.slide4A.preload = 'auto';
+            audioPool.slide4A.preload = 'none';
             console.log(' Created slide4 line 2 audio');
           }
           if (!audioPool.slide4B) {
             audioPool.slide4B = new Audio('VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide4.B.2.wav');
             audioPool.slide4B.loop = false;
             audioPool.slide4B.volume = 1.0;
-            audioPool.slide4B.preload = 'auto';
+            audioPool.slide4B.preload = 'none';
             console.log(' Created slide4 line 3 audio');
           }
           if (!audioPool.slide4C) {
             audioPool.slide4C = new Audio('VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide4.C.2.wav');
             audioPool.slide4C.loop = false;
             audioPool.slide4C.volume = 1.0;
-            audioPool.slide4C.preload = 'auto';
+            audioPool.slide4C.preload = 'none';
             console.log(' Created slide4 line 4 audio');
           }
           
@@ -1412,21 +1447,21 @@ FOR THIS, WE NEED YOUR HELP.
             audioPool.slide5 = new Audio('VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide5.2.wav');
             audioPool.slide5.loop = false;
             audioPool.slide5.volume = 1.0;
-            audioPool.slide5.preload = 'auto';
+            audioPool.slide5.preload = 'none';
             console.log(' Created slide5 line 1 audio');
           }
           if (!audioPool.slide5A) {
             audioPool.slide5A = new Audio('VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide5.A.2.wav');
             audioPool.slide5A.loop = false;
             audioPool.slide5A.volume = 1.0;
-            audioPool.slide5A.preload = 'auto';
+            audioPool.slide5A.preload = 'none';
             console.log(' Created slide5 line 2 audio');
           }
           if (!audioPool.slide5B) {
             audioPool.slide5B = new Audio('VIDEOS/211112-Sound_for_Website-slide5.B.2/211112-Sound_for_Website-slide5.B.2.wav');
             audioPool.slide5B.loop = false;
             audioPool.slide5B.volume = 1.0;
-            audioPool.slide5B.preload = 'auto';
+            audioPool.slide5B.preload = 'none';
             console.log(' Created slide5 line 3 audio');
           }
           
@@ -1435,7 +1470,7 @@ FOR THIS, WE NEED YOUR HELP.
             audioPool.slide6A = new Audio('VIDEOS/211112-Sound_for_Website-slide6.A.3.wav');
             audioPool.slide6A.loop = false;
             audioPool.slide6A.volume = 1.0;
-            audioPool.slide6A.preload = 'auto';
+            audioPool.slide6A.preload = 'none';
             console.log(' Created slide6 line 1 audio');
           }
           
@@ -1444,7 +1479,7 @@ FOR THIS, WE NEED YOUR HELP.
             audioPool.longTyping = new Audio('https://github.com/CSFILMS/6BDMCLEAN/raw/main/VIDEOS/LONGTYPINGSOUND.wav');
             audioPool.longTyping.loop = true;
             audioPool.longTyping.volume = 1.0;
-            audioPool.longTyping.preload = 'auto';
+            audioPool.longTyping.preload = 'none';
             console.log(' Created longTyping audio');
           }
           
@@ -3728,6 +3763,8 @@ FOR THIS, WE NEED YOUR HELP.
        }
        console.log(` Navigation updated for page ${pageIndex + 1}`);
        
+       // Preload audio for next slide
+       preloadNextSlideAudio(pageIndex);
      }
 
 
@@ -3891,8 +3928,9 @@ if (e.key==='1'||e.key==='2'||e.key==='3'){ colorIndex=parseInt(e.key,10)-1; app
     // Dedicated mobile handler for timeline reveal - works on all mobile devices
 
     /* ================== INIT ================== */
-    window.onload = () => {
-      // Start presentation immediately when DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      // Start presentation as soon as DOM is ready (don't wait for all resources)
+      console.log(' DOM ready - starting presentation');
       startPage(0);
       
       
@@ -3937,7 +3975,7 @@ customCursor.style.display = 'none';
       
       // Apply the default font (Crisp) on page load
       applyCurrentFont();
-    };
+    });
     
     // Mobile text wrapping function
     function wrapTextForMobile(text) {
