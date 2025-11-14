@@ -1364,6 +1364,35 @@ FOR THIS, WE NEED YOUR HELP.
         console.log(' Preloaded slide6A audio for slide 7');
       }
     }
+    
+    // Function to wait for audio to be ready, then execute callback
+    function whenAudioReady(audio, callback) {
+      if (!audio) {
+        callback();
+        return;
+      }
+      
+      // Check if audio is already loaded (readyState 4 = HAVE_ENOUGH_DATA)
+      if (audio.readyState >= 3) {
+        console.log(' Audio already ready');
+        callback();
+      } else {
+        console.log(' Waiting for audio to be ready...');
+        const onReady = () => {
+          console.log(' Audio ready event fired');
+          audio.removeEventListener('canplaythrough', onReady);
+          callback();
+        };
+        audio.addEventListener('canplaythrough', onReady, { once: true });
+        
+        // Fallback timeout in case audio never loads (start anyway after 1 second)
+        setTimeout(() => {
+          audio.removeEventListener('canplaythrough', onReady);
+          console.log(' Audio timeout - starting anyway');
+          callback();
+        }, 1000);
+      }
+    }
 
     // Unlock audio context on user interaction
     function unlockAudioContext() {
@@ -3557,7 +3586,7 @@ FOR THIS, WE NEED YOUR HELP.
               textWrap.style.display = 'block';
             }
             
-            // Show scrambled text first, then wait 0.5s before starting animation and audio
+            // Show scrambled text first
             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,\'"?!-:;\n';
             let scrambled = '';
             for (let i = 0; i < pages[pageIndex].length; i++) {
@@ -3565,22 +3594,24 @@ FOR THIS, WE NEED YOUR HELP.
             }
             el.textContent = scrambled;
             
-            // Wait 0.5 seconds, then start audio and decoding
-            setTimeout(() => {
-              // Play slide 2 audio once (uninterrupted)
-              if (audioPool.slide1 && audioPool.slide1.paused) {
-                console.log(' Starting slide 2 audio (after 0.5s delay)');
-                audioPool.slide1.currentTime = 0;
-                audioPool.slide1.loop = false;
-                audioPool.slide1.volume = 1.0;
-                audioPool.slide1.play().catch(err => console.log(' Slide 2 audio blocked:', err.message));
-              }
-              
-              // Start decoding animation
-              scrambleFastChunks(el, pages[pageIndex], () => {
-                console.log(` Slide 2 decoding completed`);
-              });
-            }, 500);
+            // Wait for audio to be ready, then freeze 0.5s, then start audio and animation together
+            whenAudioReady(audioPool.slide1, () => {
+              setTimeout(() => {
+                // Play slide 2 audio once (uninterrupted)
+                if (audioPool.slide1 && audioPool.slide1.paused) {
+                  console.log(' Starting slide 2 audio (synchronized with animation)');
+                  audioPool.slide1.currentTime = 0;
+                  audioPool.slide1.loop = false;
+                  audioPool.slide1.volume = 1.0;
+                  audioPool.slide1.play().catch(err => console.log(' Slide 2 audio blocked:', err.message));
+                }
+                
+                // Start decoding animation simultaneously
+                scrambleFastChunks(el, pages[pageIndex], () => {
+                  console.log(` Slide 2 decoding completed`);
+                });
+              }, 500);
+            });
          } else if (pageIndex === 3) {
            // Slide 4 (video slide) - no text initially, just video
            console.log(` Video slide ${pageIndex + 1}: Clearing text, showing video and "A FILM BY" only`);
@@ -3603,31 +3634,33 @@ FOR THIS, WE NEED YOUR HELP.
            // Slide 3 - wait for slide animation to complete before unscrambling
            console.log(` SLIDE 3: Waiting for slide animation to complete before unscrambling`);
            
-           // Play slide 3 audio after 1.5 second delay (750ms slide + 500ms freeze)
-           if (audioPool.slide2 && audioPool.slide2.paused) {
-             setTimeout(() => {
-               console.log(' Starting slide 3 audio (1.25 second delay)');
-               audioPool.slide2.currentTime = 0;
-               audioPool.slide2.loop = false;
-               audioPool.slide2.volume = 1.0;
-               audioPool.slide2.play().catch(err => console.log(' Slide 3 audio blocked:', err.message));
-             }, 1250);
-           }
-           
            el.textContent = '';
            // Show text wrap on other slides
            const textWrap = document.getElementById('text-wrap');
            if (textWrap) {
              textWrap.style.display = 'block';
            }
-           // Wait for slide animation (750ms) + additional 500ms freeze
-           setTimeout(() => {
-             console.log(` SCRAMBLE: Starting delayed unscrambling for slide ${pageIndex + 1}:`, pages[pageIndex].substring(0, 100));
-             scrambleFastChunks(el, pages[pageIndex], () => {
-               // Text displayed
-               console.log(` Slide 3 unscrambling completed`);
-             });
-           }, 1250);
+           
+           // Wait for audio to be ready, then wait for slide animation + freeze, then start together
+           whenAudioReady(audioPool.slide2, () => {
+             // Wait for slide animation (750ms) + additional 500ms freeze
+             setTimeout(() => {
+               // Play slide 3 audio synchronized with animation
+               if (audioPool.slide2 && audioPool.slide2.paused) {
+                 console.log(' Starting slide 3 audio (synchronized with animation)');
+                 audioPool.slide2.currentTime = 0;
+                 audioPool.slide2.loop = false;
+                 audioPool.slide2.volume = 1.0;
+                 audioPool.slide2.play().catch(err => console.log(' Slide 3 audio blocked:', err.message));
+               }
+               
+               // Start animation simultaneously
+               console.log(` SCRAMBLE: Starting unscrambling for slide ${pageIndex + 1}:`, pages[pageIndex].substring(0, 100));
+               scrambleFastChunks(el, pages[pageIndex], () => {
+                 console.log(` Slide 3 unscrambling completed`);
+               });
+             }, 1250);
+           });
          } else if (pageIndex === 4 || pageIndex === 5 || pageIndex === 6) {
            // Slides 5, 6, and 7 (was 4, 5, 6) - character-by-character reveal with year pauses
            console.log(` CHARACTER REVEAL: Starting for slide ${pageIndex + 1}`);
@@ -3638,14 +3671,23 @@ FOR THIS, WE NEED YOUR HELP.
            if (textWrap) {
              textWrap.style.display = 'block';
            }
-           // Wait for slide animation (750ms) + additional 500ms freeze before typing starts
-           setTimeout(() => {
-             // Don't play old slide audio - individual line audios will play instead
-             console.log(` Starting character reveal for slide ${pageIndex + 1} (after 1.25s delay):`, pages[pageIndex].substring(0, 100));
-             revealByCharacterWithYearPauses(el, pages[pageIndex], () => {
-               console.log(` Slide ${pageIndex + 1} character reveal completed`);
-             }, pageIndex);
-           }, 1250);
+           
+           // Determine which audio to wait for
+           const firstAudio = pageIndex === 4 ? audioPool.slide4 : 
+                              pageIndex === 5 ? audioPool.slide5 : 
+                              audioPool.slide6A;
+           
+           // Wait for audio to be ready, then wait for animation + freeze, then start together
+           whenAudioReady(firstAudio, () => {
+             // Wait for slide animation (750ms) + additional 500ms freeze before typing starts
+             setTimeout(() => {
+               // Don't play old slide audio - individual line audios will play inside reveal function
+               console.log(` Starting character reveal for slide ${pageIndex + 1} (audio ready, after 1.25s delay):`, pages[pageIndex].substring(0, 100));
+               revealByCharacterWithYearPauses(el, pages[pageIndex], () => {
+                 console.log(` Slide ${pageIndex + 1} character reveal completed`);
+               }, pageIndex);
+             }, 1250);
+           });
          } else {
            // Show text wrap on other slides
            const textWrap = document.getElementById('text-wrap');
