@@ -3515,15 +3515,6 @@ FOR THIS, WE NEED YOUR HELP.
           } else if (pageIndex === 1) {
             console.log(` SLIDE 3 (was SLIDE 2): Starting decoding animation`);
             
-            // Play slide 2 audio once (uninterrupted)
-            if (audioPool.slide1 && audioPool.slide1.paused) {
-              console.log(' Starting slide 2 audio (uninterrupted)');
-              audioPool.slide1.currentTime = 0;
-              audioPool.slide1.loop = false;
-              audioPool.slide1.volume = 1.0;
-              audioPool.slide1.play().catch(err => console.log(' Slide 2 audio blocked:', err.message));
-            }
-            
             el.textContent = '';
             // Show text wrap
             const textWrap = document.getElementById('text-wrap');
@@ -3531,10 +3522,30 @@ FOR THIS, WE NEED YOUR HELP.
               textWrap.style.display = 'block';
             }
             
-            // Start decoding immediately (no delay needed on first slide)
-            scrambleFastChunks(el, pages[pageIndex], () => {
-              console.log(` Slide 2 decoding completed`);
-            });
+            // Show scrambled text first, then wait 0.5s before starting animation and audio
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,\'"?!-:;\n';
+            let scrambled = '';
+            for (let i = 0; i < pages[pageIndex].length; i++) {
+              scrambled += chars[Math.floor(Math.random() * chars.length)];
+            }
+            el.textContent = scrambled;
+            
+            // Wait 0.5 seconds, then start audio and decoding
+            setTimeout(() => {
+              // Play slide 2 audio once (uninterrupted)
+              if (audioPool.slide1 && audioPool.slide1.paused) {
+                console.log(' Starting slide 2 audio (after 0.5s delay)');
+                audioPool.slide1.currentTime = 0;
+                audioPool.slide1.loop = false;
+                audioPool.slide1.volume = 1.0;
+                audioPool.slide1.play().catch(err => console.log(' Slide 2 audio blocked:', err.message));
+              }
+              
+              // Start decoding animation
+              scrambleFastChunks(el, pages[pageIndex], () => {
+                console.log(` Slide 2 decoding completed`);
+              });
+            }, 500);
          } else if (pageIndex === 3) {
            // Slide 4 (video slide) - no text initially, just video
            console.log(` Video slide ${pageIndex + 1}: Clearing text, showing video and "A FILM BY" only`);
@@ -3557,15 +3568,15 @@ FOR THIS, WE NEED YOUR HELP.
            // Slide 3 - wait for slide animation to complete before unscrambling
            console.log(` SLIDE 3: Waiting for slide animation to complete before unscrambling`);
            
-           // Play slide 3 audio after 1 second delay
+           // Play slide 3 audio after 1.5 second delay (750ms slide + 500ms freeze)
            if (audioPool.slide2 && audioPool.slide2.paused) {
              setTimeout(() => {
-               console.log(' Starting slide 3 audio (1 second delay)');
+               console.log(' Starting slide 3 audio (1.25 second delay)');
                audioPool.slide2.currentTime = 0;
                audioPool.slide2.loop = false;
                audioPool.slide2.volume = 1.0;
                audioPool.slide2.play().catch(err => console.log(' Slide 3 audio blocked:', err.message));
-             }, 1000);
+             }, 1250);
            }
            
            el.textContent = '';
@@ -3574,16 +3585,16 @@ FOR THIS, WE NEED YOUR HELP.
            if (textWrap) {
              textWrap.style.display = 'block';
            }
-           // Wait for slide animation to complete (750ms total: 250ms slide-out + 250ms delay + 250ms slide-in)
+           // Wait for slide animation (750ms) + additional 500ms freeze
            setTimeout(() => {
              console.log(` SCRAMBLE: Starting delayed unscrambling for slide ${pageIndex + 1}:`, pages[pageIndex].substring(0, 100));
              scrambleFastChunks(el, pages[pageIndex], () => {
                // Text displayed
                console.log(` Slide 3 unscrambling completed`);
              });
-           }, 750);
+           }, 1250);
          } else if (pageIndex === 4 || pageIndex === 5 || pageIndex === 6) {
-           // Slides 4, 5, and 6 - character-by-character reveal with year pauses
+           // Slides 5, 6, and 7 (was 4, 5, 6) - character-by-character reveal with year pauses
            console.log(` CHARACTER REVEAL: Starting for slide ${pageIndex + 1}`);
            
            el.textContent = '';
@@ -3592,14 +3603,14 @@ FOR THIS, WE NEED YOUR HELP.
            if (textWrap) {
              textWrap.style.display = 'block';
            }
-           // Wait for slide animation to complete
+           // Wait for slide animation (750ms) + additional 500ms freeze before typing starts
            setTimeout(() => {
              // Don't play old slide audio - individual line audios will play instead
-             console.log(` Starting character reveal for slide ${pageIndex + 1}:`, pages[pageIndex].substring(0, 100));
+             console.log(` Starting character reveal for slide ${pageIndex + 1} (after 1.25s delay):`, pages[pageIndex].substring(0, 100));
              revealByCharacterWithYearPauses(el, pages[pageIndex], () => {
                console.log(` Slide ${pageIndex + 1} character reveal completed`);
              }, pageIndex);
-           }, 750);
+           }, 1250);
          } else {
            // Show text wrap on other slides
            const textWrap = document.getElementById('text-wrap');
