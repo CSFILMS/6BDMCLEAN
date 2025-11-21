@@ -3604,39 +3604,22 @@ FOR THIS, WE NEED YOUR HELP.
               textWrap.style.display = 'block';
             }
             
-            // Show scrambled text first - preserve spaces and line breaks for structure
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            let scrambled = '';
-            for (let i = 0; i < pages[pageIndex].length; i++) {
-              const char = pages[pageIndex][i];
-              // Preserve spaces, newlines, and basic punctuation structure
-              if (/\s/.test(char)) {
-                scrambled += char; // Keep whitespace as-is
-              } else {
-                // Scramble everything else
-                scrambled += chars[Math.floor(Math.random() * chars.length)];
-              }
-            }
-            el.textContent = scrambled;
-            
-            // Wait for audio to be ready, then freeze 0.5s, then start audio and animation together
+            // Wait for audio to be ready, then start audio and animation together (no freeze)
             whenAudioReady(audioPool.slide1, () => {
+              // Start decoding animation immediately
+              scrambleFastChunks(el, pages[pageIndex], () => {
+                console.log(` Slide 2 decoding completed`);
+              });
+              
+              // Play slide 2 audio 500ms AFTER animation starts (to match 5-frame scramble delay)
               setTimeout(() => {
-                // Start decoding animation FIRST
-                scrambleFastChunks(el, pages[pageIndex], () => {
-                  console.log(` Slide 2 decoding completed`);
-                });
-                
-                // Play slide 2 audio 500ms AFTER animation starts (to match 5-frame scramble delay)
-                setTimeout(() => {
-                  if (audioPool.slide1 && audioPool.slide1.paused) {
-                    console.log(' Starting slide 2 audio (500ms after animation starts to match scramble delay)');
-                    audioPool.slide1.currentTime = 0;
-                    audioPool.slide1.loop = false;
-                    audioPool.slide1.volume = 1.0;
-                    audioPool.slide1.play().catch(err => console.log(' Slide 2 audio blocked:', err.message));
-                  }
-                }, 500);
+                if (audioPool.slide1 && audioPool.slide1.paused) {
+                  console.log(' Starting slide 2 audio (500ms after animation starts to match scramble delay)');
+                  audioPool.slide1.currentTime = 0;
+                  audioPool.slide1.loop = false;
+                  audioPool.slide1.volume = 1.0;
+                  audioPool.slide1.play().catch(err => console.log(' Slide 2 audio blocked:', err.message));
+                }
               }, 500);
             });
          } else if (pageIndex === 3) {
